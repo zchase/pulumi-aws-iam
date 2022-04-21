@@ -13,9 +13,15 @@
         "strict": true
     },
     "files": [
+        "account.ts",
+        "assumableRoleWithOIDC.ts",
+        "assumableRoleWithSAML.ts",
         "index.ts",
+        "policy.ts",
         "provider.ts",
-        "staticPage.ts",
+        "types/index.ts",
+        "types/input.ts",
+        "types/output.ts",
         "utilities.ts"
     ]
 }

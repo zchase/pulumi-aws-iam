@@ -1,8 +1,7 @@
-import * as xyz from "@pulumi/xyz";
+import * as iam from "@pulumi/aws-iam";
 
-const page = new xyz.StaticPage("page", {
-    indexContent: "<html><body><p>Hello world!</p></body></html>",
-});
+const account = new iam.IAMAccount("my-account", {
+    accountAlias: "wow-cool-alias",
+})
 
-export const bucket = page.bucket;
-export const url = page.websiteUrl;
+export const wowOutput = account.callerIdentityAccountId;
