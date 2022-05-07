@@ -6,11 +6,21 @@ from . import _utilities
 import typing
 # Export this package's modules as members:
 from .account import *
+from .assumable_role import *
 from .assumable_role_with_oidc import *
 from .assumable_role_with_saml import *
+from .assumable_roles import *
+from .assumable_roles_with_saml import *
+from .eks_role import *
+from .group_with_assumable_roles_policy import *
+from .group_with_policies import *
 from .policy import *
 from .provider import *
+from .read_only_policy import *
+from .role_for_service_accounts_eks import *
+from .user import *
 from ._inputs import *
+from . import outputs
 _utilities.register(
     resource_modules="""
 [
@@ -20,9 +30,18 @@ _utilities.register(
   "fqn": "pulumi_aws_iam",
   "classes": {
    "aws-iam:index:Account": "Account",
+   "aws-iam:index:AssumableRole": "AssumableRole",
    "aws-iam:index:AssumableRoleWithOIDC": "AssumableRoleWithOIDC",
    "aws-iam:index:AssumableRoleWithSAML": "AssumableRoleWithSAML",
-   "aws-iam:index:Policy": "Policy"
+   "aws-iam:index:AssumableRoles": "AssumableRoles",
+   "aws-iam:index:AssumableRolesWithSAML": "AssumableRolesWithSAML",
+   "aws-iam:index:EKSRole": "EKSRole",
+   "aws-iam:index:GroupWithAssumableRolesPolicy": "GroupWithAssumableRolesPolicy",
+   "aws-iam:index:GroupWithPolicies": "GroupWithPolicies",
+   "aws-iam:index:Policy": "Policy",
+   "aws-iam:index:ReadOnlyPolicy": "ReadOnlyPolicy",
+   "aws-iam:index:RoleForServiceAccountsEks": "RoleForServiceAccountsEks",
+   "aws-iam:index:User": "User"
   }
  }
 ]

@@ -21,7 +21,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-const AssumableRoleIdentifier = "aws-iam:index:AssumableRoleWithSAML"
+const AssumableRoleIdentifier = "aws-iam:index:AssumableRole"
 
 type AssumableRoleArgs struct {
 	// Actions of STS.
@@ -39,23 +39,8 @@ type AssumableRoleArgs struct {
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration int `pulumi:"maxSessionDuration"`
 
-	// Whether to create an instance profile.
-	CreateInstanceProfile bool `pulumi:"createInstanceProfile"`
-
-	// IAM role name.
-	RoleName string `pulumi:"roleName"`
-
-	// IAM Role description.
-	RoleDescription string `pulumi:"roleDescription"`
-
-	// Path of IAM role.
-	RolePath string `pulumi:"rolePath"`
-
-	// Whether role requires MFA.
-	RoleRequiresMFA bool `pulumi:"roleRequiresMfa"`
-
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn string `pulumi:"rolePermissionsBoundaryArn"`
+	// IAM role.
+	Role RoleArgs `pulumi:"role"`
 
 	// A map of tags to add.
 	Tags map[string]string `pulumi:"tags"`
@@ -65,9 +50,6 @@ type AssumableRoleArgs struct {
 
 	// A custom role trust policy.
 	CustomRoleTrustPolicy string `pulumi:"customRoleTrustPolicy"`
-
-	// Number of IAM policies to attach to IAM role.
-	NumberOfCustomRolePolicyArns int `pulumi:"numberOfCustomRolePolicyArns"`
 
 	// Policy ARN to use for admin role.
 	AdminRolePolicyArn string `pulumi:"adminRolePolicyArn"`
@@ -91,49 +73,51 @@ type AssumableRoleArgs struct {
 	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
 
 	// STS ExternalId condition values to use with a role (when MFA is not required).
-	RoleSTSExternalID []string `pulumi:"roleStsExternalId"`
+	RoleSTSExternalIDs []string `pulumi:"roleStsExternalIds"`
+}
+
+type AssumableRoleRoleOutput struct {
+	// ARN of IAM role.
+	Arn pulumi.StringOutput `pulumi:"arn"`
+
+	// Name of IAM role.
+	Name pulumi.StringOutput `pulumi:"name"`
+
+	// Path of IAM role.
+	Path pulumi.StringPtrOutput `pulumi:"path"`
+
+	// Unique ID of IAM role.
+	UniqueID pulumi.StringOutput `pulumi:"uniqueId"`
+
+	// Whether IAM role requires MFA.
+	RequiresMFA bool `pulumi:"requiresMfa"`
+
+	// STS ExternalId condition value to use with a role.
+	STSExternalIDs []string `pulumi:"stsExternalIds"`
+}
+
+type AssumableRoleInstanceProfileOutput struct {
+	// ARN of IAM instance profile.
+	Arn pulumi.StringOutput `pulumi:"arn"`
+
+	// Name of IAM instance profile.
+	Name pulumi.StringOutput `pulumi:"name"`
+
+	// IAM Instance profile's ID.
+	ID pulumi.StringOutput `pulumi:"id"`
+
+	// Path of IAM instance profile.
+	Path pulumi.StringPtrOutput `pulumi:"path"`
 }
 
 type AssumableRole struct {
 	pulumi.ResourceState
 
-	// ARN of IAM role.
-	IAMRoleArn pulumi.StringOutput `pulumi:"iamRoleArn"`
+	// IAM Role
+	Role AssumableRoleRoleOutput `pulumi:"role"`
 
-	// Name of IAM role.
-	IAMRoleName pulumi.StringOutput `pulumi:"iamRoleName"`
-
-	// Path of IAM role.
-	IAMRolePath pulumi.StringOutput `pulumi:"iamRolePath"`
-
-	// Unique ID of IAM role.
-	IAMRoleUniqueID pulumi.StringOutput `pulumi:"iamRoleUniqueId"`
-
-	// Whether IAM role requires MFA.
-	RoleRequiresMFA pulumi.BoolOutput `pulumi:"roleRequiresMfa"`
-
-	// ARN of IAM instance profile.
-	IAMInstanceProfileArn pulumi.StringOutput `pulumi:"iamInstanceProfileArn"`
-
-	// Name of IAM instance profile.
-	IAMInstanceProfileName pulumi.StringOutput `pulumi:"iamInstanceProfileName"`
-
-	// IAM Instance profile's ID.
-	IAMInstanceProfileID pulumi.StringOutput `pulumi:"iamInstanceProfileId"`
-
-	// Path of IAM instance profile.
-	IAMInstanceProfilePath pulumi.StringOutput `pulumi:"iamInstanceProfilePath"`
-
-	// STS ExternalId condition value to use with a role.
-	RoleSTSExternalID pulumi.StringOutput `pulumi:"roleSTSExternalId"`
-}
-
-func createRolePolicyAttachment(ctx *pulumi.Context, name, policyArn string, roleName pulumi.StringOutput, opts ...pulumi.ResourceOption) error {
-	_, err := iam.NewRolePolicyAttachment(ctx, name, &iam.RolePolicyAttachmentArgs{
-		Role:      roleName,
-		PolicyArn: pulumi.String(policyArn),
-	}, opts...)
-	return err
+	// IAM instance profile.
+	InstanceProfile AssumableRoleInstanceProfileOutput `pulumi:"instanceProfile"`
 }
 
 func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs, opts ...pulumi.ResourceOption) (*AssumableRole, error) {
@@ -149,94 +133,45 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 
 	opts = append(opts, pulumi.Parent(component))
 
-	effect := "Allow"
-	var stsExternalIdPolicy iam.GetPolicyDocumentStatementCondition
-	if len(args.RoleSTSExternalID) > 0 {
-		stsExternalIdPolicy = iam.GetPolicyDocumentStatementCondition{
-			Test:     "StringEquals",
-			Variable: "sts:ExternalId",
-			Values:   args.RoleSTSExternalID,
-		}
+	if len(args.TrustedRoleActions) == 0 {
+		args.TrustedRoleActions = append(args.TrustedRoleActions, "sts:AssumeRole")
 	}
 
-	assumeRolePolicy, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
-		Statements: []iam.GetPolicyDocumentStatement{
-			{
-				Effect:  &effect,
-				Actions: args.TrustedRoleActions,
-				Principals: []iam.GetPolicyDocumentStatementPrincipal{
-					{
-						Type:        "AWS",
-						Identifiers: args.TrustedRoleArns,
-					},
-					{
-						Type:        "Service",
-						Identifiers: args.TrustedRoleServices,
-					},
-				},
-				Conditions: []iam.GetPolicyDocumentStatementCondition{
-					stsExternalIdPolicy,
-				},
-			},
-		},
-	})
-	if err != nil {
-		return nil, err
+	assumeRolePolicyArgs := newIAMPolicyDocumentStatementConstructor("Allow", args.TrustedRoleActions).
+		AddAWSPrincipal(args.TrustedRoleArns)
+
+	if len(args.TrustedRoleServices) > 0 {
+		assumeRolePolicyArgs.AddServicePrincipal(args.TrustedRoleServices)
 	}
 
-	assumeRoleWithMFAPolicy, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
-		Statements: []iam.GetPolicyDocumentStatement{
-			{
-				Effect:  &effect,
-				Actions: args.TrustedRoleActions,
-				Principals: []iam.GetPolicyDocumentStatementPrincipal{
-					{
-						Type:        "AWS",
-						Identifiers: args.TrustedRoleArns,
-					},
-					{
-						Type:        "Service",
-						Identifiers: args.TrustedRoleServices,
-					},
-				},
-				Conditions: []iam.GetPolicyDocumentStatementCondition{
-					{
-						Test:     "Bool",
-						Variable: "aws:MultiFactorAuthPresent",
-						Values:   []string{"true"},
-					},
-					{
-						Test:     "NumericLessThan",
-						Variable: "aws:MultiFactorAuthAge",
-						Values: []string{
-							fmt.Sprintf("%v", args.MFAAge),
-						},
-					},
-					stsExternalIdPolicy,
-				},
-			},
-		},
-	})
+	if len(args.RoleSTSExternalIDs) > 0 && !args.Role.RequiresMFA {
+		assumeRolePolicyArgs.AddCondition("StringEquals", "sts:ExternalId", args.RoleSTSExternalIDs)
+	}
+
+	if args.Role.RequiresMFA {
+		assumeRolePolicyArgs.
+			AddCondition("Bool", "aws:MultiFactorAuthPresent", []string{"true"}).
+			AddCondition("NumericLessThan", "aws:MultiFactorAuthAge", []string{fmt.Sprintf("%v", args.MFAAge)})
+	}
+
+	assumeRolePolicy, err := iam.GetPolicyDocument(ctx, assumeRolePolicyArgs.Build())
 	if err != nil {
 		return nil, err
 	}
 
 	rolePolicy := args.CustomRoleTrustPolicy
 	if rolePolicy == "" {
-		rolePolicy = assumeRoleWithMFAPolicy.Json
-
-		if rolePolicy == "" {
-			rolePolicy = assumeRolePolicy.Json
-		}
+		rolePolicy = assumeRolePolicy.Json
 	}
 
-	role, err := iam.NewRole(ctx, name, &iam.RoleArgs{
-		Name:                pulumi.String(args.RoleName),
-		Path:                pulumi.String(args.RolePath),
-		Description:         pulumi.String(args.RoleDescription),
+	roleName := fmt.Sprintf("%s-role", name)
+	role, err := iam.NewRole(ctx, roleName, &iam.RoleArgs{
+		Name:                pulumi.String(args.Role.Name),
+		Path:                pulumi.String(args.Role.Path),
+		Description:         pulumi.String(args.Role.Description),
 		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
 		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		PermissionsBoundary: pulumi.StringPtr(args.RolePermissionsBoundaryArn),
+		PermissionsBoundary: pulumi.StringPtr(args.Role.PermissionsBoundaryArn),
 		Tags:                pulumi.ToStringMap(args.Tags),
 		AssumeRolePolicy:    pulumi.String(rolePolicy),
 	}, opts...)
@@ -245,42 +180,50 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 	}
 
 	for _, policyArn := range args.CustomRolePolicyArns {
-		err = createRolePolicyAttachment(ctx, name, policyArn, role.Name, opts...)
+		policyAttachmentName := fmt.Sprintf("%s-policy-attachment-%s", name, policyArn)
+		err = createRolePolicyAttachment(ctx, policyAttachmentName, policyArn, role.Name, opts...)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	if args.AttachAdminPolicy {
-		err = createRolePolicyAttachment(ctx, name, args.AdminRolePolicyArn, role.Name, opts...)
-		if err != nil {
-			return nil, err
+	policyAttachments := map[string]bool{
+		args.AdminRolePolicyArn:     args.AttachAdminPolicy,
+		args.PoweruserRolePolicyArn: args.AttachPoweruserPolicy,
+		args.ReadonlyRolePolicyArn:  args.AttachReadonlyPolicy,
+	}
+
+	for arn, attach := range policyAttachments {
+		if attach {
+			policyAttachmentName := fmt.Sprintf("%s-policy-attachment-%s", name, arn)
+			err = createRolePolicyAttachment(ctx, policyAttachmentName, arn, role.Name, opts...)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
-	if args.AttachPoweruserPolicy {
-		err = createRolePolicyAttachment(ctx, name, args.PoweruserRolePolicyArn, role.Name, opts...)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if args.AttachReadonlyPolicy {
-		err = createRolePolicyAttachment(ctx, name, args.ReadonlyRolePolicyArn, role.Name, opts...)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	_, err = iam.NewInstanceProfile(ctx, name, &iam.InstanceProfileArgs{
-		Name: pulumi.String(args.RoleName),
-		Path: pulumi.String(args.RolePath),
+	instanceProfileName := fmt.Sprintf("%s-instance-profile", name)
+	instanceProfile, err := iam.NewInstanceProfile(ctx, instanceProfileName, &iam.InstanceProfileArgs{
+		Name: pulumi.String(args.Role.Name),
+		Path: pulumi.String(args.Role.Path),
 		Role: role.Name,
 		Tags: pulumi.ToStringMap(args.Tags),
 	}, opts...)
 	if err != nil {
 		return nil, err
 	}
+
+	component.Role.Arn = role.Arn
+	component.Role.Name = role.Name
+	component.Role.Path = role.Path
+	component.Role.UniqueID = role.UniqueId
+	component.Role.RequiresMFA = args.Role.RequiresMFA
+	component.Role.STSExternalIDs = args.RoleSTSExternalIDs
+	component.InstanceProfile.Arn = instanceProfile.Arn
+	component.InstanceProfile.ID = instanceProfile.UniqueId
+	component.InstanceProfile.Name = instanceProfile.Name
+	component.InstanceProfile.Path = instanceProfile.Path
 
 	return component, nil
 }

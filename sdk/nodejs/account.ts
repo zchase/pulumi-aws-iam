@@ -20,21 +20,21 @@ export class Account extends pulumi.ComponentResource {
     }
 
     /**
-     * The AWS Account ID number of the account that owns or contains the calling entity
-     */
-    public /*out*/ readonly callerIdentityAccountId!: pulumi.Output<string>;
-    /**
      * The AWS ARN associated with the calling entity
      */
-    public /*out*/ readonly callerIdentityArn!: pulumi.Output<string>;
+    public /*out*/ readonly arn!: pulumi.Output<string>;
     /**
-     * The unique identifier of the calling entity
+     * The AWS Account ID number of the account that owns or contains the calling entity
      */
-    public /*out*/ readonly callerIdentityUserId!: pulumi.Output<string>;
+    public /*out*/ readonly id!: pulumi.Output<string>;
     /**
      * Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
      */
-    public /*out*/ readonly iamAccountPasswordPolicyExpirePasswords!: pulumi.Output<boolean>;
+    public /*out*/ readonly passwordPolicyExpirePasswords!: pulumi.Output<boolean>;
+    /**
+     * The unique identifier of the calling entity
+     */
+    public /*out*/ readonly userId!: pulumi.Output<string>;
 
     /**
      * Create a Account resource with the given unique name, arguments, and options.
@@ -52,7 +52,6 @@ export class Account extends pulumi.ComponentResource {
             }
             resourceInputs["accountAlias"] = args ? args.accountAlias : undefined;
             resourceInputs["allowUsersToChangePassword"] = (args ? args.allowUsersToChangePassword : undefined) ?? true;
-            resourceInputs["createAccountPasswordPolicy"] = (args ? args.createAccountPasswordPolicy : undefined) ?? true;
             resourceInputs["getCallerIdentity"] = (args ? args.getCallerIdentity : undefined) ?? true;
             resourceInputs["hardExpiry"] = (args ? args.hardExpiry : undefined) ?? false;
             resourceInputs["maxPasswordAge"] = (args ? args.maxPasswordAge : undefined) ?? 0;
@@ -62,15 +61,15 @@ export class Account extends pulumi.ComponentResource {
             resourceInputs["requireNumbers"] = (args ? args.requireNumbers : undefined) ?? true;
             resourceInputs["requireSymbols"] = (args ? args.requireSymbols : undefined) ?? true;
             resourceInputs["requireUppercaseCharacters"] = (args ? args.requireUppercaseCharacters : undefined) ?? true;
-            resourceInputs["callerIdentityAccountId"] = undefined /*out*/;
-            resourceInputs["callerIdentityArn"] = undefined /*out*/;
-            resourceInputs["callerIdentityUserId"] = undefined /*out*/;
-            resourceInputs["iamAccountPasswordPolicyExpirePasswords"] = undefined /*out*/;
+            resourceInputs["arn"] = undefined /*out*/;
+            resourceInputs["id"] = undefined /*out*/;
+            resourceInputs["passwordPolicyExpirePasswords"] = undefined /*out*/;
+            resourceInputs["userId"] = undefined /*out*/;
         } else {
-            resourceInputs["callerIdentityAccountId"] = undefined /*out*/;
-            resourceInputs["callerIdentityArn"] = undefined /*out*/;
-            resourceInputs["callerIdentityUserId"] = undefined /*out*/;
-            resourceInputs["iamAccountPasswordPolicyExpirePasswords"] = undefined /*out*/;
+            resourceInputs["arn"] = undefined /*out*/;
+            resourceInputs["id"] = undefined /*out*/;
+            resourceInputs["passwordPolicyExpirePasswords"] = undefined /*out*/;
+            resourceInputs["userId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Account.__pulumiType, name, resourceInputs, opts, true /*remote*/);
@@ -90,11 +89,7 @@ export interface AccountArgs {
      */
     allowUsersToChangePassword?: pulumi.Input<boolean>;
     /**
-     * Whether to create AWS IAM account password policy.
-     */
-    createAccountPasswordPolicy?: pulumi.Input<boolean>;
-    /**
-     * Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+     * Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
      */
     getCallerIdentity?: pulumi.Input<boolean>;
     /**

@@ -8,7 +8,6 @@ require (
 	github.com/pulumi/pulumi-aws/sdk/v5 v5.1.3
 	github.com/pulumi/pulumi/pkg/v3 v3.30.0
 	github.com/pulumi/pulumi/sdk/v3 v3.30.0
-	golang.org/x/exp v0.0.0-20220414153411-bcd21879b8fd
 )
 
 require (

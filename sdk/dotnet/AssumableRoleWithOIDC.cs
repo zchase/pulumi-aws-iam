@@ -15,26 +15,26 @@ namespace Pulumi.AwsIam
         /// <summary>
         /// ARN of IAM role.
         /// </summary>
-        [Output("iamRoleArn")]
-        public Output<string> IamRoleArn { get; private set; } = null!;
+        [Output("arn")]
+        public Output<string> Arn { get; private set; } = null!;
 
         /// <summary>
         /// Name of IAM role.
         /// </summary>
-        [Output("iamRoleName")]
-        public Output<string> IamRoleName { get; private set; } = null!;
+        [Output("name")]
+        public Output<string> Name { get; private set; } = null!;
 
         /// <summary>
         /// Path of IAM role.
         /// </summary>
-        [Output("iamRolePath")]
-        public Output<string> IamRolePath { get; private set; } = null!;
+        [Output("path")]
+        public Output<string> Path { get; private set; } = null!;
 
         /// <summary>
         /// Unique ID of IAM role.
         /// </summary>
-        [Output("iamRoleUniqueId")]
-        public Output<string> IamRoleUniqueId { get; private set; } = null!;
+        [Output("uniqueId")]
+        public Output<string> UniqueId { get; private set; } = null!;
 
 
         /// <summary>
@@ -71,12 +71,6 @@ namespace Pulumi.AwsIam
         public Input<string>? AwsAccountId { get; set; }
 
         /// <summary>
-        /// Whether to create a role.
-        /// </summary>
-        [Input("createRole")]
-        public Input<bool>? CreateRole { get; set; }
-
-        /// <summary>
         /// Whether policies should be detached from this role when destroying.
         /// </summary>
         [Input("forceDetachPolicies")]
@@ -87,12 +81,6 @@ namespace Pulumi.AwsIam
         /// </summary>
         [Input("maxSessionDuration")]
         public Input<int>? MaxSessionDuration { get; set; }
-
-        /// <summary>
-        /// Number of IAM policies to attach to IAM role.
-        /// </summary>
-        [Input("numberOfRolePolicyArns")]
-        public Input<int>? NumberOfRolePolicyArns { get; set; }
 
         [Input("oidcFullyQualifiedAudiences")]
         private InputList<string>? _oidcFullyQualifiedAudiences;
@@ -130,12 +118,6 @@ namespace Pulumi.AwsIam
             set => _oidcSubjectsWithWildcards = value;
         }
 
-        /// <summary>
-        /// URL of the OIDC Provider. Use provider_urls to specify several URLs.
-        /// </summary>
-        [Input("providerUrl")]
-        public Input<string>? ProviderUrl { get; set; }
-
         [Input("providerUrls")]
         private InputList<string>? _providerUrls;
 
@@ -149,46 +131,10 @@ namespace Pulumi.AwsIam
         }
 
         /// <summary>
-        /// IAM Role description.
+        /// The IAM role.
         /// </summary>
-        [Input("roleDescription")]
-        public Input<string>? RoleDescription { get; set; }
-
-        /// <summary>
-        /// IAM role name.
-        /// </summary>
-        [Input("roleName")]
-        public Input<string>? RoleName { get; set; }
-
-        /// <summary>
-        /// IAM role name prefix.
-        /// </summary>
-        [Input("roleNamePrefix")]
-        public Input<string>? RoleNamePrefix { get; set; }
-
-        /// <summary>
-        /// Path of IAM role.
-        /// </summary>
-        [Input("rolePath")]
-        public Input<string>? RolePath { get; set; }
-
-        /// <summary>
-        /// Permissions boundary ARN to use for IAM role.
-        /// </summary>
-        [Input("rolePermissionsBoundaryArn")]
-        public Input<string>? RolePermissionsBoundaryArn { get; set; }
-
-        [Input("rolePolicyArns")]
-        private InputList<string>? _rolePolicyArns;
-
-        /// <summary>
-        /// List of ARNs of IAM policies to attach to IAM role.
-        /// </summary>
-        public InputList<string> RolePolicyArns
-        {
-            get => _rolePolicyArns ?? (_rolePolicyArns = new InputList<string>());
-            set => _rolePolicyArns = value;
-        }
+        [Input("role")]
+        public Input<Inputs.RoleArgs>? Role { get; set; }
 
         [Input("tags")]
         public Input<Inputs.TagsArgs>? Tags { get; set; }
@@ -196,13 +142,8 @@ namespace Pulumi.AwsIam
         public AssumableRoleWithOIDCArgs()
         {
             AwsAccountId = "";
-            CreateRole = false;
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
-            ProviderUrl = "";
-            RoleDescription = "";
-            RolePath = "/";
-            RolePermissionsBoundaryArn = "";
         }
     }
 }

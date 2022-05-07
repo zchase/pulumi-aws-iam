@@ -14,13 +14,13 @@ type AssumableRoleWithSAML struct {
 	pulumi.ResourceState
 
 	// ARN of IAM role.
-	IamRoleArn pulumi.StringOutput `pulumi:"iamRoleArn"`
+	RoleArn pulumi.StringOutput `pulumi:"roleArn"`
 	// Name of IAM role.
-	IamRoleName pulumi.StringOutput `pulumi:"iamRoleName"`
+	RoleName pulumi.StringOutput `pulumi:"roleName"`
 	// Path of IAM role.
-	IamRolePath pulumi.StringOutput `pulumi:"iamRolePath"`
+	RolePath pulumi.StringOutput `pulumi:"rolePath"`
 	// Unique ID of IAM role.
-	IamRoleUniqueId pulumi.StringOutput `pulumi:"iamRoleUniqueId"`
+	RoleUniqueId pulumi.StringOutput `pulumi:"roleUniqueId"`
 }
 
 // NewAssumableRoleWithSAML registers a new resource with the given unique name, arguments, and options.
@@ -33,26 +33,14 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context,
 	if isZero(args.AwsSamlEndpoint) {
 		args.AwsSamlEndpoint = pulumi.StringPtr("https://signin.aws.amazon.com/saml")
 	}
-	if isZero(args.CreateRole) {
-		args.CreateRole = pulumi.BoolPtr(false)
-	}
 	if isZero(args.ForceDetachPolicies) {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
 	if isZero(args.MaxSessionDuration) {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
-	if isZero(args.ProviderId) {
-		args.ProviderId = pulumi.StringPtr("")
-	}
-	if isZero(args.RoleDescription) {
-		args.RoleDescription = pulumi.StringPtr("")
-	}
-	if isZero(args.RolePath) {
-		args.RolePath = pulumi.StringPtr("/")
-	}
-	if isZero(args.RolePermissionsBoundaryArn) {
-		args.RolePermissionsBoundaryArn = pulumi.StringPtr("")
+	if args.Role != nil {
+		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
 	var resource AssumableRoleWithSAML
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoleWithSAML", name, args, &resource, opts...)
@@ -65,62 +53,28 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context,
 type assumableRoleWithSAMLArgs struct {
 	// AWS SAML Endpoint.
 	AwsSamlEndpoint *string `pulumi:"awsSamlEndpoint"`
-	// Whether to create a role.
-	CreateRole *bool `pulumi:"createRole"`
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies *bool `pulumi:"forceDetachPolicies"`
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration *int `pulumi:"maxSessionDuration"`
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns *int `pulumi:"numberOfRolePolicyArns"`
-	// ID of the SAML Provider. Use provider_ids to specify several IDs.
-	ProviderId *string `pulumi:"providerId"`
 	// List of SAML Provider IDs.
 	ProviderIds []string `pulumi:"providerIds"`
-	// IAM Role description.
-	RoleDescription *string `pulumi:"roleDescription"`
-	// IAM role name.
-	RoleName *string `pulumi:"roleName"`
-	// IAM role name prefix.
-	RoleNamePrefix *string `pulumi:"roleNamePrefix"`
-	// Path of IAM role.
-	RolePath *string `pulumi:"rolePath"`
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn *string `pulumi:"rolePermissionsBoundaryArn"`
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns []string `pulumi:"rolePolicyArns"`
-	Tags           *Tags    `pulumi:"tags"`
+	Role        *Role    `pulumi:"role"`
+	Tags        *Tags    `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a AssumableRoleWithSAML resource.
 type AssumableRoleWithSAMLArgs struct {
 	// AWS SAML Endpoint.
 	AwsSamlEndpoint pulumi.StringPtrInput
-	// Whether to create a role.
-	CreateRole pulumi.BoolPtrInput
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies pulumi.BoolPtrInput
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration pulumi.IntPtrInput
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns pulumi.IntPtrInput
-	// ID of the SAML Provider. Use provider_ids to specify several IDs.
-	ProviderId pulumi.StringPtrInput
 	// List of SAML Provider IDs.
 	ProviderIds pulumi.StringArrayInput
-	// IAM Role description.
-	RoleDescription pulumi.StringPtrInput
-	// IAM role name.
-	RoleName pulumi.StringPtrInput
-	// IAM role name prefix.
-	RoleNamePrefix pulumi.StringPtrInput
-	// Path of IAM role.
-	RolePath pulumi.StringPtrInput
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn pulumi.StringPtrInput
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns pulumi.StringArrayInput
-	Tags           TagsPtrInput
+	Role        RolePtrInput
+	Tags        TagsPtrInput
 }
 
 func (AssumableRoleWithSAMLArgs) ElementType() reflect.Type {

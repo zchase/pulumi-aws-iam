@@ -22,12 +22,30 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 	switch typ {
 	case "aws-iam:index:Account":
 		r = &Account{}
+	case "aws-iam:index:AssumableRole":
+		r = &AssumableRole{}
 	case "aws-iam:index:AssumableRoleWithOIDC":
 		r = &AssumableRoleWithOIDC{}
 	case "aws-iam:index:AssumableRoleWithSAML":
 		r = &AssumableRoleWithSAML{}
+	case "aws-iam:index:AssumableRoles":
+		r = &AssumableRoles{}
+	case "aws-iam:index:AssumableRolesWithSAML":
+		r = &AssumableRolesWithSAML{}
+	case "aws-iam:index:EKSRole":
+		r = &EKSRole{}
+	case "aws-iam:index:GroupWithAssumableRolesPolicy":
+		r = &GroupWithAssumableRolesPolicy{}
+	case "aws-iam:index:GroupWithPolicies":
+		r = &GroupWithPolicies{}
 	case "aws-iam:index:Policy":
 		r = &Policy{}
+	case "aws-iam:index:ReadOnlyPolicy":
+		r = &ReadOnlyPolicy{}
+	case "aws-iam:index:RoleForServiceAccountsEks":
+		r = &RoleForServiceAccountsEks{}
+	case "aws-iam:index:User":
+		r = &User{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
 	}

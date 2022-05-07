@@ -17,15 +17,11 @@ package provider
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"golang.org/x/exp/slices"
 )
 
 const AssumableRoleWithSAMLIdentifier = "aws-iam:index:AssumableRoleWithSAML"
 
 type AssumableRoleWithSAMLArgs struct {
-	// ID of the SAML Provider. Use provider_ids to specify several IDs.
-	ProviderID string `pulumi:"providerId"`
-
 	// List of SAML Provider IDs.
 	ProviderIDs []string `pulumi:"providerIds"`
 
@@ -35,29 +31,11 @@ type AssumableRoleWithSAMLArgs struct {
 	// A map of tags to add.
 	Tags map[string]string `pulumi:"tags"`
 
-	// IAM role name.
-	RoleName string `pulumi:"roleName"`
-
-	// IAM role name prefix.
-	RoleNamePrefix string `pulumi:"roleNamePrefix"`
-
-	// IAM Role description.
-	RoleDescription string `pulumi:"roleDescription"`
-
-	// Path of IAM role.
-	RolePath string `pulumi:"rolePath"`
-
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn string `pulumi:"rolePermissionsBoundaryArn"`
+	// IAM role.
+	Role RoleArgs `pulumi:"role"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration int `pulumi:"maxSessionDuration"`
-
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns []string `pulumi:"rolePolicyArns"`
-
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns int `pulumi:"numberOfRolePolicyArns"`
 
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
@@ -67,16 +45,16 @@ type AssumableRoleWithSAML struct {
 	pulumi.ResourceState
 
 	// ARN of IAM role.
-	IAMRoleArn pulumi.StringOutput `pulumi:"iamRoleArn"`
+	Arn pulumi.StringOutput `pulumi:"arn"`
 
 	// Name of IAM role.
-	IAMRoleName pulumi.StringOutput `pulumi:"iamRoleName"`
+	Name pulumi.StringOutput `pulumi:"name"`
 
 	// Path of IAM role.
-	IAMRolePath pulumi.StringOutput `pulumi:"iamRolePath"`
+	Path pulumi.StringPtrOutput `pulumi:"path"`
 
 	// Unique ID of IAM role.
-	IAMRoleUniqueID pulumi.StringOutput `pulumi:"iamRoleUniqueId"`
+	UniqueID pulumi.StringOutput `pulumi:"uniqueId"`
 }
 
 func NewAssumableRoleWithSAML(ctx *pulumi.Context, name string, args *AssumableRoleWithSAMLArgs, opts ...pulumi.ResourceOption) (*AssumableRoleWithSAML, error) {
@@ -92,41 +70,31 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context, name string, args *AssumableR
 
 	opts = append(opts, pulumi.Parent(component))
 
-	if !slices.Contains(args.ProviderIDs, args.ProviderID) {
-		args.ProviderIDs = append(args.ProviderIDs, args.ProviderID)
+	policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRoleWithSAML"}).
+		AddFederatedPrincipal(args.ProviderIDs).
+		AddCondition("StringEquals", "SAML:aud", []string{args.AWSSAMLEndpoint}).
+		Build()
+
+	policyDoc, err := iam.GetPolicyDocument(ctx, policyDocArgs)
+	if err != nil {
+		return nil, err
 	}
 
-	effect := "Allow"
-	policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
-		Statements: []iam.GetPolicyDocumentStatement{
-			{
-				Effect:  &effect,
-				Actions: []string{"sts:AssumeRoleWithSAML"},
-				Principals: []iam.GetPolicyDocumentStatementPrincipal{
-					{
-						Type:        "Federated",
-						Identifiers: args.ProviderIDs,
-					},
-				},
-				Conditions: []iam.GetPolicyDocumentStatementCondition{
-					{
-						Test:     "StringEquals",
-						Variable: "SAML:aud",
-						Values:   []string{args.AWSSAMLEndpoint},
-					},
-				},
-			},
-		},
-	})
+	var roleNamePrefix pulumi.StringPtrInput
+	roleName := pulumi.StringPtr(args.Role.Name)
+	if args.Role.NamePrefix != "" {
+		roleNamePrefix = pulumi.StringPtr(args.Role.NamePrefix)
+		roleName = nil
+	}
 
 	role, err := iam.NewRole(ctx, name, &iam.RoleArgs{
-		Name:                pulumi.String(args.RoleName),
-		NamePrefix:          pulumi.String(args.RoleNamePrefix),
-		Description:         pulumi.String(args.RoleDescription),
-		Path:                pulumi.String(args.RolePath),
+		Name:                roleName,
+		NamePrefix:          roleNamePrefix,
+		Description:         pulumi.String(args.Role.Description),
+		Path:                pulumi.String(args.Role.Path),
 		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
 		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		PermissionsBoundary: pulumi.StringPtr(args.RolePermissionsBoundaryArn),
+		PermissionsBoundary: pulumi.StringPtr(args.Role.PermissionsBoundaryArn),
 		Tags:                pulumi.ToStringMap(args.Tags),
 		AssumeRolePolicy:    pulumi.String(policyDoc.Json),
 	}, opts...)
@@ -134,12 +102,17 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context, name string, args *AssumableR
 		return nil, err
 	}
 
-	for _, policyArn := range args.RolePolicyArns {
+	for _, policyArn := range args.Role.PolicyArns {
 		err = createRolePolicyAttachment(ctx, name, policyArn, role.Name, opts...)
 		if err != nil {
 			return nil, err
 		}
 	}
+
+	component.Arn = role.Arn
+	component.Name = role.Name
+	component.Path = role.Path
+	component.UniqueID = role.UniqueId
 
 	return component, nil
 }

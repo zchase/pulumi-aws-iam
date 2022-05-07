@@ -16,7 +16,6 @@ class PolicyArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[str],
                  policy_document: pulumi.Input[str],
-                 create_policy: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input['TagsArgs']] = None):
@@ -24,16 +23,11 @@ class PolicyArgs:
         The set of arguments for constructing a Policy resource.
         :param pulumi.Input[str] name: The name of the policy.
         :param pulumi.Input[str] policy_document: The policy document.
-        :param pulumi.Input[bool] create_policy: Whether to create the IAM policy.
         :param pulumi.Input[str] description: The description of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "policy_document", policy_document)
-        if create_policy is None:
-            create_policy = True
-        if create_policy is not None:
-            pulumi.set(__self__, "create_policy", create_policy)
         if description is None:
             description = 'IAM Policy'
         if description is not None:
@@ -68,18 +62,6 @@ class PolicyArgs:
     @policy_document.setter
     def policy_document(self, value: pulumi.Input[str]):
         pulumi.set(self, "policy_document", value)
-
-    @property
-    @pulumi.getter(name="createPolicy")
-    def create_policy(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to create the IAM policy.
-        """
-        return pulumi.get(self, "create_policy")
-
-    @create_policy.setter
-    def create_policy(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "create_policy", value)
 
     @property
     @pulumi.getter
@@ -120,7 +102,6 @@ class Policy(pulumi.ComponentResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 create_policy: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
@@ -131,7 +112,6 @@ class Policy(pulumi.ComponentResource):
         Create a Policy resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] create_policy: Whether to create the IAM policy.
         :param pulumi.Input[str] description: The description of the policy.
         :param pulumi.Input[str] name: The name of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
@@ -160,7 +140,6 @@ class Policy(pulumi.ComponentResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 create_policy: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
@@ -180,9 +159,6 @@ class Policy(pulumi.ComponentResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PolicyArgs.__new__(PolicyArgs)
 
-            if create_policy is None:
-                create_policy = True
-            __props__.__dict__["create_policy"] = create_policy
             if description is None:
                 description = 'IAM Policy'
             __props__.__dict__["description"] = description

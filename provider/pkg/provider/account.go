@@ -31,9 +31,6 @@ type AccountArgs struct {
 	// AWS IAM account alias for this account.
 	AccountAlias string `pulumi:"accountAlias"`
 
-	// Whether to create AWS IAM account password policy.
-	CreateAccountPasswordPolicy bool `pulumi:"createAccountPasswordPolicy"`
-
 	// The number of days that an user password is valid.
 	MaxPasswordAge int `pulumi:"maxPasswordAge"`
 
@@ -66,16 +63,16 @@ type Account struct {
 	pulumi.ResourceState
 
 	// The AWS Account ID number of the account that owns or contains the calling entity.
-	CallerIdentityAccountId string `pulumi:"callerIdentityAccountId"`
+	Id string `pulumi:"id"`
 
 	// The AWS ARN associated with the calling entity.
-	CallerIdentityArn string `pulumi:"callerIdentityArn"`
+	Arn string `pulumi:"arn"`
 
 	// The unique identifier of the calling entity.
-	CallerIdentityUserId string `pulumi:"callerIdentityUserId"`
+	UserId string `pulumi:"userId"`
 
 	// Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
-	IamAccountPasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"iamAccountPasswordPolicyExpirePasswords"`
+	PasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"passwordPolicyExpirePasswords"`
 }
 
 func NewIAMAccount(ctx *pulumi.Context, name string, args *AccountArgs, opts ...pulumi.ResourceOption) (*Account, error) {
@@ -120,10 +117,10 @@ func NewIAMAccount(ctx *pulumi.Context, name string, args *AccountArgs, opts ...
 		return nil, err
 	}
 
-	component.CallerIdentityAccountId = account.AccountId
-	component.CallerIdentityArn = account.Arn
-	component.CallerIdentityUserId = account.UserId
-	component.IamAccountPasswordPolicyExpirePasswords = passwordPolicy.ExpirePasswords
+	component.Id = account.AccountId
+	component.Arn = account.Arn
+	component.UserId = account.UserId
+	component.PasswordPolicyExpirePasswords = passwordPolicy.ExpirePasswords
 
 	return component, nil
 }

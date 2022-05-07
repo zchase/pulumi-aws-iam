@@ -77,12 +77,6 @@ namespace Pulumi.AwsIam
     public sealed class PolicyArgs : Pulumi.ResourceArgs
     {
         /// <summary>
-        /// Whether to create the IAM policy.
-        /// </summary>
-        [Input("createPolicy")]
-        public Input<bool>? CreatePolicy { get; set; }
-
-        /// <summary>
         /// The description of the policy.
         /// </summary>
         [Input("description")]
@@ -111,7 +105,6 @@ namespace Pulumi.AwsIam
 
         public PolicyArgs()
         {
-            CreatePolicy = true;
             Description = "IAM Policy";
             Path = "/";
         }

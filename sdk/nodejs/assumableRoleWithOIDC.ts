@@ -23,19 +23,19 @@ export class AssumableRoleWithOIDC extends pulumi.ComponentResource {
     /**
      * ARN of IAM role.
      */
-    public /*out*/ readonly iamRoleArn!: pulumi.Output<string>;
+    public /*out*/ readonly arn!: pulumi.Output<string>;
     /**
      * Name of IAM role.
      */
-    public /*out*/ readonly iamRoleName!: pulumi.Output<string>;
+    public /*out*/ readonly name!: pulumi.Output<string>;
     /**
      * Path of IAM role.
      */
-    public /*out*/ readonly iamRolePath!: pulumi.Output<string>;
+    public /*out*/ readonly path!: pulumi.Output<string>;
     /**
      * Unique ID of IAM role.
      */
-    public /*out*/ readonly iamRoleUniqueId!: pulumi.Output<string>;
+    public /*out*/ readonly uniqueId!: pulumi.Output<string>;
 
     /**
      * Create a AssumableRoleWithOIDC resource with the given unique name, arguments, and options.
@@ -49,31 +49,23 @@ export class AssumableRoleWithOIDC extends pulumi.ComponentResource {
         opts = opts || {};
         if (!opts.id) {
             resourceInputs["awsAccountId"] = (args ? args.awsAccountId : undefined) ?? "";
-            resourceInputs["createRole"] = (args ? args.createRole : undefined) ?? false;
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
-            resourceInputs["numberOfRolePolicyArns"] = args ? args.numberOfRolePolicyArns : undefined;
             resourceInputs["oidcFullyQualifiedAudiences"] = args ? args.oidcFullyQualifiedAudiences : undefined;
             resourceInputs["oidcFullyQualifiedSubjects"] = args ? args.oidcFullyQualifiedSubjects : undefined;
             resourceInputs["oidcSubjectsWithWildcards"] = args ? args.oidcSubjectsWithWildcards : undefined;
-            resourceInputs["providerUrl"] = (args ? args.providerUrl : undefined) ?? "";
             resourceInputs["providerUrls"] = args ? args.providerUrls : undefined;
-            resourceInputs["roleDescription"] = (args ? args.roleDescription : undefined) ?? "";
-            resourceInputs["roleName"] = args ? args.roleName : undefined;
-            resourceInputs["roleNamePrefix"] = args ? args.roleNamePrefix : undefined;
-            resourceInputs["rolePath"] = (args ? args.rolePath : undefined) ?? "/";
-            resourceInputs["rolePermissionsBoundaryArn"] = (args ? args.rolePermissionsBoundaryArn : undefined) ?? "";
-            resourceInputs["rolePolicyArns"] = args ? args.rolePolicyArns : undefined;
+            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleArgsProvideDefaults) : undefined) : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
-            resourceInputs["iamRoleArn"] = undefined /*out*/;
-            resourceInputs["iamRoleName"] = undefined /*out*/;
-            resourceInputs["iamRolePath"] = undefined /*out*/;
-            resourceInputs["iamRoleUniqueId"] = undefined /*out*/;
+            resourceInputs["arn"] = undefined /*out*/;
+            resourceInputs["name"] = undefined /*out*/;
+            resourceInputs["path"] = undefined /*out*/;
+            resourceInputs["uniqueId"] = undefined /*out*/;
         } else {
-            resourceInputs["iamRoleArn"] = undefined /*out*/;
-            resourceInputs["iamRoleName"] = undefined /*out*/;
-            resourceInputs["iamRolePath"] = undefined /*out*/;
-            resourceInputs["iamRoleUniqueId"] = undefined /*out*/;
+            resourceInputs["arn"] = undefined /*out*/;
+            resourceInputs["name"] = undefined /*out*/;
+            resourceInputs["path"] = undefined /*out*/;
+            resourceInputs["uniqueId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(AssumableRoleWithOIDC.__pulumiType, name, resourceInputs, opts, true /*remote*/);
@@ -89,10 +81,6 @@ export interface AssumableRoleWithOIDCArgs {
      */
     awsAccountId?: pulumi.Input<string>;
     /**
-     * Whether to create a role.
-     */
-    createRole?: pulumi.Input<boolean>;
-    /**
      * Whether policies should be detached from this role when destroying.
      */
     forceDetachPolicies?: pulumi.Input<boolean>;
@@ -100,10 +88,6 @@ export interface AssumableRoleWithOIDCArgs {
      * Maximum CLI/API session duration in seconds between 3600 and 43200.
      */
     maxSessionDuration?: pulumi.Input<number>;
-    /**
-     * Number of IAM policies to attach to IAM role.
-     */
-    numberOfRolePolicyArns?: pulumi.Input<number>;
     /**
      * The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
      */
@@ -117,36 +101,12 @@ export interface AssumableRoleWithOIDCArgs {
      */
     oidcSubjectsWithWildcards?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * URL of the OIDC Provider. Use provider_urls to specify several URLs.
-     */
-    providerUrl?: pulumi.Input<string>;
-    /**
      * List of URLs of the OIDC Providers.
      */
     providerUrls?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * IAM Role description.
+     * The IAM role.
      */
-    roleDescription?: pulumi.Input<string>;
-    /**
-     * IAM role name.
-     */
-    roleName?: pulumi.Input<string>;
-    /**
-     * IAM role name prefix.
-     */
-    roleNamePrefix?: pulumi.Input<string>;
-    /**
-     * Path of IAM role.
-     */
-    rolePath?: pulumi.Input<string>;
-    /**
-     * Permissions boundary ARN to use for IAM role.
-     */
-    rolePermissionsBoundaryArn?: pulumi.Input<string>;
-    /**
-     * List of ARNs of IAM policies to attach to IAM role.
-     */
-    rolePolicyArns?: pulumi.Input<pulumi.Input<string>[]>;
+    role?: pulumi.Input<inputs.RoleArgs>;
     tags?: pulumi.Input<inputs.TagsArgs>;
 }

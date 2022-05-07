@@ -22,10 +22,19 @@ import (
 )
 
 var resourceConstructorMap = map[string]ResourceConstructor{
-	AccountIdentifier:               createNewResourceConstructor(NewIAMAccount),
-	PolicyIdentifier:                createNewResourceConstructor(NewPolicy),
-	AssumableRoleWithOIDCIdentifier: createNewResourceConstructor(NewIAMAssumableRoleWithOIDC),
-	AssumableRoleWithSAMLIdentifier: createNewResourceConstructor(NewAssumableRoleWithSAML),
+	AccountIdentifier:                       createNewResourceConstructor(NewIAMAccount),
+	PolicyIdentifier:                        createNewResourceConstructor(NewPolicy),
+	AssumableRoleWithOIDCIdentifier:         createNewResourceConstructor(NewIAMAssumableRoleWithOIDC),
+	AssumableRoleWithSAMLIdentifier:         createNewResourceConstructor(NewAssumableRoleWithSAML),
+	AssumableRoleIdentifier:                 createNewResourceConstructor(NewAssumableRole),
+	AssumableRolesWithSAMLIdentifier:        createNewResourceConstructor(NewAssumableRolesWithSAML),
+	AssumableRolesIdentifier:                createNewResourceConstructor(NewAssumableRoles),
+	EKSRoleIdentifier:                       createNewResourceConstructor(NewEKSRole),
+	GroupWithAssumableRolesPolicyIdentifier: createNewResourceConstructor(NewGroupWithAssumableRolesPolicy),
+	GroupWithPoliciesIdentifier:             createNewResourceConstructor(NewGroupWithPolicies),
+	ReadOnlyPolicyIdentifier:                createNewResourceConstructor(NewReadOnlyPolicy),
+	RoleForServiceAccountsEksIdentifier:     createNewResourceConstructor(NewRoleForServiceAccountsEks),
+	UserIdentifier:                          createNewResourceConstructor(NewUser),
 }
 
 type ResourceConstructor func(ctx *pulumi.Context, name string, inputs provider.ConstructInputs, options pulumi.ResourceOption) (*provider.ConstructResult, error)

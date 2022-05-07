@@ -13,28 +13,28 @@ namespace Pulumi.AwsIam
     public partial class Account : Pulumi.ComponentResource
     {
         /// <summary>
-        /// The AWS Account ID number of the account that owns or contains the calling entity
-        /// </summary>
-        [Output("callerIdentityAccountId")]
-        public Output<string> CallerIdentityAccountId { get; private set; } = null!;
-
-        /// <summary>
         /// The AWS ARN associated with the calling entity
         /// </summary>
-        [Output("callerIdentityArn")]
-        public Output<string> CallerIdentityArn { get; private set; } = null!;
+        [Output("arn")]
+        public Output<string> Arn { get; private set; } = null!;
 
         /// <summary>
-        /// The unique identifier of the calling entity
+        /// The AWS Account ID number of the account that owns or contains the calling entity
         /// </summary>
-        [Output("callerIdentityUserId")]
-        public Output<string> CallerIdentityUserId { get; private set; } = null!;
+        [Output("id")]
+        public Output<string> Id { get; private set; } = null!;
 
         /// <summary>
         /// Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
         /// </summary>
-        [Output("iamAccountPasswordPolicyExpirePasswords")]
-        public Output<bool> IamAccountPasswordPolicyExpirePasswords { get; private set; } = null!;
+        [Output("passwordPolicyExpirePasswords")]
+        public Output<bool> PasswordPolicyExpirePasswords { get; private set; } = null!;
+
+        /// <summary>
+        /// The unique identifier of the calling entity
+        /// </summary>
+        [Output("userId")]
+        public Output<string> UserId { get; private set; } = null!;
 
 
         /// <summary>
@@ -77,13 +77,7 @@ namespace Pulumi.AwsIam
         public Input<bool>? AllowUsersToChangePassword { get; set; }
 
         /// <summary>
-        /// Whether to create AWS IAM account password policy.
-        /// </summary>
-        [Input("createAccountPasswordPolicy")]
-        public Input<bool>? CreateAccountPasswordPolicy { get; set; }
-
-        /// <summary>
-        /// Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+        /// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
         /// </summary>
         [Input("getCallerIdentity")]
         public Input<bool>? GetCallerIdentity { get; set; }
@@ -139,7 +133,6 @@ namespace Pulumi.AwsIam
         public AccountArgs()
         {
             AllowUsersToChangePassword = true;
-            CreateAccountPasswordPolicy = true;
             GetCallerIdentity = true;
             HardExpiry = false;
             MaxPasswordAge = 0;

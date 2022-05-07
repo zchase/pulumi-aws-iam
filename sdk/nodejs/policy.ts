@@ -62,7 +62,6 @@ export class Policy extends pulumi.ComponentResource {
             if ((!args || args.policyDocument === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'policyDocument'");
             }
-            resourceInputs["createPolicy"] = (args ? args.createPolicy : undefined) ?? true;
             resourceInputs["description"] = (args ? args.description : undefined) ?? "IAM Policy";
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["path"] = (args ? args.path : undefined) ?? "/";
@@ -87,10 +86,6 @@ export class Policy extends pulumi.ComponentResource {
  * The set of arguments for constructing a Policy resource.
  */
 export interface PolicyArgs {
-    /**
-     * Whether to create the IAM policy.
-     */
-    createPolicy?: pulumi.Input<boolean>;
     /**
      * The description of the policy.
      */

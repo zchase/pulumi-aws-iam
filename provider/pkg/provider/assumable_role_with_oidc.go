@@ -21,15 +21,34 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws"
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"golang.org/x/exp/slices"
 )
 
 const AssumableRoleWithOIDCIdentifier = "aws-iam:index:AssumableRoleWithOIDC"
 
-type AssumableRoleWithOIDCArgs struct {
-	// URL of the OIDC Provider. Use provider_urls to specify several URLs.
-	ProviderURL string `pulumi:"providerUrl"`
+type RoleArgs struct {
+	// IAM role name.
+	Name string `pulumi:"name"`
 
+	// IAM role name prefix.
+	NamePrefix string `pulumi:"namePrefix"`
+
+	// IAM Role description.
+	Description string `pulumi:"description"`
+
+	// Path of IAM role.
+	Path string `pulumi:"path"`
+
+	// Permissions boundary ARN to use for IAM role.
+	PermissionsBoundaryArn string `pulumi:"permissionsBoundaryArn"`
+
+	// List of ARNs of IAM policies to attach to IAM role.
+	PolicyArns []string `pulumi:"policyArns"`
+
+	// Whether role requires MFA.
+	RequiresMFA bool `pulumi:"requiresMfa"`
+}
+
+type AssumableRoleWithOIDCArgs struct {
 	// List of URLs of the OIDC Providers.
 	ProviderURLs []string `pulumi:"providerUrls"`
 
@@ -39,29 +58,11 @@ type AssumableRoleWithOIDCArgs struct {
 	// A map of tags to add.
 	Tags map[string]string `pulumi:"tags"`
 
-	// IAM role name.
-	RoleName string `pulumi:"roleName"`
-
-	// IAM role name prefix.
-	RoleNamePrefix string `pulumi:"roleNamePrefix"`
-
-	// IAM Role description.
-	RoleDescription string `pulumi:"roleDescription"`
-
-	// Path of IAM role.
-	RolePath string `pulumi:"rolePath"`
-
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn string `pulumi:"rolePermissionsBoundaryArn"`
+	// IAM role.
+	Role RoleArgs `pulumi:"role"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration int `pulumi:"maxSessionDuration"`
-
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns []string `pulumi:"rolePolicyArns"`
-
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns int `pulumi:"numberOfRolePolicyArns"`
 
 	// The fully qualified OIDC subjects to be added to the role policy.
 	OIDCFullyQualifiedSubjects []string `pulumi:"oidcFullyQualifiedSubjects"`
@@ -80,16 +81,16 @@ type AssumableRoleWithOIDC struct {
 	pulumi.ResourceState
 
 	// ARN of IAM role.
-	IAMRoleArn pulumi.StringOutput `pulumi:"iamRoleArn"`
+	Arn pulumi.StringOutput `pulumi:"arn"`
 
 	// Name of IAM role.
-	IAMRoleName pulumi.StringOutput `pulumi:"iamRoleName"`
+	Name pulumi.StringOutput `pulumi:"name"`
 
 	// Path of IAM role.
-	IAMRolePath pulumi.StringOutput `pulumi:"iamRolePath"`
+	Path pulumi.StringPtrOutput `pulumi:"path"`
 
 	// Unique ID of IAM role.
-	IAMRoleUniqueID pulumi.StringOutput `pulumi:"iamRoleUniqueId"`
+	UniqueID pulumi.StringOutput `pulumi:"uniqueId"`
 }
 
 func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *AssumableRoleWithOIDCArgs, opts ...pulumi.ResourceOption) (*AssumableRoleWithOIDC, error) {
@@ -118,22 +119,27 @@ func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *Assumab
 		return nil, err
 	}
 
-	if !slices.Contains(args.ProviderURLs, args.ProviderURL) {
-		args.ProviderURLs = append(args.ProviderURLs, args.ProviderURL)
-	}
-
 	for index, url := range args.ProviderURLs {
 		args.ProviderURLs[index] = strings.ReplaceAll(url, "https://", "")
-	}
-
-	if args.NumberOfRolePolicyArns == 0 {
-		args.NumberOfRolePolicyArns = len(args.RolePolicyArns)
 	}
 
 	var policies []string
 	for _, url := range args.ProviderURLs {
 		effect := "Allow"
 		principalIdentifier := fmt.Sprintf("arn:%s:iam::%s:oidc-provider/%s", currentPartition.Partition, args.AWSAccountID, url)
+
+		var policyConditions []iam.GetPolicyDocumentStatementCondition
+		if len(args.OIDCFullyQualifiedSubjects) > 0 {
+			policyConditions = append(policyConditions, NewPolicyDocCondition("StringEquals", fmt.Sprintf("%s:sub", url), args.OIDCFullyQualifiedSubjects...))
+		}
+
+		if len(args.OIDCSubjectsWithWildcards) > 0 {
+			policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:sub", url), args.OIDCSubjectsWithWildcards...))
+		}
+
+		if len(args.OIDCFullyQualifiedAudiences) > 0 {
+			policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:sub", url), args.OIDCFullyQualifiedAudiences...))
+		}
 
 		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
 			Statements: []iam.GetPolicyDocumentStatement{
@@ -146,23 +152,7 @@ func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *Assumab
 							Identifiers: []string{principalIdentifier},
 						},
 					},
-					Conditions: []iam.GetPolicyDocumentStatementCondition{
-						{
-							Test:     "StringEquals",
-							Variable: fmt.Sprintf("%s:sub", url),
-							Values:   args.OIDCFullyQualifiedSubjects,
-						},
-						{
-							Test:     "StringLike",
-							Variable: fmt.Sprintf("%s:sub", url),
-							Values:   args.OIDCSubjectsWithWildcards,
-						},
-						{
-							Test:     "StringLike",
-							Variable: fmt.Sprintf("%s:aud", url),
-							Values:   args.OIDCFullyQualifiedAudiences,
-						},
-					},
+					Conditions: policyConditions,
 				},
 			},
 		})
@@ -173,14 +163,21 @@ func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *Assumab
 		policies = append(policies, policyDoc.Json)
 	}
 
+	var roleNamePrefix pulumi.StringPtrInput
+	roleName := pulumi.StringPtr(args.Role.Name)
+	if args.Role.NamePrefix != "" {
+		roleNamePrefix = pulumi.StringPtr(args.Role.NamePrefix)
+		roleName = nil
+	}
+
 	role, err := iam.NewRole(ctx, name, &iam.RoleArgs{
-		Name:                pulumi.String(args.RoleName),
-		NamePrefix:          pulumi.String(args.RoleNamePrefix),
-		Description:         pulumi.String(args.RoleDescription),
-		Path:                pulumi.String(args.RolePath),
+		Name:                roleName,
+		NamePrefix:          roleNamePrefix,
+		Description:         pulumi.String(args.Role.Description),
+		Path:                pulumi.String(args.Role.Path),
 		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
 		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		PermissionsBoundary: pulumi.StringPtr(args.RolePermissionsBoundaryArn),
+		PermissionsBoundary: pulumi.StringPtr(args.Role.PermissionsBoundaryArn),
 		Tags:                pulumi.ToStringMap(args.Tags),
 		AssumeRolePolicy:    pulumi.String(strings.Join(policies, "")),
 	}, opts...)
@@ -188,12 +185,17 @@ func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *Assumab
 		return nil, err
 	}
 
-	for _, policyArn := range args.RolePolicyArns {
+	for _, policyArn := range args.Role.PolicyArns {
 		err = createRolePolicyAttachment(ctx, name, policyArn, role.Name, opts...)
 		if err != nil {
 			return nil, err
 		}
 	}
+
+	component.Arn = role.Arn
+	component.Name = role.Name
+	component.Path = role.Path
+	component.UniqueID = role.UniqueId
 
 	return component, nil
 }

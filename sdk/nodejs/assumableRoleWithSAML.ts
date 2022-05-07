@@ -23,19 +23,19 @@ export class AssumableRoleWithSAML extends pulumi.ComponentResource {
     /**
      * ARN of IAM role.
      */
-    public /*out*/ readonly iamRoleArn!: pulumi.Output<string>;
+    public /*out*/ readonly roleArn!: pulumi.Output<string>;
     /**
      * Name of IAM role.
      */
-    public /*out*/ readonly iamRoleName!: pulumi.Output<string>;
+    public /*out*/ readonly roleName!: pulumi.Output<string>;
     /**
      * Path of IAM role.
      */
-    public /*out*/ readonly iamRolePath!: pulumi.Output<string>;
+    public /*out*/ readonly rolePath!: pulumi.Output<string>;
     /**
      * Unique ID of IAM role.
      */
-    public /*out*/ readonly iamRoleUniqueId!: pulumi.Output<string>;
+    public /*out*/ readonly roleUniqueId!: pulumi.Output<string>;
 
     /**
      * Create a AssumableRoleWithSAML resource with the given unique name, arguments, and options.
@@ -49,28 +49,20 @@ export class AssumableRoleWithSAML extends pulumi.ComponentResource {
         opts = opts || {};
         if (!opts.id) {
             resourceInputs["awsSamlEndpoint"] = (args ? args.awsSamlEndpoint : undefined) ?? "https://signin.aws.amazon.com/saml";
-            resourceInputs["createRole"] = (args ? args.createRole : undefined) ?? false;
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
-            resourceInputs["numberOfRolePolicyArns"] = args ? args.numberOfRolePolicyArns : undefined;
-            resourceInputs["providerId"] = (args ? args.providerId : undefined) ?? "";
             resourceInputs["providerIds"] = args ? args.providerIds : undefined;
-            resourceInputs["roleDescription"] = (args ? args.roleDescription : undefined) ?? "";
-            resourceInputs["roleName"] = args ? args.roleName : undefined;
-            resourceInputs["roleNamePrefix"] = args ? args.roleNamePrefix : undefined;
-            resourceInputs["rolePath"] = (args ? args.rolePath : undefined) ?? "/";
-            resourceInputs["rolePermissionsBoundaryArn"] = (args ? args.rolePermissionsBoundaryArn : undefined) ?? "";
-            resourceInputs["rolePolicyArns"] = args ? args.rolePolicyArns : undefined;
+            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleArgsProvideDefaults) : undefined) : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
-            resourceInputs["iamRoleArn"] = undefined /*out*/;
-            resourceInputs["iamRoleName"] = undefined /*out*/;
-            resourceInputs["iamRolePath"] = undefined /*out*/;
-            resourceInputs["iamRoleUniqueId"] = undefined /*out*/;
+            resourceInputs["roleArn"] = undefined /*out*/;
+            resourceInputs["roleName"] = undefined /*out*/;
+            resourceInputs["rolePath"] = undefined /*out*/;
+            resourceInputs["roleUniqueId"] = undefined /*out*/;
         } else {
-            resourceInputs["iamRoleArn"] = undefined /*out*/;
-            resourceInputs["iamRoleName"] = undefined /*out*/;
-            resourceInputs["iamRolePath"] = undefined /*out*/;
-            resourceInputs["iamRoleUniqueId"] = undefined /*out*/;
+            resourceInputs["roleArn"] = undefined /*out*/;
+            resourceInputs["roleName"] = undefined /*out*/;
+            resourceInputs["rolePath"] = undefined /*out*/;
+            resourceInputs["roleUniqueId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(AssumableRoleWithSAML.__pulumiType, name, resourceInputs, opts, true /*remote*/);
@@ -86,10 +78,6 @@ export interface AssumableRoleWithSAMLArgs {
      */
     awsSamlEndpoint?: pulumi.Input<string>;
     /**
-     * Whether to create a role.
-     */
-    createRole?: pulumi.Input<boolean>;
-    /**
      * Whether policies should be detached from this role when destroying.
      */
     forceDetachPolicies?: pulumi.Input<boolean>;
@@ -98,40 +86,9 @@ export interface AssumableRoleWithSAMLArgs {
      */
     maxSessionDuration?: pulumi.Input<number>;
     /**
-     * Number of IAM policies to attach to IAM role.
-     */
-    numberOfRolePolicyArns?: pulumi.Input<number>;
-    /**
-     * ID of the SAML Provider. Use provider_ids to specify several IDs.
-     */
-    providerId?: pulumi.Input<string>;
-    /**
      * List of SAML Provider IDs.
      */
     providerIds?: pulumi.Input<pulumi.Input<string>[]>;
-    /**
-     * IAM Role description.
-     */
-    roleDescription?: pulumi.Input<string>;
-    /**
-     * IAM role name.
-     */
-    roleName?: pulumi.Input<string>;
-    /**
-     * IAM role name prefix.
-     */
-    roleNamePrefix?: pulumi.Input<string>;
-    /**
-     * Path of IAM role.
-     */
-    rolePath?: pulumi.Input<string>;
-    /**
-     * Permissions boundary ARN to use for IAM role.
-     */
-    rolePermissionsBoundaryArn?: pulumi.Input<string>;
-    /**
-     * List of ARNs of IAM policies to attach to IAM role.
-     */
-    rolePolicyArns?: pulumi.Input<pulumi.Input<string>[]>;
+    role?: pulumi.Input<inputs.RoleArgs>;
     tags?: pulumi.Input<inputs.TagsArgs>;
 }

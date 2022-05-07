@@ -14,14 +14,23 @@
     },
     "files": [
         "account.ts",
+        "assumableRole.ts",
         "assumableRoleWithOIDC.ts",
         "assumableRoleWithSAML.ts",
+        "assumableRoles.ts",
+        "assumableRolesWithSAML.ts",
+        "eksrole.ts",
+        "groupWithAssumableRolesPolicy.ts",
+        "groupWithPolicies.ts",
         "index.ts",
         "policy.ts",
         "provider.ts",
+        "readOnlyPolicy.ts",
+        "roleForServiceAccountsEks.ts",
         "types/index.ts",
         "types/input.ts",
         "types/output.ts",
+        "user.ts",
         "utilities.ts"
     ]
 }

@@ -15,7 +15,6 @@ class AccountArgs:
     def __init__(__self__, *,
                  account_alias: pulumi.Input[str],
                  allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 create_account_password_policy: Optional[pulumi.Input[bool]] = None,
                  get_caller_identity: Optional[pulumi.Input[bool]] = None,
                  hard_expiry: Optional[pulumi.Input[bool]] = None,
                  max_password_age: Optional[pulumi.Input[int]] = None,
@@ -29,8 +28,7 @@ class AccountArgs:
         The set of arguments for constructing a Account resource.
         :param pulumi.Input[str] account_alias: AWS IAM account alias for this account.
         :param pulumi.Input[bool] allow_users_to_change_password: Whether to allow users to change their own password.
-        :param pulumi.Input[bool] create_account_password_policy: Whether to create AWS IAM account password policy.
-        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
         :param pulumi.Input[bool] hard_expiry: Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
         :param pulumi.Input[int] max_password_age: The number of days that an user password is valid.
         :param pulumi.Input[int] minimum_password_length: Minimum length to require for user passwords.
@@ -45,10 +43,6 @@ class AccountArgs:
             allow_users_to_change_password = True
         if allow_users_to_change_password is not None:
             pulumi.set(__self__, "allow_users_to_change_password", allow_users_to_change_password)
-        if create_account_password_policy is None:
-            create_account_password_policy = True
-        if create_account_password_policy is not None:
-            pulumi.set(__self__, "create_account_password_policy", create_account_password_policy)
         if get_caller_identity is None:
             get_caller_identity = True
         if get_caller_identity is not None:
@@ -109,22 +103,10 @@ class AccountArgs:
         pulumi.set(self, "allow_users_to_change_password", value)
 
     @property
-    @pulumi.getter(name="createAccountPasswordPolicy")
-    def create_account_password_policy(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to create AWS IAM account password policy.
-        """
-        return pulumi.get(self, "create_account_password_policy")
-
-    @create_account_password_policy.setter
-    def create_account_password_policy(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "create_account_password_policy", value)
-
-    @property
     @pulumi.getter(name="getCallerIdentity")
     def get_caller_identity(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+        Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
         """
         return pulumi.get(self, "get_caller_identity")
 
@@ -236,7 +218,6 @@ class Account(pulumi.ComponentResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_alias: Optional[pulumi.Input[str]] = None,
                  allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 create_account_password_policy: Optional[pulumi.Input[bool]] = None,
                  get_caller_identity: Optional[pulumi.Input[bool]] = None,
                  hard_expiry: Optional[pulumi.Input[bool]] = None,
                  max_password_age: Optional[pulumi.Input[int]] = None,
@@ -253,8 +234,7 @@ class Account(pulumi.ComponentResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account_alias: AWS IAM account alias for this account.
         :param pulumi.Input[bool] allow_users_to_change_password: Whether to allow users to change their own password.
-        :param pulumi.Input[bool] create_account_password_policy: Whether to create AWS IAM account password policy.
-        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
         :param pulumi.Input[bool] hard_expiry: Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
         :param pulumi.Input[int] max_password_age: The number of days that an user password is valid.
         :param pulumi.Input[int] minimum_password_length: Minimum length to require for user passwords.
@@ -289,7 +269,6 @@ class Account(pulumi.ComponentResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_alias: Optional[pulumi.Input[str]] = None,
                  allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 create_account_password_policy: Optional[pulumi.Input[bool]] = None,
                  get_caller_identity: Optional[pulumi.Input[bool]] = None,
                  hard_expiry: Optional[pulumi.Input[bool]] = None,
                  max_password_age: Optional[pulumi.Input[int]] = None,
@@ -319,9 +298,6 @@ class Account(pulumi.ComponentResource):
             if allow_users_to_change_password is None:
                 allow_users_to_change_password = True
             __props__.__dict__["allow_users_to_change_password"] = allow_users_to_change_password
-            if create_account_password_policy is None:
-                create_account_password_policy = True
-            __props__.__dict__["create_account_password_policy"] = create_account_password_policy
             if get_caller_identity is None:
                 get_caller_identity = True
             __props__.__dict__["get_caller_identity"] = get_caller_identity
@@ -347,10 +323,10 @@ class Account(pulumi.ComponentResource):
             if require_uppercase_characters is None:
                 require_uppercase_characters = True
             __props__.__dict__["require_uppercase_characters"] = require_uppercase_characters
-            __props__.__dict__["caller_identity_account_id"] = None
-            __props__.__dict__["caller_identity_arn"] = None
-            __props__.__dict__["caller_identity_user_id"] = None
-            __props__.__dict__["iam_account_password_policy_expire_passwords"] = None
+            __props__.__dict__["arn"] = None
+            __props__.__dict__["id"] = None
+            __props__.__dict__["password_policy_expire_passwords"] = None
+            __props__.__dict__["user_id"] = None
         super(Account, __self__).__init__(
             'aws-iam:index:Account',
             resource_name,
@@ -359,34 +335,34 @@ class Account(pulumi.ComponentResource):
             remote=True)
 
     @property
-    @pulumi.getter(name="callerIdentityAccountId")
-    def caller_identity_account_id(self) -> pulumi.Output[str]:
-        """
-        The AWS Account ID number of the account that owns or contains the calling entity
-        """
-        return pulumi.get(self, "caller_identity_account_id")
-
-    @property
-    @pulumi.getter(name="callerIdentityArn")
-    def caller_identity_arn(self) -> pulumi.Output[str]:
+    @pulumi.getter
+    def arn(self) -> pulumi.Output[str]:
         """
         The AWS ARN associated with the calling entity
         """
-        return pulumi.get(self, "caller_identity_arn")
+        return pulumi.get(self, "arn")
 
     @property
-    @pulumi.getter(name="callerIdentityUserId")
-    def caller_identity_user_id(self) -> pulumi.Output[str]:
+    @pulumi.getter
+    def id(self) -> pulumi.Output[str]:
         """
-        The unique identifier of the calling entity
+        The AWS Account ID number of the account that owns or contains the calling entity
         """
-        return pulumi.get(self, "caller_identity_user_id")
+        return pulumi.get(self, "id")
 
     @property
-    @pulumi.getter(name="iamAccountPasswordPolicyExpirePasswords")
-    def iam_account_password_policy_expire_passwords(self) -> pulumi.Output[bool]:
+    @pulumi.getter(name="passwordPolicyExpirePasswords")
+    def password_policy_expire_passwords(self) -> pulumi.Output[bool]:
         """
         Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
         """
-        return pulumi.get(self, "iam_account_password_policy_expire_passwords")
+        return pulumi.get(self, "password_policy_expire_passwords")
+
+    @property
+    @pulumi.getter(name="userId")
+    def user_id(self) -> pulumi.Output[str]:
+        """
+        The unique identifier of the calling entity
+        """
+        return pulumi.get(self, "user_id")
 

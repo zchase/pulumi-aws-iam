@@ -18,6 +18,10 @@ build:: build_provider build_dotnet_sdk build_nodejs_sdk build_python_sdk
 
 install:: install_provider install_dotnet_sdk install_nodejs_sdk
 
+all:: generate build install
+
+all_typescript:: gen_nodejs_sdk build_provider build_nodejs_sdk install_provider install_nodejs_sdk
+
 
 # Provider
 

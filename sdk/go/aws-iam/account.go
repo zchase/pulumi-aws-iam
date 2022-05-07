@@ -14,14 +14,14 @@ import (
 type Account struct {
 	pulumi.ResourceState
 
-	// The AWS Account ID number of the account that owns or contains the calling entity
-	CallerIdentityAccountId pulumi.StringOutput `pulumi:"callerIdentityAccountId"`
 	// The AWS ARN associated with the calling entity
-	CallerIdentityArn pulumi.StringOutput `pulumi:"callerIdentityArn"`
-	// The unique identifier of the calling entity
-	CallerIdentityUserId pulumi.StringOutput `pulumi:"callerIdentityUserId"`
+	Arn pulumi.StringOutput `pulumi:"arn"`
+	// The AWS Account ID number of the account that owns or contains the calling entity
+	Id pulumi.StringOutput `pulumi:"id"`
 	// Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
-	IamAccountPasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"iamAccountPasswordPolicyExpirePasswords"`
+	PasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"passwordPolicyExpirePasswords"`
+	// The unique identifier of the calling entity
+	UserId pulumi.StringOutput `pulumi:"userId"`
 }
 
 // NewAccount registers a new resource with the given unique name, arguments, and options.
@@ -36,9 +36,6 @@ func NewAccount(ctx *pulumi.Context,
 	}
 	if isZero(args.AllowUsersToChangePassword) {
 		args.AllowUsersToChangePassword = pulumi.BoolPtr(true)
-	}
-	if isZero(args.CreateAccountPasswordPolicy) {
-		args.CreateAccountPasswordPolicy = pulumi.BoolPtr(true)
 	}
 	if isZero(args.GetCallerIdentity) {
 		args.GetCallerIdentity = pulumi.BoolPtr(true)
@@ -77,9 +74,7 @@ type accountArgs struct {
 	AccountAlias string `pulumi:"accountAlias"`
 	// Whether to allow users to change their own password.
 	AllowUsersToChangePassword *bool `pulumi:"allowUsersToChangePassword"`
-	// Whether to create AWS IAM account password policy.
-	CreateAccountPasswordPolicy *bool `pulumi:"createAccountPasswordPolicy"`
-	// Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+	// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
 	GetCallerIdentity *bool `pulumi:"getCallerIdentity"`
 	// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
 	HardExpiry *bool `pulumi:"hardExpiry"`
@@ -105,9 +100,7 @@ type AccountArgs struct {
 	AccountAlias pulumi.StringInput
 	// Whether to allow users to change their own password.
 	AllowUsersToChangePassword pulumi.BoolPtrInput
-	// Whether to create AWS IAM account password policy.
-	CreateAccountPasswordPolicy pulumi.BoolPtrInput
-	// Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
+	// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
 	GetCallerIdentity pulumi.BoolPtrInput
 	// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
 	HardExpiry pulumi.BoolPtrInput

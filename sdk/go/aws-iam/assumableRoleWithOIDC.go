@@ -14,13 +14,13 @@ type AssumableRoleWithOIDC struct {
 	pulumi.ResourceState
 
 	// ARN of IAM role.
-	IamRoleArn pulumi.StringOutput `pulumi:"iamRoleArn"`
+	Arn pulumi.StringOutput `pulumi:"arn"`
 	// Name of IAM role.
-	IamRoleName pulumi.StringOutput `pulumi:"iamRoleName"`
+	Name pulumi.StringOutput `pulumi:"name"`
 	// Path of IAM role.
-	IamRolePath pulumi.StringOutput `pulumi:"iamRolePath"`
+	Path pulumi.StringOutput `pulumi:"path"`
 	// Unique ID of IAM role.
-	IamRoleUniqueId pulumi.StringOutput `pulumi:"iamRoleUniqueId"`
+	UniqueId pulumi.StringOutput `pulumi:"uniqueId"`
 }
 
 // NewAssumableRoleWithOIDC registers a new resource with the given unique name, arguments, and options.
@@ -33,26 +33,14 @@ func NewAssumableRoleWithOIDC(ctx *pulumi.Context,
 	if isZero(args.AwsAccountId) {
 		args.AwsAccountId = pulumi.StringPtr("")
 	}
-	if isZero(args.CreateRole) {
-		args.CreateRole = pulumi.BoolPtr(false)
-	}
 	if isZero(args.ForceDetachPolicies) {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
 	if isZero(args.MaxSessionDuration) {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
-	if isZero(args.ProviderUrl) {
-		args.ProviderUrl = pulumi.StringPtr("")
-	}
-	if isZero(args.RoleDescription) {
-		args.RoleDescription = pulumi.StringPtr("")
-	}
-	if isZero(args.RolePath) {
-		args.RolePath = pulumi.StringPtr("/")
-	}
-	if isZero(args.RolePermissionsBoundaryArn) {
-		args.RolePermissionsBoundaryArn = pulumi.StringPtr("")
+	if args.Role != nil {
+		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
 	var resource AssumableRoleWithOIDC
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoleWithOIDC", name, args, &resource, opts...)
@@ -65,74 +53,42 @@ func NewAssumableRoleWithOIDC(ctx *pulumi.Context,
 type assumableRoleWithOIDCArgs struct {
 	// The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
 	AwsAccountId *string `pulumi:"awsAccountId"`
-	// Whether to create a role.
-	CreateRole *bool `pulumi:"createRole"`
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies *bool `pulumi:"forceDetachPolicies"`
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration *int `pulumi:"maxSessionDuration"`
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns *int `pulumi:"numberOfRolePolicyArns"`
 	// The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
 	OidcFullyQualifiedAudiences []string `pulumi:"oidcFullyQualifiedAudiences"`
 	// The fully qualified OIDC subjects to be added to the role policy.
 	OidcFullyQualifiedSubjects []string `pulumi:"oidcFullyQualifiedSubjects"`
 	// The OIDC subject using wildcards to be added to the role policy.
 	OidcSubjectsWithWildcards []string `pulumi:"oidcSubjectsWithWildcards"`
-	// URL of the OIDC Provider. Use provider_urls to specify several URLs.
-	ProviderUrl *string `pulumi:"providerUrl"`
 	// List of URLs of the OIDC Providers.
 	ProviderUrls []string `pulumi:"providerUrls"`
-	// IAM Role description.
-	RoleDescription *string `pulumi:"roleDescription"`
-	// IAM role name.
-	RoleName *string `pulumi:"roleName"`
-	// IAM role name prefix.
-	RoleNamePrefix *string `pulumi:"roleNamePrefix"`
-	// Path of IAM role.
-	RolePath *string `pulumi:"rolePath"`
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn *string `pulumi:"rolePermissionsBoundaryArn"`
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns []string `pulumi:"rolePolicyArns"`
-	Tags           *Tags    `pulumi:"tags"`
+	// The IAM role.
+	Role *Role `pulumi:"role"`
+	Tags *Tags `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a AssumableRoleWithOIDC resource.
 type AssumableRoleWithOIDCArgs struct {
 	// The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
 	AwsAccountId pulumi.StringPtrInput
-	// Whether to create a role.
-	CreateRole pulumi.BoolPtrInput
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies pulumi.BoolPtrInput
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration pulumi.IntPtrInput
-	// Number of IAM policies to attach to IAM role.
-	NumberOfRolePolicyArns pulumi.IntPtrInput
 	// The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
 	OidcFullyQualifiedAudiences pulumi.StringArrayInput
 	// The fully qualified OIDC subjects to be added to the role policy.
 	OidcFullyQualifiedSubjects pulumi.StringArrayInput
 	// The OIDC subject using wildcards to be added to the role policy.
 	OidcSubjectsWithWildcards pulumi.StringArrayInput
-	// URL of the OIDC Provider. Use provider_urls to specify several URLs.
-	ProviderUrl pulumi.StringPtrInput
 	// List of URLs of the OIDC Providers.
 	ProviderUrls pulumi.StringArrayInput
-	// IAM Role description.
-	RoleDescription pulumi.StringPtrInput
-	// IAM role name.
-	RoleName pulumi.StringPtrInput
-	// IAM role name prefix.
-	RoleNamePrefix pulumi.StringPtrInput
-	// Path of IAM role.
-	RolePath pulumi.StringPtrInput
-	// Permissions boundary ARN to use for IAM role.
-	RolePermissionsBoundaryArn pulumi.StringPtrInput
-	// List of ARNs of IAM policies to attach to IAM role.
-	RolePolicyArns pulumi.StringArrayInput
-	Tags           TagsPtrInput
+	// The IAM role.
+	Role RolePtrInput
+	Tags TagsPtrInput
 }
 
 func (AssumableRoleWithOIDCArgs) ElementType() reflect.Type {

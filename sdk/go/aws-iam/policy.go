@@ -41,9 +41,6 @@ func NewPolicy(ctx *pulumi.Context,
 	if args.PolicyDocument == nil {
 		return nil, errors.New("invalid value for required argument 'PolicyDocument'")
 	}
-	if isZero(args.CreatePolicy) {
-		args.CreatePolicy = pulumi.BoolPtr(true)
-	}
 	if isZero(args.Description) {
 		args.Description = pulumi.StringPtr("IAM Policy")
 	}
@@ -59,8 +56,6 @@ func NewPolicy(ctx *pulumi.Context,
 }
 
 type policyArgs struct {
-	// Whether to create the IAM policy.
-	CreatePolicy *bool `pulumi:"createPolicy"`
 	// The description of the policy.
 	Description *string `pulumi:"description"`
 	// The name of the policy.
@@ -74,8 +69,6 @@ type policyArgs struct {
 
 // The set of arguments for constructing a Policy resource.
 type PolicyArgs struct {
-	// Whether to create the IAM policy.
-	CreatePolicy pulumi.BoolPtrInput
 	// The description of the policy.
 	Description pulumi.StringPtrInput
 	// The name of the policy.

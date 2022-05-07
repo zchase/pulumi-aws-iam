@@ -15,49 +15,29 @@ __all__ = ['AssumableRoleWithOIDCArgs', 'AssumableRoleWithOIDC']
 class AssumableRoleWithOIDCArgs:
     def __init__(__self__, *,
                  aws_account_id: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
                  oidc_fully_qualified_audiences: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_fully_qualified_subjects: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 provider_url: Optional[pulumi.Input[str]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input['RoleArgs']] = None,
                  tags: Optional[pulumi.Input['TagsArgs']] = None):
         """
         The set of arguments for constructing a AssumableRoleWithOIDC resource.
         :param pulumi.Input[str] aws_account_id: The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
-        :param pulumi.Input[bool] create_role: Whether to create a role.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
-        :param pulumi.Input[int] number_of_role_policy_arns: Number of IAM policies to attach to IAM role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_fully_qualified_audiences: The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_fully_qualified_subjects: The fully qualified OIDC subjects to be added to the role policy.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_subjects_with_wildcards: The OIDC subject using wildcards to be added to the role policy.
-        :param pulumi.Input[str] provider_url: URL of the OIDC Provider. Use provider_urls to specify several URLs.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_urls: List of URLs of the OIDC Providers.
-        :param pulumi.Input[str] role_description: IAM Role description.
-        :param pulumi.Input[str] role_name: IAM role name.
-        :param pulumi.Input[str] role_name_prefix: IAM role name prefix.
-        :param pulumi.Input[str] role_path: Path of IAM role.
-        :param pulumi.Input[str] role_permissions_boundary_arn: Permissions boundary ARN to use for IAM role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
+        :param pulumi.Input['RoleArgs'] role: The IAM role.
         """
         if aws_account_id is None:
             aws_account_id = ''
         if aws_account_id is not None:
             pulumi.set(__self__, "aws_account_id", aws_account_id)
-        if create_role is None:
-            create_role = False
-        if create_role is not None:
-            pulumi.set(__self__, "create_role", create_role)
         if force_detach_policies is None:
             force_detach_policies = False
         if force_detach_policies is not None:
@@ -66,38 +46,16 @@ class AssumableRoleWithOIDCArgs:
             max_session_duration = 3600
         if max_session_duration is not None:
             pulumi.set(__self__, "max_session_duration", max_session_duration)
-        if number_of_role_policy_arns is not None:
-            pulumi.set(__self__, "number_of_role_policy_arns", number_of_role_policy_arns)
         if oidc_fully_qualified_audiences is not None:
             pulumi.set(__self__, "oidc_fully_qualified_audiences", oidc_fully_qualified_audiences)
         if oidc_fully_qualified_subjects is not None:
             pulumi.set(__self__, "oidc_fully_qualified_subjects", oidc_fully_qualified_subjects)
         if oidc_subjects_with_wildcards is not None:
             pulumi.set(__self__, "oidc_subjects_with_wildcards", oidc_subjects_with_wildcards)
-        if provider_url is None:
-            provider_url = ''
-        if provider_url is not None:
-            pulumi.set(__self__, "provider_url", provider_url)
         if provider_urls is not None:
             pulumi.set(__self__, "provider_urls", provider_urls)
-        if role_description is None:
-            role_description = ''
-        if role_description is not None:
-            pulumi.set(__self__, "role_description", role_description)
-        if role_name is not None:
-            pulumi.set(__self__, "role_name", role_name)
-        if role_name_prefix is not None:
-            pulumi.set(__self__, "role_name_prefix", role_name_prefix)
-        if role_path is None:
-            role_path = '/'
-        if role_path is not None:
-            pulumi.set(__self__, "role_path", role_path)
-        if role_permissions_boundary_arn is None:
-            role_permissions_boundary_arn = ''
-        if role_permissions_boundary_arn is not None:
-            pulumi.set(__self__, "role_permissions_boundary_arn", role_permissions_boundary_arn)
-        if role_policy_arns is not None:
-            pulumi.set(__self__, "role_policy_arns", role_policy_arns)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -112,18 +70,6 @@ class AssumableRoleWithOIDCArgs:
     @aws_account_id.setter
     def aws_account_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "aws_account_id", value)
-
-    @property
-    @pulumi.getter(name="createRole")
-    def create_role(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to create a role.
-        """
-        return pulumi.get(self, "create_role")
-
-    @create_role.setter
-    def create_role(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "create_role", value)
 
     @property
     @pulumi.getter(name="forceDetachPolicies")
@@ -148,18 +94,6 @@ class AssumableRoleWithOIDCArgs:
     @max_session_duration.setter
     def max_session_duration(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "max_session_duration", value)
-
-    @property
-    @pulumi.getter(name="numberOfRolePolicyArns")
-    def number_of_role_policy_arns(self) -> Optional[pulumi.Input[int]]:
-        """
-        Number of IAM policies to attach to IAM role.
-        """
-        return pulumi.get(self, "number_of_role_policy_arns")
-
-    @number_of_role_policy_arns.setter
-    def number_of_role_policy_arns(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "number_of_role_policy_arns", value)
 
     @property
     @pulumi.getter(name="oidcFullyQualifiedAudiences")
@@ -198,18 +132,6 @@ class AssumableRoleWithOIDCArgs:
         pulumi.set(self, "oidc_subjects_with_wildcards", value)
 
     @property
-    @pulumi.getter(name="providerUrl")
-    def provider_url(self) -> Optional[pulumi.Input[str]]:
-        """
-        URL of the OIDC Provider. Use provider_urls to specify several URLs.
-        """
-        return pulumi.get(self, "provider_url")
-
-    @provider_url.setter
-    def provider_url(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "provider_url", value)
-
-    @property
     @pulumi.getter(name="providerUrls")
     def provider_urls(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
@@ -222,76 +144,16 @@ class AssumableRoleWithOIDCArgs:
         pulumi.set(self, "provider_urls", value)
 
     @property
-    @pulumi.getter(name="roleDescription")
-    def role_description(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input['RoleArgs']]:
         """
-        IAM Role description.
+        The IAM role.
         """
-        return pulumi.get(self, "role_description")
+        return pulumi.get(self, "role")
 
-    @role_description.setter
-    def role_description(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_description", value)
-
-    @property
-    @pulumi.getter(name="roleName")
-    def role_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        IAM role name.
-        """
-        return pulumi.get(self, "role_name")
-
-    @role_name.setter
-    def role_name(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_name", value)
-
-    @property
-    @pulumi.getter(name="roleNamePrefix")
-    def role_name_prefix(self) -> Optional[pulumi.Input[str]]:
-        """
-        IAM role name prefix.
-        """
-        return pulumi.get(self, "role_name_prefix")
-
-    @role_name_prefix.setter
-    def role_name_prefix(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_name_prefix", value)
-
-    @property
-    @pulumi.getter(name="rolePath")
-    def role_path(self) -> Optional[pulumi.Input[str]]:
-        """
-        Path of IAM role.
-        """
-        return pulumi.get(self, "role_path")
-
-    @role_path.setter
-    def role_path(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_path", value)
-
-    @property
-    @pulumi.getter(name="rolePermissionsBoundaryArn")
-    def role_permissions_boundary_arn(self) -> Optional[pulumi.Input[str]]:
-        """
-        Permissions boundary ARN to use for IAM role.
-        """
-        return pulumi.get(self, "role_permissions_boundary_arn")
-
-    @role_permissions_boundary_arn.setter
-    def role_permissions_boundary_arn(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_permissions_boundary_arn", value)
-
-    @property
-    @pulumi.getter(name="rolePolicyArns")
-    def role_policy_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
-        """
-        List of ARNs of IAM policies to attach to IAM role.
-        """
-        return pulumi.get(self, "role_policy_arns")
-
-    @role_policy_arns.setter
-    def role_policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
-        pulumi.set(self, "role_policy_arns", value)
+    @role.setter
+    def role(self, value: Optional[pulumi.Input['RoleArgs']]):
+        pulumi.set(self, "role", value)
 
     @property
     @pulumi.getter
@@ -309,21 +171,13 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aws_account_id: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
                  oidc_fully_qualified_audiences: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_fully_qualified_subjects: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 provider_url: Optional[pulumi.Input[str]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
                  __props__=None):
         """
@@ -331,21 +185,13 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] aws_account_id: The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
-        :param pulumi.Input[bool] create_role: Whether to create a role.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
-        :param pulumi.Input[int] number_of_role_policy_arns: Number of IAM policies to attach to IAM role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_fully_qualified_audiences: The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_fully_qualified_subjects: The fully qualified OIDC subjects to be added to the role policy.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_subjects_with_wildcards: The OIDC subject using wildcards to be added to the role policy.
-        :param pulumi.Input[str] provider_url: URL of the OIDC Provider. Use provider_urls to specify several URLs.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_urls: List of URLs of the OIDC Providers.
-        :param pulumi.Input[str] role_description: IAM Role description.
-        :param pulumi.Input[str] role_name: IAM role name.
-        :param pulumi.Input[str] role_name_prefix: IAM role name prefix.
-        :param pulumi.Input[str] role_path: Path of IAM role.
-        :param pulumi.Input[str] role_permissions_boundary_arn: Permissions boundary ARN to use for IAM role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
+        :param pulumi.Input[pulumi.InputType['RoleArgs']] role: The IAM role.
         """
         ...
     @overload
@@ -371,21 +217,13 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aws_account_id: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
                  oidc_fully_qualified_audiences: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_fully_qualified_subjects: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 provider_url: Optional[pulumi.Input[str]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
                  __props__=None):
         if opts is None:
@@ -404,40 +242,22 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
             if aws_account_id is None:
                 aws_account_id = ''
             __props__.__dict__["aws_account_id"] = aws_account_id
-            if create_role is None:
-                create_role = False
-            __props__.__dict__["create_role"] = create_role
             if force_detach_policies is None:
                 force_detach_policies = False
             __props__.__dict__["force_detach_policies"] = force_detach_policies
             if max_session_duration is None:
                 max_session_duration = 3600
             __props__.__dict__["max_session_duration"] = max_session_duration
-            __props__.__dict__["number_of_role_policy_arns"] = number_of_role_policy_arns
             __props__.__dict__["oidc_fully_qualified_audiences"] = oidc_fully_qualified_audiences
             __props__.__dict__["oidc_fully_qualified_subjects"] = oidc_fully_qualified_subjects
             __props__.__dict__["oidc_subjects_with_wildcards"] = oidc_subjects_with_wildcards
-            if provider_url is None:
-                provider_url = ''
-            __props__.__dict__["provider_url"] = provider_url
             __props__.__dict__["provider_urls"] = provider_urls
-            if role_description is None:
-                role_description = ''
-            __props__.__dict__["role_description"] = role_description
-            __props__.__dict__["role_name"] = role_name
-            __props__.__dict__["role_name_prefix"] = role_name_prefix
-            if role_path is None:
-                role_path = '/'
-            __props__.__dict__["role_path"] = role_path
-            if role_permissions_boundary_arn is None:
-                role_permissions_boundary_arn = ''
-            __props__.__dict__["role_permissions_boundary_arn"] = role_permissions_boundary_arn
-            __props__.__dict__["role_policy_arns"] = role_policy_arns
+            __props__.__dict__["role"] = role
             __props__.__dict__["tags"] = tags
-            __props__.__dict__["iam_role_arn"] = None
-            __props__.__dict__["iam_role_name"] = None
-            __props__.__dict__["iam_role_path"] = None
-            __props__.__dict__["iam_role_unique_id"] = None
+            __props__.__dict__["arn"] = None
+            __props__.__dict__["name"] = None
+            __props__.__dict__["path"] = None
+            __props__.__dict__["unique_id"] = None
         super(AssumableRoleWithOIDC, __self__).__init__(
             'aws-iam:index:AssumableRoleWithOIDC',
             resource_name,
@@ -446,34 +266,34 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
             remote=True)
 
     @property
-    @pulumi.getter(name="iamRoleArn")
-    def iam_role_arn(self) -> pulumi.Output[str]:
+    @pulumi.getter
+    def arn(self) -> pulumi.Output[str]:
         """
         ARN of IAM role.
         """
-        return pulumi.get(self, "iam_role_arn")
+        return pulumi.get(self, "arn")
 
     @property
-    @pulumi.getter(name="iamRoleName")
-    def iam_role_name(self) -> pulumi.Output[str]:
+    @pulumi.getter
+    def name(self) -> pulumi.Output[str]:
         """
         Name of IAM role.
         """
-        return pulumi.get(self, "iam_role_name")
+        return pulumi.get(self, "name")
 
     @property
-    @pulumi.getter(name="iamRolePath")
-    def iam_role_path(self) -> pulumi.Output[str]:
+    @pulumi.getter
+    def path(self) -> pulumi.Output[str]:
         """
         Path of IAM role.
         """
-        return pulumi.get(self, "iam_role_path")
+        return pulumi.get(self, "path")
 
     @property
-    @pulumi.getter(name="iamRoleUniqueId")
-    def iam_role_unique_id(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="uniqueId")
+    def unique_id(self) -> pulumi.Output[str]:
         """
         Unique ID of IAM role.
         """
-        return pulumi.get(self, "iam_role_unique_id")
+        return pulumi.get(self, "unique_id")
 

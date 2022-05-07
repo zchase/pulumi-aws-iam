@@ -15,43 +15,22 @@ __all__ = ['AssumableRoleWithSAMLArgs', 'AssumableRoleWithSAML']
 class AssumableRoleWithSAMLArgs:
     def __init__(__self__, *,
                  aws_saml_endpoint: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
-                 provider_id: Optional[pulumi.Input[str]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input['RoleArgs']] = None,
                  tags: Optional[pulumi.Input['TagsArgs']] = None):
         """
         The set of arguments for constructing a AssumableRoleWithSAML resource.
         :param pulumi.Input[str] aws_saml_endpoint: AWS SAML Endpoint.
-        :param pulumi.Input[bool] create_role: Whether to create a role.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
-        :param pulumi.Input[int] number_of_role_policy_arns: Number of IAM policies to attach to IAM role.
-        :param pulumi.Input[str] provider_id: ID of the SAML Provider. Use provider_ids to specify several IDs.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_ids: List of SAML Provider IDs.
-        :param pulumi.Input[str] role_description: IAM Role description.
-        :param pulumi.Input[str] role_name: IAM role name.
-        :param pulumi.Input[str] role_name_prefix: IAM role name prefix.
-        :param pulumi.Input[str] role_path: Path of IAM role.
-        :param pulumi.Input[str] role_permissions_boundary_arn: Permissions boundary ARN to use for IAM role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
         """
         if aws_saml_endpoint is None:
             aws_saml_endpoint = 'https://signin.aws.amazon.com/saml'
         if aws_saml_endpoint is not None:
             pulumi.set(__self__, "aws_saml_endpoint", aws_saml_endpoint)
-        if create_role is None:
-            create_role = False
-        if create_role is not None:
-            pulumi.set(__self__, "create_role", create_role)
         if force_detach_policies is None:
             force_detach_policies = False
         if force_detach_policies is not None:
@@ -60,32 +39,10 @@ class AssumableRoleWithSAMLArgs:
             max_session_duration = 3600
         if max_session_duration is not None:
             pulumi.set(__self__, "max_session_duration", max_session_duration)
-        if number_of_role_policy_arns is not None:
-            pulumi.set(__self__, "number_of_role_policy_arns", number_of_role_policy_arns)
-        if provider_id is None:
-            provider_id = ''
-        if provider_id is not None:
-            pulumi.set(__self__, "provider_id", provider_id)
         if provider_ids is not None:
             pulumi.set(__self__, "provider_ids", provider_ids)
-        if role_description is None:
-            role_description = ''
-        if role_description is not None:
-            pulumi.set(__self__, "role_description", role_description)
-        if role_name is not None:
-            pulumi.set(__self__, "role_name", role_name)
-        if role_name_prefix is not None:
-            pulumi.set(__self__, "role_name_prefix", role_name_prefix)
-        if role_path is None:
-            role_path = '/'
-        if role_path is not None:
-            pulumi.set(__self__, "role_path", role_path)
-        if role_permissions_boundary_arn is None:
-            role_permissions_boundary_arn = ''
-        if role_permissions_boundary_arn is not None:
-            pulumi.set(__self__, "role_permissions_boundary_arn", role_permissions_boundary_arn)
-        if role_policy_arns is not None:
-            pulumi.set(__self__, "role_policy_arns", role_policy_arns)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -100,18 +57,6 @@ class AssumableRoleWithSAMLArgs:
     @aws_saml_endpoint.setter
     def aws_saml_endpoint(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "aws_saml_endpoint", value)
-
-    @property
-    @pulumi.getter(name="createRole")
-    def create_role(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to create a role.
-        """
-        return pulumi.get(self, "create_role")
-
-    @create_role.setter
-    def create_role(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "create_role", value)
 
     @property
     @pulumi.getter(name="forceDetachPolicies")
@@ -138,30 +83,6 @@ class AssumableRoleWithSAMLArgs:
         pulumi.set(self, "max_session_duration", value)
 
     @property
-    @pulumi.getter(name="numberOfRolePolicyArns")
-    def number_of_role_policy_arns(self) -> Optional[pulumi.Input[int]]:
-        """
-        Number of IAM policies to attach to IAM role.
-        """
-        return pulumi.get(self, "number_of_role_policy_arns")
-
-    @number_of_role_policy_arns.setter
-    def number_of_role_policy_arns(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "number_of_role_policy_arns", value)
-
-    @property
-    @pulumi.getter(name="providerId")
-    def provider_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        ID of the SAML Provider. Use provider_ids to specify several IDs.
-        """
-        return pulumi.get(self, "provider_id")
-
-    @provider_id.setter
-    def provider_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "provider_id", value)
-
-    @property
     @pulumi.getter(name="providerIds")
     def provider_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
@@ -174,76 +95,13 @@ class AssumableRoleWithSAMLArgs:
         pulumi.set(self, "provider_ids", value)
 
     @property
-    @pulumi.getter(name="roleDescription")
-    def role_description(self) -> Optional[pulumi.Input[str]]:
-        """
-        IAM Role description.
-        """
-        return pulumi.get(self, "role_description")
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input['RoleArgs']]:
+        return pulumi.get(self, "role")
 
-    @role_description.setter
-    def role_description(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_description", value)
-
-    @property
-    @pulumi.getter(name="roleName")
-    def role_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        IAM role name.
-        """
-        return pulumi.get(self, "role_name")
-
-    @role_name.setter
-    def role_name(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_name", value)
-
-    @property
-    @pulumi.getter(name="roleNamePrefix")
-    def role_name_prefix(self) -> Optional[pulumi.Input[str]]:
-        """
-        IAM role name prefix.
-        """
-        return pulumi.get(self, "role_name_prefix")
-
-    @role_name_prefix.setter
-    def role_name_prefix(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_name_prefix", value)
-
-    @property
-    @pulumi.getter(name="rolePath")
-    def role_path(self) -> Optional[pulumi.Input[str]]:
-        """
-        Path of IAM role.
-        """
-        return pulumi.get(self, "role_path")
-
-    @role_path.setter
-    def role_path(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_path", value)
-
-    @property
-    @pulumi.getter(name="rolePermissionsBoundaryArn")
-    def role_permissions_boundary_arn(self) -> Optional[pulumi.Input[str]]:
-        """
-        Permissions boundary ARN to use for IAM role.
-        """
-        return pulumi.get(self, "role_permissions_boundary_arn")
-
-    @role_permissions_boundary_arn.setter
-    def role_permissions_boundary_arn(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "role_permissions_boundary_arn", value)
-
-    @property
-    @pulumi.getter(name="rolePolicyArns")
-    def role_policy_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
-        """
-        List of ARNs of IAM policies to attach to IAM role.
-        """
-        return pulumi.get(self, "role_policy_arns")
-
-    @role_policy_arns.setter
-    def role_policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
-        pulumi.set(self, "role_policy_arns", value)
+    @role.setter
+    def role(self, value: Optional[pulumi.Input['RoleArgs']]):
+        pulumi.set(self, "role", value)
 
     @property
     @pulumi.getter
@@ -261,18 +119,10 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aws_saml_endpoint: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
-                 provider_id: Optional[pulumi.Input[str]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
                  __props__=None):
         """
@@ -280,18 +130,9 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] aws_saml_endpoint: AWS SAML Endpoint.
-        :param pulumi.Input[bool] create_role: Whether to create a role.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
-        :param pulumi.Input[int] number_of_role_policy_arns: Number of IAM policies to attach to IAM role.
-        :param pulumi.Input[str] provider_id: ID of the SAML Provider. Use provider_ids to specify several IDs.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_ids: List of SAML Provider IDs.
-        :param pulumi.Input[str] role_description: IAM Role description.
-        :param pulumi.Input[str] role_name: IAM role name.
-        :param pulumi.Input[str] role_name_prefix: IAM role name prefix.
-        :param pulumi.Input[str] role_path: Path of IAM role.
-        :param pulumi.Input[str] role_permissions_boundary_arn: Permissions boundary ARN to use for IAM role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
         """
         ...
     @overload
@@ -317,18 +158,10 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aws_saml_endpoint: Optional[pulumi.Input[str]] = None,
-                 create_role: Optional[pulumi.Input[bool]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
-                 number_of_role_policy_arns: Optional[pulumi.Input[int]] = None,
-                 provider_id: Optional[pulumi.Input[str]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 role_description: Optional[pulumi.Input[str]] = None,
-                 role_name: Optional[pulumi.Input[str]] = None,
-                 role_name_prefix: Optional[pulumi.Input[str]] = None,
-                 role_path: Optional[pulumi.Input[str]] = None,
-                 role_permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
-                 role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
                  __props__=None):
         if opts is None:
@@ -347,37 +180,19 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
             if aws_saml_endpoint is None:
                 aws_saml_endpoint = 'https://signin.aws.amazon.com/saml'
             __props__.__dict__["aws_saml_endpoint"] = aws_saml_endpoint
-            if create_role is None:
-                create_role = False
-            __props__.__dict__["create_role"] = create_role
             if force_detach_policies is None:
                 force_detach_policies = False
             __props__.__dict__["force_detach_policies"] = force_detach_policies
             if max_session_duration is None:
                 max_session_duration = 3600
             __props__.__dict__["max_session_duration"] = max_session_duration
-            __props__.__dict__["number_of_role_policy_arns"] = number_of_role_policy_arns
-            if provider_id is None:
-                provider_id = ''
-            __props__.__dict__["provider_id"] = provider_id
             __props__.__dict__["provider_ids"] = provider_ids
-            if role_description is None:
-                role_description = ''
-            __props__.__dict__["role_description"] = role_description
-            __props__.__dict__["role_name"] = role_name
-            __props__.__dict__["role_name_prefix"] = role_name_prefix
-            if role_path is None:
-                role_path = '/'
-            __props__.__dict__["role_path"] = role_path
-            if role_permissions_boundary_arn is None:
-                role_permissions_boundary_arn = ''
-            __props__.__dict__["role_permissions_boundary_arn"] = role_permissions_boundary_arn
-            __props__.__dict__["role_policy_arns"] = role_policy_arns
+            __props__.__dict__["role"] = role
             __props__.__dict__["tags"] = tags
-            __props__.__dict__["iam_role_arn"] = None
-            __props__.__dict__["iam_role_name"] = None
-            __props__.__dict__["iam_role_path"] = None
-            __props__.__dict__["iam_role_unique_id"] = None
+            __props__.__dict__["role_arn"] = None
+            __props__.__dict__["role_name"] = None
+            __props__.__dict__["role_path"] = None
+            __props__.__dict__["role_unique_id"] = None
         super(AssumableRoleWithSAML, __self__).__init__(
             'aws-iam:index:AssumableRoleWithSAML',
             resource_name,
@@ -386,34 +201,34 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
             remote=True)
 
     @property
-    @pulumi.getter(name="iamRoleArn")
-    def iam_role_arn(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="roleArn")
+    def role_arn(self) -> pulumi.Output[str]:
         """
         ARN of IAM role.
         """
-        return pulumi.get(self, "iam_role_arn")
+        return pulumi.get(self, "role_arn")
 
     @property
-    @pulumi.getter(name="iamRoleName")
-    def iam_role_name(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="roleName")
+    def role_name(self) -> pulumi.Output[str]:
         """
         Name of IAM role.
         """
-        return pulumi.get(self, "iam_role_name")
+        return pulumi.get(self, "role_name")
 
     @property
-    @pulumi.getter(name="iamRolePath")
-    def iam_role_path(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="rolePath")
+    def role_path(self) -> pulumi.Output[str]:
         """
         Path of IAM role.
         """
-        return pulumi.get(self, "iam_role_path")
+        return pulumi.get(self, "role_path")
 
     @property
-    @pulumi.getter(name="iamRoleUniqueId")
-    def iam_role_unique_id(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="roleUniqueId")
+    def role_unique_id(self) -> pulumi.Output[str]:
         """
         Unique ID of IAM role.
         """
-        return pulumi.get(self, "iam_role_unique_id")
+        return pulumi.get(self, "role_unique_id")
 
