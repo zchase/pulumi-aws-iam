@@ -103,7 +103,6 @@ export const policy = new iam.Policy("policy", {
     name: "example",
     path: "/",
     description: "My example policy",
-    tags: { "test": "tag" },
     policyDocument: `{
         "Version": "2012-10-17",
         "Statement": [
