@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-aws-iam/sdk
+module github.com/zchase/pulumi-aws-iam/sdk
 
 go 1.15
 
