@@ -72,7 +72,8 @@ type userArgs struct {
 	SshKeyEncoding *string `pulumi:"sshKeyEncoding"`
 	// The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
 	SshPublicKey *string `pulumi:"sshPublicKey"`
-	Tags         *Tags   `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 	// Whether to upload a public ssh key to the IAM user.
 	UploadIamUserSshKey *bool `pulumi:"uploadIamUserSshKey"`
 }
@@ -97,7 +98,8 @@ type UserArgs struct {
 	SshKeyEncoding pulumi.StringPtrInput
 	// The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
 	SshPublicKey pulumi.StringPtrInput
-	Tags         TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 	// Whether to upload a public ssh key to the IAM user.
 	UploadIamUserSshKey pulumi.BoolPtrInput
 }

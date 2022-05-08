@@ -59,7 +59,8 @@ type eksroleArgs struct {
 	Role               *Role               `pulumi:"role"`
 	// ARNs of any policies to attach to the IAM role.
 	RolePolicyArns []string `pulumi:"rolePolicyArns"`
-	Tags           *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a EKSRole resource.
@@ -75,7 +76,8 @@ type EKSRoleArgs struct {
 	Role               RolePtrInput
 	// ARNs of any policies to attach to the IAM role.
 	RolePolicyArns pulumi.StringArrayInput
-	Tags           TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (EKSRoleArgs) ElementType() reflect.Type {

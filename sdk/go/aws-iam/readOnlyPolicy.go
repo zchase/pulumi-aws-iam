@@ -83,7 +83,8 @@ type readOnlyPolicyArgs struct {
 	Name string `pulumi:"name"`
 	// The path of the policy in IAM.
 	Path *string `pulumi:"path"`
-	Tags *Tags   `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 	// List of web console services to allow.
 	WebConsoleServices []string `pulumi:"webConsoleServices"`
 }
@@ -106,7 +107,8 @@ type ReadOnlyPolicyArgs struct {
 	Name pulumi.StringInput
 	// The path of the policy in IAM.
 	Path pulumi.StringPtrInput
-	Tags TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 	// List of web console services to allow.
 	WebConsoleServices pulumi.StringArrayInput
 }

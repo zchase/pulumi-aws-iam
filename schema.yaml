@@ -28,18 +28,15 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             requiresMfa:
                 type: boolean
                 description: Whether the role requires MFA.
                 default: true
-
-    "aws-iam:index:Tags":
-        type: object
-        description: A map of tags to add.
-        additionalProperties:
-            type: string
 
     "aws-iam:index:EKSServiceAccountRole":
         type: object
@@ -130,7 +127,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
     "aws-iam:index:AdminRoleWithMFA":
         type: object
@@ -158,7 +158,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             requiresMfa:
                 type: boolean
@@ -191,7 +194,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
     "aws-iam:index:PoweruserRoleWithMFA":
         type: object
@@ -219,7 +225,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             requiresMfa:
                 type: boolean
@@ -252,7 +261,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
     "aws-iam:index:ReadonlyRoleWithMFA":
         type: object
@@ -280,7 +292,10 @@ types:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             requiresMfa:
                 type: boolean
@@ -714,7 +729,10 @@ resources:
                 description: The ARN of the policy that is used to set the permissions boundary for the user.
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
         requiredInputs:
             - name
@@ -745,7 +763,10 @@ resources:
         isComponent: true
         inputProperties:
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             role:
                 $ref: "#/types/aws-iam:index:EKSServiceAccountRole"
@@ -821,7 +842,10 @@ resources:
                 default: IAM Policy
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             allowedServices:
                 type: array
@@ -940,7 +964,10 @@ resources:
                 default: ""
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
         requiredInputs:
             - name
@@ -975,7 +1002,10 @@ resources:
         isComponent: true
         inputProperties:
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             name:
                 type: string
@@ -1033,7 +1063,10 @@ resources:
         isComponent: true
         inputProperties:
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             role:
                 $ref: "#/types/aws-iam:index:Role"
@@ -1342,8 +1375,10 @@ resources:
                 $ref: "#/types/aws-iam:index:RoleWithMFA"
 
             tags:
-                descriptions: A map of tags to associate to the resource.
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             customRolePolicyArns:
                 type: array
@@ -1454,7 +1489,10 @@ resources:
         isComponent: true
         inputProperties:
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             role:
                 $ref: "#/types/aws-iam:index:Role"
@@ -1509,8 +1547,10 @@ resources:
         isComponent: true
         inputProperties:
             tags:
-                descriptions: A map of tags to associate to the resource.
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
             providerUrls:
                 type: array
@@ -1685,7 +1725,10 @@ resources:
                 description: The policy document.
 
             tags:
-                $ref: "#/types/aws-iam:index:Tags"
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
 
         requiredInputs:
             - name

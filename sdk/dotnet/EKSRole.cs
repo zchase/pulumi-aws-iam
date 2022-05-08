@@ -116,7 +116,16 @@ namespace Pulumi.AwsIam
         }
 
         [Input("tags")]
-        public Input<Inputs.TagsArgs>? Tags { get; set; }
+        private InputMap<string>? _tags;
+
+        /// <summary>
+        /// A map of tags to add.
+        /// </summary>
+        public InputMap<string> Tags
+        {
+            get => _tags ?? (_tags = new InputMap<string>());
+            set => _tags = value;
+        }
 
         public EKSRoleArgs()
         {

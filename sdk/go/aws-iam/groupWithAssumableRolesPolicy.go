@@ -57,7 +57,8 @@ type groupWithAssumableRolesPolicyArgs struct {
 	GroupUsers []string `pulumi:"groupUsers"`
 	// Name of IAM policy and IAM group.
 	Name string `pulumi:"name"`
-	Tags *Tags  `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a GroupWithAssumableRolesPolicy resource.
@@ -68,7 +69,8 @@ type GroupWithAssumableRolesPolicyArgs struct {
 	GroupUsers pulumi.StringArrayInput
 	// Name of IAM policy and IAM group.
 	Name pulumi.StringInput
-	Tags TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (GroupWithAssumableRolesPolicyArgs) ElementType() reflect.Type {

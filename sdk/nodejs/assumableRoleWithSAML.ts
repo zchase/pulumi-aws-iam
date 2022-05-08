@@ -90,5 +90,8 @@ export interface AssumableRoleWithSAMLArgs {
      */
     providerIds?: pulumi.Input<pulumi.Input<string>[]>;
     role?: pulumi.Input<inputs.RoleArgs>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

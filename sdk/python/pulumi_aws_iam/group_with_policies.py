@@ -7,7 +7,6 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
-from ._inputs import *
 
 __all__ = ['GroupWithPoliciesArgs', 'GroupWithPolicies']
 
@@ -21,7 +20,7 @@ class GroupWithPoliciesArgs:
                  custom_group_policies: Optional[pulumi.Input[Sequence[pulumi.Input[Mapping[str, pulumi.Input[str]]]]]] = None,
                  custom_group_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iam_self_management_policy_name_prefix: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a GroupWithPolicies resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] group_users: List of IAM users to have in an IAM group which can assume the role.
@@ -31,6 +30,7 @@ class GroupWithPoliciesArgs:
         :param pulumi.Input[Sequence[pulumi.Input[Mapping[str, pulumi.Input[str]]]]] custom_group_policies: List of maps of inline IAM policies to attach to IAM group. Should have `name` and `policy` keys in each element.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] custom_group_policy_arns: List of IAM policies ARNs to attach to IAM group.
         :param pulumi.Input[str] iam_self_management_policy_name_prefix: Name prefix for IAM policy to create with IAM self-management permissions.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         pulumi.set(__self__, "group_users", group_users)
         if name is None:
@@ -141,11 +141,14 @@ class GroupWithPoliciesArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -161,7 +164,7 @@ class GroupWithPolicies(pulumi.ComponentResource):
                  group_users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iam_self_management_policy_name_prefix: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a GroupWithPolicies resource with the given unique name, props, and options.
@@ -174,6 +177,7 @@ class GroupWithPolicies(pulumi.ComponentResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] group_users: List of IAM users to have in an IAM group which can assume the role.
         :param pulumi.Input[str] iam_self_management_policy_name_prefix: Name prefix for IAM policy to create with IAM self-management permissions.
         :param pulumi.Input[str] name: Name of IAM group.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -205,7 +209,7 @@ class GroupWithPolicies(pulumi.ComponentResource):
                  group_users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iam_self_management_policy_name_prefix: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

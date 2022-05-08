@@ -21,7 +21,7 @@ class RoleForServiceAccountsEksArgs:
                  policies: Optional[pulumi.Input['EKSRolePoliciesArgs']] = None,
                  policy_name_prefix: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input['EKSServiceAccountRoleArgs']] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a RoleForServiceAccountsEks resource.
         :param pulumi.Input[str] assume_role_condition_test: Name of the IAM condition operator to evaluate when assuming the role.
@@ -29,6 +29,7 @@ class RoleForServiceAccountsEksArgs:
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input['OIDCProviderArgs']]] oidc_providers: Map of OIDC providers.
         :param pulumi.Input[str] policy_name_prefix: IAM policy name prefix.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if assume_role_condition_test is None:
             assume_role_condition_test = 'StringEquals'
@@ -135,11 +136,14 @@ class RoleForServiceAccountsEksArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -155,7 +159,7 @@ class RoleForServiceAccountsEks(pulumi.ComponentResource):
                  policies: Optional[pulumi.Input[pulumi.InputType['EKSRolePoliciesArgs']]] = None,
                  policy_name_prefix: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['EKSServiceAccountRoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a RoleForServiceAccountsEks resource with the given unique name, props, and options.
@@ -166,6 +170,7 @@ class RoleForServiceAccountsEks(pulumi.ComponentResource):
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input[pulumi.InputType['OIDCProviderArgs']]]] oidc_providers: Map of OIDC providers.
         :param pulumi.Input[str] policy_name_prefix: IAM policy name prefix.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -197,7 +202,7 @@ class RoleForServiceAccountsEks(pulumi.ComponentResource):
                  policies: Optional[pulumi.Input[pulumi.InputType['EKSRolePoliciesArgs']]] = None,
                  policy_name_prefix: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['EKSServiceAccountRoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

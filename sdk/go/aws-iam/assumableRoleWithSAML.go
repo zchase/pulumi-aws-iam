@@ -60,7 +60,8 @@ type assumableRoleWithSAMLArgs struct {
 	// List of SAML Provider IDs.
 	ProviderIds []string `pulumi:"providerIds"`
 	Role        *Role    `pulumi:"role"`
-	Tags        *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a AssumableRoleWithSAML resource.
@@ -74,7 +75,8 @@ type AssumableRoleWithSAMLArgs struct {
 	// List of SAML Provider IDs.
 	ProviderIds pulumi.StringArrayInput
 	Role        RolePtrInput
-	Tags        TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (AssumableRoleWithSAMLArgs) ElementType() reflect.Type {

@@ -64,7 +64,8 @@ type policyArgs struct {
 	Path *string `pulumi:"path"`
 	// The policy document.
 	PolicyDocument string `pulumi:"policyDocument"`
-	Tags           *Tags  `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Policy resource.
@@ -77,7 +78,8 @@ type PolicyArgs struct {
 	Path pulumi.StringPtrInput
 	// The policy document.
 	PolicyDocument pulumi.StringInput
-	Tags           TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (PolicyArgs) ElementType() reflect.Type {

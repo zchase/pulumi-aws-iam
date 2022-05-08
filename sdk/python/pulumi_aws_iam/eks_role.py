@@ -20,7 +20,7 @@ class EKSRoleArgs:
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
                  role: Optional[pulumi.Input['RoleArgs']] = None,
                  role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a EKSRole resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
@@ -28,6 +28,7 @@ class EKSRoleArgs:
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] provider_url_sa_pairs: OIDC provider URL and k8s ServiceAccount pairs. If the assume role policy requires a mix of EKS clusters and other OIDC providers then this can be used
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: ARNs of any policies to attach to the IAM role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if cluster_service_accounts is not None:
             pulumi.set(__self__, "cluster_service_accounts", cluster_service_accounts)
@@ -119,11 +120,14 @@ class EKSRoleArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -138,7 +142,7 @@ class EKSRole(pulumi.ComponentResource):
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a EKSRole resource with the given unique name, props, and options.
@@ -149,6 +153,7 @@ class EKSRole(pulumi.ComponentResource):
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] provider_url_sa_pairs: OIDC provider URL and k8s ServiceAccount pairs. If the assume role policy requires a mix of EKS clusters and other OIDC providers then this can be used
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_policy_arns: ARNs of any policies to attach to the IAM role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -179,7 +184,7 @@ class EKSRole(pulumi.ComponentResource):
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
                  role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

@@ -69,7 +69,8 @@ type groupWithPoliciesArgs struct {
 	IamSelfManagementPolicyNamePrefix *string `pulumi:"iamSelfManagementPolicyNamePrefix"`
 	// Name of IAM group.
 	Name string `pulumi:"name"`
-	Tags *Tags  `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a GroupWithPolicies resource.
@@ -88,7 +89,8 @@ type GroupWithPoliciesArgs struct {
 	IamSelfManagementPolicyNamePrefix pulumi.StringPtrInput
 	// Name of IAM group.
 	Name pulumi.StringInput
-	Tags TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (GroupWithPoliciesArgs) ElementType() reflect.Type {

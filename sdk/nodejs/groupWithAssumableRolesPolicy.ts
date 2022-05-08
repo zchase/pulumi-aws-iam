@@ -2,7 +2,6 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
 export class GroupWithAssumableRolesPolicy extends pulumi.ComponentResource {
@@ -96,5 +95,8 @@ export interface GroupWithAssumableRolesPolicyArgs {
      * Name of IAM policy and IAM group.
      */
     name: pulumi.Input<string>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

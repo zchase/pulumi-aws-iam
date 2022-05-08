@@ -27,7 +27,7 @@ class AssumableRoleArgs:
                  readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input['RoleWithMFAArgs']] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  trusted_role_actions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
@@ -46,6 +46,7 @@ class AssumableRoleArgs:
         :param pulumi.Input[str] readonly_role_policy_arn: Policy ARN to use for readonly role.
         :param pulumi.Input['RoleWithMFAArgs'] role: An IAM role that requires MFA.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_sts_external_ids: STS ExternalId condition values to use with a role (when MFA is not required).
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_actions: Actions of STS.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_arns: ARNs of AWS entities who can assume these roles.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_services: AWS Services that can assume these roles.
@@ -263,11 +264,14 @@ class AssumableRoleArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
     @property
@@ -325,7 +329,7 @@ class AssumableRole(pulumi.ComponentResource):
                  readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleWithMFAArgs']]] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  trusted_role_actions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -347,6 +351,7 @@ class AssumableRole(pulumi.ComponentResource):
         :param pulumi.Input[str] readonly_role_policy_arn: Policy ARN to use for readonly role.
         :param pulumi.Input[pulumi.InputType['RoleWithMFAArgs']] role: An IAM role that requires MFA.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_sts_external_ids: STS ExternalId condition values to use with a role (when MFA is not required).
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_actions: Actions of STS.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_arns: ARNs of AWS entities who can assume these roles.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_services: AWS Services that can assume these roles.
@@ -387,7 +392,7 @@ class AssumableRole(pulumi.ComponentResource):
                  readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleWithMFAArgs']]] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  trusted_role_actions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,

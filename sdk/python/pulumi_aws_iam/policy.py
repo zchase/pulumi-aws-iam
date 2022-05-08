@@ -7,7 +7,6 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
-from ._inputs import *
 
 __all__ = ['PolicyArgs', 'Policy']
 
@@ -18,13 +17,14 @@ class PolicyArgs:
                  policy_document: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Policy resource.
         :param pulumi.Input[str] name: The name of the policy.
         :param pulumi.Input[str] policy_document: The policy document.
         :param pulumi.Input[str] description: The description of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "policy_document", policy_document)
@@ -89,11 +89,14 @@ class PolicyArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -106,7 +109,7 @@ class Policy(pulumi.ComponentResource):
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_document: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a Policy resource with the given unique name, props, and options.
@@ -116,6 +119,7 @@ class Policy(pulumi.ComponentResource):
         :param pulumi.Input[str] name: The name of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
         :param pulumi.Input[str] policy_document: The policy document.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -144,7 +148,7 @@ class Policy(pulumi.ComponentResource):
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_document: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

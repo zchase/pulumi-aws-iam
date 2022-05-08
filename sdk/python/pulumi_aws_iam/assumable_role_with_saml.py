@@ -19,13 +19,14 @@ class AssumableRoleWithSAMLArgs:
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input['RoleArgs']] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a AssumableRoleWithSAML resource.
         :param pulumi.Input[str] aws_saml_endpoint: AWS SAML Endpoint.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_ids: List of SAML Provider IDs.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if aws_saml_endpoint is None:
             aws_saml_endpoint = 'https://signin.aws.amazon.com/saml'
@@ -105,11 +106,14 @@ class AssumableRoleWithSAMLArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -123,7 +127,7 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a AssumableRoleWithSAML resource with the given unique name, props, and options.
@@ -133,6 +137,7 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_ids: List of SAML Provider IDs.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -162,7 +167,7 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

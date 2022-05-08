@@ -34,7 +34,6 @@ __all__ = [
     'ReadonlyRoleArgs',
     'RoleWithMFAArgs',
     'RoleArgs',
-    'TagsArgs',
 ]
 
 @pulumi.input_type
@@ -45,7 +44,7 @@ class AdminRoleWithMFAArgs:
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  requires_mfa: Optional[pulumi.Input[bool]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The admin role.
         :param pulumi.Input[str] name: IAM role with admin access.
@@ -53,6 +52,7 @@ class AdminRoleWithMFAArgs:
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for admin role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for admin role.
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'admin'
@@ -137,11 +137,14 @@ class AdminRoleWithMFAArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -152,13 +155,14 @@ class AdminRoleArgs:
                  path: Optional[pulumi.Input[str]] = None,
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The admin role.
         :param pulumi.Input[str] name: IAM role with admin access.
         :param pulumi.Input[str] path: Path of admin IAM role.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for admin role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for admin role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'admin'
@@ -227,11 +231,14 @@ class AdminRoleArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1263,7 +1270,7 @@ class PoweruserRoleWithMFAArgs:
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  requires_mfa: Optional[pulumi.Input[bool]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The poweruser role.
         :param pulumi.Input[str] name: IAM role with poweruser access.
@@ -1271,6 +1278,7 @@ class PoweruserRoleWithMFAArgs:
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for poweruser role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for poweruser role.
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'poweruser'
@@ -1355,11 +1363,14 @@ class PoweruserRoleWithMFAArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1370,13 +1381,14 @@ class PoweruserRoleArgs:
                  path: Optional[pulumi.Input[str]] = None,
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The poweruser role.
         :param pulumi.Input[str] name: IAM role with poweruser access.
         :param pulumi.Input[str] path: Path of poweruser IAM role.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for poweruser role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for poweruser role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'poweruser'
@@ -1445,11 +1457,14 @@ class PoweruserRoleArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1461,7 +1476,7 @@ class ReadonlyRoleWithMFAArgs:
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  requires_mfa: Optional[pulumi.Input[bool]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The readonly role.
         :param pulumi.Input[str] name: IAM role with readonly access.
@@ -1469,6 +1484,7 @@ class ReadonlyRoleWithMFAArgs:
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for readonly role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for readonly role.
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'readonly'
@@ -1553,11 +1569,14 @@ class ReadonlyRoleWithMFAArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1568,13 +1587,14 @@ class ReadonlyRoleArgs:
                  path: Optional[pulumi.Input[str]] = None,
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The readonly role.
         :param pulumi.Input[str] name: IAM role with readonly access.
         :param pulumi.Input[str] path: Path of readonly IAM role.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for readonly role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for readonly role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'readonly'
@@ -1643,11 +1663,14 @@ class ReadonlyRoleArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1659,7 +1682,7 @@ class RoleWithMFAArgs:
                  permissions_boundary_arn: Optional[pulumi.Input[str]] = None,
                  policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  requires_mfa: Optional[pulumi.Input[bool]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         An IAM role that requires MFA.
         :param pulumi.Input[str] name: IAM role with the access.
@@ -1667,6 +1690,7 @@ class RoleWithMFAArgs:
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for the role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for the role.
         :param pulumi.Input[bool] requires_mfa: Whether the role requires MFA.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if name is None:
             name = 'admin'
@@ -1751,11 +1775,14 @@ class RoleWithMFAArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -1853,14 +1880,5 @@ class RoleArgs:
     @policy_arns.setter
     def policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "policy_arns", value)
-
-
-@pulumi.input_type
-class TagsArgs:
-    def __init__(__self__):
-        """
-        A map of tags to add.
-        """
-        pass
 
 

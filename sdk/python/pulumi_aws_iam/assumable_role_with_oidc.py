@@ -22,7 +22,7 @@ class AssumableRoleWithOIDCArgs:
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input['RoleArgs']] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a AssumableRoleWithOIDC resource.
         :param pulumi.Input[str] aws_account_id: The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
@@ -33,6 +33,7 @@ class AssumableRoleWithOIDCArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_subjects_with_wildcards: The OIDC subject using wildcards to be added to the role policy.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_urls: List of URLs of the OIDC Providers.
         :param pulumi.Input['RoleArgs'] role: The IAM role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         if aws_account_id is None:
             aws_account_id = ''
@@ -157,11 +158,14 @@ class AssumableRoleWithOIDCArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -178,7 +182,7 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a AssumableRoleWithOIDC resource with the given unique name, props, and options.
@@ -192,6 +196,7 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] oidc_subjects_with_wildcards: The OIDC subject using wildcards to be added to the role policy.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] provider_urls: List of URLs of the OIDC Providers.
         :param pulumi.Input[pulumi.InputType['RoleArgs']] role: The IAM role.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -224,7 +229,7 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  oidc_subjects_with_wildcards: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  provider_urls: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleArgs']]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

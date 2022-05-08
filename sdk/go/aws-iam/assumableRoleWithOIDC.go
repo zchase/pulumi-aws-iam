@@ -67,7 +67,8 @@ type assumableRoleWithOIDCArgs struct {
 	ProviderUrls []string `pulumi:"providerUrls"`
 	// The IAM role.
 	Role *Role `pulumi:"role"`
-	Tags *Tags `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a AssumableRoleWithOIDC resource.
@@ -88,7 +89,8 @@ type AssumableRoleWithOIDCArgs struct {
 	ProviderUrls pulumi.StringArrayInput
 	// The IAM role.
 	Role RolePtrInput
-	Tags TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (AssumableRoleWithOIDCArgs) ElementType() reflect.Type {

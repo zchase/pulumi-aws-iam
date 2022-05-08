@@ -62,7 +62,8 @@ type roleForServiceAccountsEksArgs struct {
 	// IAM policy name prefix.
 	PolicyNamePrefix *string                `pulumi:"policyNamePrefix"`
 	Role             *EKSServiceAccountRole `pulumi:"role"`
-	Tags             *Tags                  `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a RoleForServiceAccountsEks resource.
@@ -79,7 +80,8 @@ type RoleForServiceAccountsEksArgs struct {
 	// IAM policy name prefix.
 	PolicyNamePrefix pulumi.StringPtrInput
 	Role             EKSServiceAccountRolePtrInput
-	Tags             TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 }
 
 func (RoleForServiceAccountsEksArgs) ElementType() reflect.Type {

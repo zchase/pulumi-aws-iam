@@ -117,7 +117,10 @@ export interface AssumableRoleArgs {
      * STS ExternalId condition values to use with a role (when MFA is not required).
      */
     roleStsExternalIds?: pulumi.Input<pulumi.Input<string>[]>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Actions of STS.
      */

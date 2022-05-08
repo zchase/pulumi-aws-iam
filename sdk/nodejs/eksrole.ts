@@ -95,5 +95,8 @@ export interface EKSRoleArgs {
      * ARNs of any policies to attach to the IAM role.
      */
     rolePolicyArns?: pulumi.Input<pulumi.Input<string>[]>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

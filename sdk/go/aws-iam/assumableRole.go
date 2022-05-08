@@ -92,7 +92,8 @@ type assumableRoleArgs struct {
 	Role *RoleWithMFA `pulumi:"role"`
 	// STS ExternalId condition values to use with a role (when MFA is not required).
 	RoleStsExternalIds []string `pulumi:"roleStsExternalIds"`
-	Tags               *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 	// Actions of STS.
 	TrustedRoleActions []string `pulumi:"trustedRoleActions"`
 	// ARNs of AWS entities who can assume these roles.
@@ -129,7 +130,8 @@ type AssumableRoleArgs struct {
 	Role RoleWithMFAPtrInput
 	// STS ExternalId condition values to use with a role (when MFA is not required).
 	RoleStsExternalIds pulumi.StringArrayInput
-	Tags               TagsPtrInput
+	// A map of tags to add.
+	Tags pulumi.StringMapInput
 	// Actions of STS.
 	TrustedRoleActions pulumi.StringArrayInput
 	// ARNs of AWS entities who can assume these roles.

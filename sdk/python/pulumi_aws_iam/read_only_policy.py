@@ -7,7 +7,6 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
-from ._inputs import *
 
 __all__ = ['ReadOnlyPolicyArgs', 'ReadOnlyPolicy']
 
@@ -22,7 +21,7 @@ class ReadOnlyPolicyArgs:
                  allowed_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  web_console_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a ReadOnlyPolicy resource.
@@ -34,6 +33,7 @@ class ReadOnlyPolicyArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] allowed_services: List of services to allow Get/List/Describe/View options. Service name should be the same as corresponding service IAM prefix. See what it is for each service here https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html.
         :param pulumi.Input[str] description: The description of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] web_console_services: List of web console services to allow.
         """
         pulumi.set(__self__, "name", name)
@@ -166,11 +166,14 @@ class ReadOnlyPolicyArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
     @property
@@ -199,7 +202,7 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  web_console_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
@@ -214,6 +217,7 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
         :param pulumi.Input[str] description: The description of the policy.
         :param pulumi.Input[str] name: The name of the policy.
         :param pulumi.Input[str] path: The path of the policy in IAM.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] web_console_services: List of web console services to allow.
         """
         ...
@@ -247,7 +251,7 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  web_console_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:

@@ -7,7 +7,6 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
-from ._inputs import *
 
 __all__ = ['GroupWithAssumableRolesPolicyArgs', 'GroupWithAssumableRolesPolicy']
 
@@ -17,12 +16,13 @@ class GroupWithAssumableRolesPolicyArgs:
                  assumable_roles: pulumi.Input[Sequence[pulumi.Input[str]]],
                  group_users: pulumi.Input[Sequence[pulumi.Input[str]]],
                  name: pulumi.Input[str],
-                 tags: Optional[pulumi.Input['TagsArgs']] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a GroupWithAssumableRolesPolicy resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assumable_roles: List of IAM roles ARNs which can be assumed by the group
         :param pulumi.Input[Sequence[pulumi.Input[str]]] group_users: List of IAM users to have in an IAM group which can assume the role
         :param pulumi.Input[str] name: Name of IAM policy and IAM group.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         pulumi.set(__self__, "assumable_roles", assumable_roles)
         pulumi.set(__self__, "group_users", group_users)
@@ -68,11 +68,14 @@ class GroupWithAssumableRolesPolicyArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
 
@@ -84,7 +87,7 @@ class GroupWithAssumableRolesPolicy(pulumi.ComponentResource):
                  assumable_roles: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  group_users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Create a GroupWithAssumableRolesPolicy resource with the given unique name, props, and options.
@@ -93,6 +96,7 @@ class GroupWithAssumableRolesPolicy(pulumi.ComponentResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assumable_roles: List of IAM roles ARNs which can be assumed by the group
         :param pulumi.Input[Sequence[pulumi.Input[str]]] group_users: List of IAM users to have in an IAM group which can assume the role
         :param pulumi.Input[str] name: Name of IAM policy and IAM group.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
         ...
     @overload
@@ -120,7 +124,7 @@ class GroupWithAssumableRolesPolicy(pulumi.ComponentResource):
                  assumable_roles: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  group_users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()

@@ -81,7 +81,8 @@ type AdminRole struct {
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for admin role.
 	PolicyArns []string `pulumi:"policyArns"`
-	Tags       *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for AdminRole
@@ -126,7 +127,8 @@ type AdminRoleArgs struct {
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for admin role.
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
-	Tags       TagsPtrInput            `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (AdminRoleArgs) ElementType() reflect.Type {
@@ -227,8 +229,9 @@ func (o AdminRoleOutput) PolicyArns() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v AdminRole) []string { return v.PolicyArns }).(pulumi.StringArrayOutput)
 }
 
-func (o AdminRoleOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v AdminRole) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o AdminRoleOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v AdminRole) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type AdminRolePtrOutput struct{ *pulumi.OutputState }
@@ -295,13 +298,14 @@ func (o AdminRolePtrOutput) PolicyArns() pulumi.StringArrayOutput {
 	}).(pulumi.StringArrayOutput)
 }
 
-func (o AdminRolePtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *AdminRole) *Tags {
+// A map of tags to add.
+func (o AdminRolePtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *AdminRole) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // The admin role.
@@ -316,7 +320,8 @@ type AdminRoleWithMFA struct {
 	PolicyArns []string `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa *bool `pulumi:"requiresMfa"`
-	Tags        *Tags `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for AdminRoleWithMFA
@@ -367,7 +372,8 @@ type AdminRoleWithMFAArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa pulumi.BoolPtrInput `pulumi:"requiresMfa"`
-	Tags        TagsPtrInput        `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (AdminRoleWithMFAArgs) ElementType() reflect.Type {
@@ -422,8 +428,9 @@ func (o AdminRoleWithMFAOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v AdminRoleWithMFA) *bool { return v.RequiresMfa }).(pulumi.BoolPtrOutput)
 }
 
-func (o AdminRoleWithMFAOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v AdminRoleWithMFA) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o AdminRoleWithMFAOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v AdminRoleWithMFA) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // The Amazon Managed Service for Prometheus IAM policy to the role.
@@ -3612,7 +3619,8 @@ type PoweruserRole struct {
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for poweruser role.
 	PolicyArns []string `pulumi:"policyArns"`
-	Tags       *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for PoweruserRole
@@ -3657,7 +3665,8 @@ type PoweruserRoleArgs struct {
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for poweruser role.
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
-	Tags       TagsPtrInput            `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (PoweruserRoleArgs) ElementType() reflect.Type {
@@ -3758,8 +3767,9 @@ func (o PoweruserRoleOutput) PolicyArns() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v PoweruserRole) []string { return v.PolicyArns }).(pulumi.StringArrayOutput)
 }
 
-func (o PoweruserRoleOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v PoweruserRole) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o PoweruserRoleOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v PoweruserRole) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type PoweruserRolePtrOutput struct{ *pulumi.OutputState }
@@ -3826,13 +3836,14 @@ func (o PoweruserRolePtrOutput) PolicyArns() pulumi.StringArrayOutput {
 	}).(pulumi.StringArrayOutput)
 }
 
-func (o PoweruserRolePtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *PoweruserRole) *Tags {
+// A map of tags to add.
+func (o PoweruserRolePtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *PoweruserRole) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // The poweruser role.
@@ -3847,7 +3858,8 @@ type PoweruserRoleWithMFA struct {
 	PolicyArns []string `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa *bool `pulumi:"requiresMfa"`
-	Tags        *Tags `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for PoweruserRoleWithMFA
@@ -3898,7 +3910,8 @@ type PoweruserRoleWithMFAArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa pulumi.BoolPtrInput `pulumi:"requiresMfa"`
-	Tags        TagsPtrInput        `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (PoweruserRoleWithMFAArgs) ElementType() reflect.Type {
@@ -4004,8 +4017,9 @@ func (o PoweruserRoleWithMFAOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PoweruserRoleWithMFA) *bool { return v.RequiresMfa }).(pulumi.BoolPtrOutput)
 }
 
-func (o PoweruserRoleWithMFAOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v PoweruserRoleWithMFA) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o PoweruserRoleWithMFAOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v PoweruserRoleWithMFA) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type PoweruserRoleWithMFAPtrOutput struct{ *pulumi.OutputState }
@@ -4082,13 +4096,14 @@ func (o PoweruserRoleWithMFAPtrOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
-func (o PoweruserRoleWithMFAPtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *PoweruserRoleWithMFA) *Tags {
+// A map of tags to add.
+func (o PoweruserRoleWithMFAPtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *PoweruserRoleWithMFA) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // The readonly role.
@@ -4101,7 +4116,8 @@ type ReadonlyRole struct {
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for readonly role.
 	PolicyArns []string `pulumi:"policyArns"`
-	Tags       *Tags    `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for ReadonlyRole
@@ -4146,7 +4162,8 @@ type ReadonlyRoleArgs struct {
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
 	// List of policy ARNs to use for readonly role.
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
-	Tags       TagsPtrInput            `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (ReadonlyRoleArgs) ElementType() reflect.Type {
@@ -4247,8 +4264,9 @@ func (o ReadonlyRoleOutput) PolicyArns() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ReadonlyRole) []string { return v.PolicyArns }).(pulumi.StringArrayOutput)
 }
 
-func (o ReadonlyRoleOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v ReadonlyRole) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o ReadonlyRoleOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v ReadonlyRole) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type ReadonlyRolePtrOutput struct{ *pulumi.OutputState }
@@ -4315,13 +4333,14 @@ func (o ReadonlyRolePtrOutput) PolicyArns() pulumi.StringArrayOutput {
 	}).(pulumi.StringArrayOutput)
 }
 
-func (o ReadonlyRolePtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *ReadonlyRole) *Tags {
+// A map of tags to add.
+func (o ReadonlyRolePtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *ReadonlyRole) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // The readonly role.
@@ -4336,7 +4355,8 @@ type ReadonlyRoleWithMFA struct {
 	PolicyArns []string `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa *bool `pulumi:"requiresMfa"`
-	Tags        *Tags `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for ReadonlyRoleWithMFA
@@ -4387,7 +4407,8 @@ type ReadonlyRoleWithMFAArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 	// Whether admin role requires MFA.
 	RequiresMfa pulumi.BoolPtrInput `pulumi:"requiresMfa"`
-	Tags        TagsPtrInput        `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (ReadonlyRoleWithMFAArgs) ElementType() reflect.Type {
@@ -4493,8 +4514,9 @@ func (o ReadonlyRoleWithMFAOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v ReadonlyRoleWithMFA) *bool { return v.RequiresMfa }).(pulumi.BoolPtrOutput)
 }
 
-func (o ReadonlyRoleWithMFAOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v ReadonlyRoleWithMFA) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o ReadonlyRoleWithMFAOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v ReadonlyRoleWithMFA) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type ReadonlyRoleWithMFAPtrOutput struct{ *pulumi.OutputState }
@@ -4571,13 +4593,14 @@ func (o ReadonlyRoleWithMFAPtrOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
-func (o ReadonlyRoleWithMFAPtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *ReadonlyRoleWithMFA) *Tags {
+// A map of tags to add.
+func (o ReadonlyRoleWithMFAPtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *ReadonlyRoleWithMFA) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // An IAM role.
@@ -4833,7 +4856,8 @@ type RoleWithMFA struct {
 	PolicyArns []string `pulumi:"policyArns"`
 	// Whether the role requires MFA.
 	RequiresMfa *bool `pulumi:"requiresMfa"`
-	Tags        *Tags `pulumi:"tags"`
+	// A map of tags to add.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // Defaults sets the appropriate defaults for RoleWithMFA
@@ -4884,7 +4908,8 @@ type RoleWithMFAArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 	// Whether the role requires MFA.
 	RequiresMfa pulumi.BoolPtrInput `pulumi:"requiresMfa"`
-	Tags        TagsPtrInput        `pulumi:"tags"`
+	// A map of tags to add.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (RoleWithMFAArgs) ElementType() reflect.Type {
@@ -4990,8 +5015,9 @@ func (o RoleWithMFAOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v RoleWithMFA) *bool { return v.RequiresMfa }).(pulumi.BoolPtrOutput)
 }
 
-func (o RoleWithMFAOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v RoleWithMFA) *Tags { return v.Tags }).(TagsPtrOutput)
+// A map of tags to add.
+func (o RoleWithMFAOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v RoleWithMFA) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type RoleWithMFAPtrOutput struct{ *pulumi.OutputState }
@@ -5068,134 +5094,14 @@ func (o RoleWithMFAPtrOutput) RequiresMfa() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
-func (o RoleWithMFAPtrOutput) Tags() TagsPtrOutput {
-	return o.ApplyT(func(v *RoleWithMFA) *Tags {
+// A map of tags to add.
+func (o RoleWithMFAPtrOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *RoleWithMFA) map[string]string {
 		if v == nil {
 			return nil
 		}
 		return v.Tags
-	}).(TagsPtrOutput)
-}
-
-// A map of tags to add.
-type Tags struct {
-}
-
-// TagsInput is an input type that accepts TagsArgs and TagsOutput values.
-// You can construct a concrete instance of `TagsInput` via:
-//
-//          TagsArgs{...}
-type TagsInput interface {
-	pulumi.Input
-
-	ToTagsOutput() TagsOutput
-	ToTagsOutputWithContext(context.Context) TagsOutput
-}
-
-// A map of tags to add.
-type TagsArgs struct {
-}
-
-func (TagsArgs) ElementType() reflect.Type {
-	return reflect.TypeOf((*Tags)(nil)).Elem()
-}
-
-func (i TagsArgs) ToTagsOutput() TagsOutput {
-	return i.ToTagsOutputWithContext(context.Background())
-}
-
-func (i TagsArgs) ToTagsOutputWithContext(ctx context.Context) TagsOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(TagsOutput)
-}
-
-func (i TagsArgs) ToTagsPtrOutput() TagsPtrOutput {
-	return i.ToTagsPtrOutputWithContext(context.Background())
-}
-
-func (i TagsArgs) ToTagsPtrOutputWithContext(ctx context.Context) TagsPtrOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(TagsOutput).ToTagsPtrOutputWithContext(ctx)
-}
-
-// TagsPtrInput is an input type that accepts TagsArgs, TagsPtr and TagsPtrOutput values.
-// You can construct a concrete instance of `TagsPtrInput` via:
-//
-//          TagsArgs{...}
-//
-//  or:
-//
-//          nil
-type TagsPtrInput interface {
-	pulumi.Input
-
-	ToTagsPtrOutput() TagsPtrOutput
-	ToTagsPtrOutputWithContext(context.Context) TagsPtrOutput
-}
-
-type tagsPtrType TagsArgs
-
-func TagsPtr(v *TagsArgs) TagsPtrInput {
-	return (*tagsPtrType)(v)
-}
-
-func (*tagsPtrType) ElementType() reflect.Type {
-	return reflect.TypeOf((**Tags)(nil)).Elem()
-}
-
-func (i *tagsPtrType) ToTagsPtrOutput() TagsPtrOutput {
-	return i.ToTagsPtrOutputWithContext(context.Background())
-}
-
-func (i *tagsPtrType) ToTagsPtrOutputWithContext(ctx context.Context) TagsPtrOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(TagsPtrOutput)
-}
-
-// A map of tags to add.
-type TagsOutput struct{ *pulumi.OutputState }
-
-func (TagsOutput) ElementType() reflect.Type {
-	return reflect.TypeOf((*Tags)(nil)).Elem()
-}
-
-func (o TagsOutput) ToTagsOutput() TagsOutput {
-	return o
-}
-
-func (o TagsOutput) ToTagsOutputWithContext(ctx context.Context) TagsOutput {
-	return o
-}
-
-func (o TagsOutput) ToTagsPtrOutput() TagsPtrOutput {
-	return o.ToTagsPtrOutputWithContext(context.Background())
-}
-
-func (o TagsOutput) ToTagsPtrOutputWithContext(ctx context.Context) TagsPtrOutput {
-	return o.ApplyTWithContext(ctx, func(_ context.Context, v Tags) *Tags {
-		return &v
-	}).(TagsPtrOutput)
-}
-
-type TagsPtrOutput struct{ *pulumi.OutputState }
-
-func (TagsPtrOutput) ElementType() reflect.Type {
-	return reflect.TypeOf((**Tags)(nil)).Elem()
-}
-
-func (o TagsPtrOutput) ToTagsPtrOutput() TagsPtrOutput {
-	return o
-}
-
-func (o TagsPtrOutput) ToTagsPtrOutputWithContext(ctx context.Context) TagsPtrOutput {
-	return o
-}
-
-func (o TagsPtrOutput) Elem() TagsOutput {
-	return o.ApplyT(func(v *Tags) Tags {
-		if v != nil {
-			return *v
-		}
-		var ret Tags
-		return ret
-	}).(TagsOutput)
+	}).(pulumi.StringMapOutput)
 }
 
 // The IAM user.
@@ -5323,8 +5229,6 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*RolePtrInput)(nil)).Elem(), RoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RoleWithMFAInput)(nil)).Elem(), RoleWithMFAArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RoleWithMFAPtrInput)(nil)).Elem(), RoleWithMFAArgs{})
-	pulumi.RegisterInputType(reflect.TypeOf((*TagsInput)(nil)).Elem(), TagsArgs{})
-	pulumi.RegisterInputType(reflect.TypeOf((*TagsPtrInput)(nil)).Elem(), TagsArgs{})
 	pulumi.RegisterOutputType(AccessKeyOutputOutput{})
 	pulumi.RegisterOutputType(AdminRoleOutput{})
 	pulumi.RegisterOutputType(AdminRolePtrOutput{})
@@ -5376,7 +5280,5 @@ func init() {
 	pulumi.RegisterOutputType(RolePtrOutput{})
 	pulumi.RegisterOutputType(RoleWithMFAOutput{})
 	pulumi.RegisterOutputType(RoleWithMFAPtrOutput{})
-	pulumi.RegisterOutputType(TagsOutput{})
-	pulumi.RegisterOutputType(TagsPtrOutput{})
 	pulumi.RegisterOutputType(UserOutputTypeOutput{})
 }

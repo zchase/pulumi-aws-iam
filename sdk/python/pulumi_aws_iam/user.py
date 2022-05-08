@@ -8,7 +8,6 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
 from . import outputs
-from ._inputs import *
 
 __all__ = ['UserArgs', 'User']
 
@@ -24,7 +23,7 @@ class UserArgs:
                  pgp_key: Optional[pulumi.Input[str]] = None,
                  ssh_key_encoding: Optional[pulumi.Input[str]] = None,
                  ssh_public_key: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input['TagsArgs']] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  upload_iam_user_ssh_key: Optional[pulumi.Input[bool]] = None):
         """
         The set of arguments for constructing a User resource.
@@ -37,6 +36,7 @@ class UserArgs:
         :param pulumi.Input[str] pgp_key: Either a base-64 encoded PGP public key, or a keybase username in the form `keybase:username`. Used to encrypt password and access key.
         :param pulumi.Input[str] ssh_key_encoding: Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use SSH. To retrieve the public key in PEM format, use PEM.
         :param pulumi.Input[str] ssh_public_key: The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[bool] upload_iam_user_ssh_key: Whether to upload a public ssh key to the IAM user.
         """
         pulumi.set(__self__, "name", name)
@@ -179,11 +179,14 @@ class UserArgs:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['TagsArgs']]:
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        A map of tags to add.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['TagsArgs']]):
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
     @property
@@ -213,7 +216,7 @@ class User(pulumi.ComponentResource):
                  pgp_key: Optional[pulumi.Input[str]] = None,
                  ssh_key_encoding: Optional[pulumi.Input[str]] = None,
                  ssh_public_key: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  upload_iam_user_ssh_key: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
@@ -229,6 +232,7 @@ class User(pulumi.ComponentResource):
         :param pulumi.Input[str] pgp_key: Either a base-64 encoded PGP public key, or a keybase username in the form `keybase:username`. Used to encrypt password and access key.
         :param pulumi.Input[str] ssh_key_encoding: Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use SSH. To retrieve the public key in PEM format, use PEM.
         :param pulumi.Input[str] ssh_public_key: The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         :param pulumi.Input[bool] upload_iam_user_ssh_key: Whether to upload a public ssh key to the IAM user.
         """
         ...
@@ -263,7 +267,7 @@ class User(pulumi.ComponentResource):
                  pgp_key: Optional[pulumi.Input[str]] = None,
                  ssh_key_encoding: Optional[pulumi.Input[str]] = None,
                  ssh_public_key: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[pulumi.InputType['TagsArgs']]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  upload_iam_user_ssh_key: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         if opts is None:

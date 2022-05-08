@@ -113,7 +113,10 @@ export interface UserArgs {
      * The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
      */
     sshPublicKey?: pulumi.Input<string>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Whether to upload a public ssh key to the IAM user.
      */

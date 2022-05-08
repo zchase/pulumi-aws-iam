@@ -26,7 +26,10 @@ export interface AdminRoleArgs {
      * List of policy ARNs to use for admin role.
      */
     policyArns?: pulumi.Input<pulumi.Input<string>[]>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * adminRoleArgsProvideDefaults sets the appropriate defaults for AdminRoleArgs
@@ -64,7 +67,10 @@ export interface AdminRoleWithMFAArgs {
      * Whether admin role requires MFA.
      */
     requiresMfa?: pulumi.Input<boolean>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * adminRoleWithMFAArgsProvideDefaults sets the appropriate defaults for AdminRoleWithMFAArgs
@@ -449,7 +455,10 @@ export interface PoweruserRoleArgs {
      * List of policy ARNs to use for poweruser role.
      */
     policyArns?: pulumi.Input<pulumi.Input<string>[]>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * poweruserRoleArgsProvideDefaults sets the appropriate defaults for PoweruserRoleArgs
@@ -487,7 +496,10 @@ export interface PoweruserRoleWithMFAArgs {
      * Whether admin role requires MFA.
      */
     requiresMfa?: pulumi.Input<boolean>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * poweruserRoleWithMFAArgsProvideDefaults sets the appropriate defaults for PoweruserRoleWithMFAArgs
@@ -522,7 +534,10 @@ export interface ReadonlyRoleArgs {
      * List of policy ARNs to use for readonly role.
      */
     policyArns?: pulumi.Input<pulumi.Input<string>[]>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * readonlyRoleArgsProvideDefaults sets the appropriate defaults for ReadonlyRoleArgs
@@ -560,7 +575,10 @@ export interface ReadonlyRoleWithMFAArgs {
      * Whether admin role requires MFA.
      */
     requiresMfa?: pulumi.Input<boolean>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * readonlyRoleWithMFAArgsProvideDefaults sets the appropriate defaults for ReadonlyRoleWithMFAArgs
@@ -637,7 +655,10 @@ export interface RoleWithMFAArgs {
      * Whether the role requires MFA.
      */
     requiresMfa?: pulumi.Input<boolean>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 /**
  * roleWithMFAArgsProvideDefaults sets the appropriate defaults for RoleWithMFAArgs
@@ -650,11 +671,5 @@ export function roleWithMFAArgsProvideDefaults(val: RoleWithMFAArgs): RoleWithMF
         permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
         requiresMfa: (val.requiresMfa) ?? true,
     };
-}
-
-/**
- * A map of tags to add.
- */
-export interface TagsArgs {
 }
 

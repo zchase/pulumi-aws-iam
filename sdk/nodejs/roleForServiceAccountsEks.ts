@@ -75,5 +75,8 @@ export interface RoleForServiceAccountsEksArgs {
      */
     policyNamePrefix?: pulumi.Input<string>;
     role?: pulumi.Input<inputs.EKSServiceAccountRoleArgs>;
-    tags?: pulumi.Input<inputs.TagsArgs>;
+    /**
+     * A map of tags to add.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
