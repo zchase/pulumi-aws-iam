@@ -13,8 +13,15 @@ public class App {
             // Account
             var account = new Account("account", AccountArgs.builder()
                 .accountAlias("cool-alias")
-                .minimumPasswordLength(37)
-                .requireNumbers(false)
+                .passwordPolicy(AccountPasswordPolicyArgs.builder()
+                    .minimumLength(37)
+                    .requireNumbers(false)
+                    .allowUsersToChange(true)
+                    .hardExpiry(true)
+                    .requireSymbols(true)
+                    .requireLowercaseCharacters(true)
+                    .requireUppercaseCharacters(true)
+                    .build())
                 .build());
 
             ctx.export("account", Output.of(account));
@@ -22,10 +29,10 @@ public class App {
             // Assumable Role
             var assumableRole = new AssumableRole("assumable-role", AssumableRoleArgs.builder()
                 .trustedRoleActions("arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus")
-                .customRolePolicyArns("arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess")
                 .role(RoleWithMFAArgs.builder()
                     .name("custom")
                     .requiresMfa(true)
+                    .policyArns("arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess")
                     .build())
                 .build());
 

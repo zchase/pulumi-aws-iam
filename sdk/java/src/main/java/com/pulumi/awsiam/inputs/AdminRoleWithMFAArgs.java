@@ -279,10 +279,7 @@ public final class AdminRoleWithMFAArgs extends com.pulumi.resources.ResourceArg
         }
 
         public AdminRoleWithMFAArgs build() {
-            $.name = Codegen.stringProp("name").output().arg($.name).def("admin").getNullable();
-            $.path = Codegen.stringProp("path").output().arg($.path).def("/").getNullable();
             $.permissionsBoundaryArn = Codegen.stringProp("permissionsBoundaryArn").output().arg($.permissionsBoundaryArn).def("").getNullable();
-            $.requiresMfa = Codegen.booleanProp("requiresMfa").output().arg($.requiresMfa).def(true).getNullable();
             return $;
         }
     }

@@ -451,8 +451,6 @@ public final class UserArgs extends com.pulumi.resources.ResourceArgs {
 
         public UserArgs build() {
             $.name = Objects.requireNonNull($.name, "expected parameter 'name' to be non-null");
-            $.passwordLength = Codegen.integerProp("passwordLength").output().arg($.passwordLength).def(20).getNullable();
-            $.passwordResetRequired = Codegen.booleanProp("passwordResetRequired").output().arg($.passwordResetRequired).def(true).getNullable();
             $.path = Codegen.stringProp("path").output().arg($.path).def("/").getNullable();
             $.sshKeyEncoding = Codegen.stringProp("sshKeyEncoding").output().arg($.sshKeyEncoding).def("SSH").getNullable();
             return $;

@@ -10,5 +10,5 @@ pluginManagement {
   }
 }
 
-rootProject.name = "com.pulumi.aws-iam"
+rootProject.name = "com.pulumi.awsiam"
 include("lib")

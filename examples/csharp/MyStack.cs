@@ -11,8 +11,17 @@ class MyStack : Stack
         var account = new Account("account", new AccountArgs
         {
             AccountAlias = "cool-alias",
-            MinimumPasswordLength = 37,
-            RequireNumbers = false,
+            PasswordPolicy=new AccountPasswordPolicyArgs
+            {
+                MinimumLength = 37,
+                RequireNumbers = false,
+                AllowUsersToChange = true,
+                HardExpiry = true,
+                RequireSymbols = true,
+                RequireLowercaseCharacters = true,
+                RequireUppercaseCharacters = true,
+            }
+
         });
 
         this.Account = Output.Create<Account>(account);
@@ -21,11 +30,11 @@ class MyStack : Stack
         var assumableRole = new AssumableRole("assumable-role", new AssumableRoleArgs
         {
             TrustedRoleArns = {"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"},
-            CustomRolePolicyArns = {"arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"},
             Role = new RoleWithMFAArgs
             {
                 Name = "custom",
                 RequiresMfa = true,
+                PolicyArns = {"arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"},
             },
         });
 
