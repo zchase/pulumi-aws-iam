@@ -50,8 +50,8 @@ export class User extends pulumi.ComponentResource {
             }
             resourceInputs["forceDestroy"] = args ? args.forceDestroy : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
-            resourceInputs["passwordLength"] = (args ? args.passwordLength : undefined) ?? 20;
-            resourceInputs["passwordResetRequired"] = (args ? args.passwordResetRequired : undefined) ?? true;
+            resourceInputs["passwordLength"] = args ? args.passwordLength : undefined;
+            resourceInputs["passwordResetRequired"] = args ? args.passwordResetRequired : undefined;
             resourceInputs["path"] = (args ? args.path : undefined) ?? "/";
             resourceInputs["permissionsBoundary"] = args ? args.permissionsBoundary : undefined;
             resourceInputs["pgpKey"] = args ? args.pgpKey : undefined;

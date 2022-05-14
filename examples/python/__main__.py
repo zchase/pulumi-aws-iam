@@ -9,8 +9,15 @@ import pulumi_aws_iam as iam
 account = iam.Account(
     'account',
     account_alias='cool-alias',
-    minimum_password_length=37,
-    require_numbers=False,
+    password_policy=iam.AccountPasswordPolicyArgs(
+        minimum_length=37,
+        require_numbers=False,
+        allow_users_to_change=True,
+        hard_expiry=True,
+        require_symbols=True,
+        require_lowercase_characters=True,
+        require_uppercase_characters=True,
+    )
 )
 
 pulumi.export('account', account)
@@ -19,10 +26,10 @@ pulumi.export('account', account)
 assumable_role = iam.AssumableRole(
     'assumable_role',
     trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
-    custom_role_policy_arns=['arn:aws:iam::aws:policy/AmazonCognitoReadOnly','arn:aws:iam::aws:policy/AlexaForBusinessFullAccess'],
     role=iam.RoleWithMFAArgs(
         name='custom',
         requires_mfa=True,
+        policy_arns=['arn:aws:iam::aws:policy/AmazonCognitoReadOnly','arn:aws:iam::aws:policy/AlexaForBusinessFullAccess'],
     ),
 )
 

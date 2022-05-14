@@ -65,10 +65,7 @@ namespace Pulumi.AwsIam.Inputs
 
         public AdminRoleWithMFAArgs()
         {
-            Name = "admin";
-            Path = "/";
             PermissionsBoundaryArn = "";
-            RequiresMfa = true;
         }
     }
 }

@@ -19,29 +19,12 @@ import (
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/zchase/pulumi-aws-iam/pkg/utils"
 )
 
+type RoleTypeIdentifier string
+
 const AssumableRolesIdentifier = "aws-iam:index:AssumableRoles"
-
-type AssumableRolesRoleArgs struct {
-	// IAM role name.
-	Name string `pulumi:"name"`
-
-	// Path of IAM role.
-	Path string `pulumi:"path"`
-
-	// List of policy ARNs to use.
-	PolicyARNS []string `pulumi:"policyArns"`
-
-	// Permissions boundary ARN to use.
-	PermissionsBoundaryARN string `pulumi:"permissionsBoundaryArn"`
-
-	// Whether admin role requires MFA.
-	RequiresMFA bool `pulumi:"requiresMfa"`
-
-	// A map of tags to add.
-	Tags map[string]string `pulumi:"tags"`
-}
 
 type AssumableRolesArgs struct {
 	// ARNs of AWS entities who can assume these roles.
@@ -60,13 +43,13 @@ type AssumableRolesArgs struct {
 	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
 
 	// IAM role with admin access.
-	Admin AssumableRolesRoleArgs `pulumi:"admin"`
+	Admin utils.RoleArgs `pulumi:"admin"`
 
 	// IAM role with poweruser access.
-	Poweruser AssumableRolesRoleArgs `pulumi:"poweruser"`
+	Poweruser utils.RoleArgs `pulumi:"poweruser"`
 
 	// IAM role with readonly access.
-	Readonly AssumableRolesRoleArgs `pulumi:"readonly"`
+	Readonly utils.RoleArgs `pulumi:"readonly"`
 }
 
 type AssumableRoleOutput struct {
@@ -99,82 +82,82 @@ type AssumableRoles struct {
 	Readonly AssumableRoleOutput `pulumi:"readonly"`
 }
 
+func newAssumableRolePolicyDocumentArgs(trustedRoleARNs []string, trustedRoleServices []string, requiresMFA bool, mfaAge int) *iam.GetPolicyDocumentArgs {
+	var conditions []iam.GetPolicyDocumentStatementCondition
+	if requiresMFA {
+		if mfaAge == 0 {
+			mfaAge = 86400
+		}
+
+		conditions = append(conditions, []iam.GetPolicyDocumentStatementCondition{
+			NewPolicyDocCondition("Bool", "aws:MultiFactorAuthPresent", "true"),
+			NewPolicyDocCondition("NumericLessThan", "aws:MultiFactorAuthAge", fmt.Sprintf("%v", mfaAge)),
+		}...)
+	}
+
+	return &iam.GetPolicyDocumentArgs{
+		Statements: []iam.GetPolicyDocumentStatement{
+			{
+				Effect:  pulumi.StringRef("Allow"),
+				Actions: []string{"sts:AssumeRole"},
+				Principals: []iam.GetPolicyDocumentStatementPrincipal{
+					{
+						Type:        "AWS",
+						Identifiers: trustedRoleARNs,
+					},
+					{
+						Type:        "Federated",
+						Identifiers: trustedRoleServices,
+					},
+				},
+				Conditions: conditions,
+			},
+		},
+	}
+}
+
 func NewAssumableRoles(ctx *pulumi.Context, name string, args *AssumableRolesArgs, opts ...pulumi.ResourceOption) (*AssumableRoles, error) {
 	if args == nil {
 		args = &AssumableRolesArgs{}
 	}
 
 	component := &AssumableRoles{}
-	err := ctx.RegisterComponentResource(AssumableRoleIdentifier, name, component, opts...)
+	err := ctx.RegisterComponentResource(AssumableRolesIdentifier, name, component, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	opts = append(opts, pulumi.Parent(component))
 
-	assumeRoleArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRole"}).
-		AddAWSPrincipal(args.TrustedRoleArns).
-		AddServicePrincipal(args.TrustedRoleServices)
+	assumeRoleArgs := newAssumableRolePolicyDocumentArgs(args.TrustedRoleArns, args.TrustedRoleServices, false, 0)
+	assumeRoleWithMFAArgs := newAssumableRolePolicyDocumentArgs(args.TrustedRoleArns, args.TrustedRoleServices, true, args.MFAAge)
 
-	assumeRoleWithMFAArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRole"}).
-		AddAWSPrincipal(args.TrustedRoleArns).
-		AddServicePrincipal(args.TrustedRoleServices).
-		AddCondition("Bool", "aws:MultiFactorAuthPresent", []string{"true"}).
-		AddCondition("NumericLessThan", "aws:MultiFactorAuthAge", []string{fmt.Sprintf("%v", args.MFAAge)})
-
-	assumeRole, err := iam.GetPolicyDocument(ctx, assumeRoleArgs.Build())
+	assumeRole, err := utils.GetIAMPolicyDocument(ctx, assumeRoleArgs)
 	if err != nil {
 		return nil, err
 	}
 
-	assumeRoleMFA, err := iam.GetPolicyDocument(ctx, assumeRoleWithMFAArgs.Build())
+	assumeRoleMFA, err := utils.GetIAMPolicyDocument(ctx, assumeRoleWithMFAArgs)
 	if err != nil {
 		return nil, err
 	}
 
-	rolesToCreate := map[string]AssumableRolesRoleArgs{
-		"admin":     args.Admin,
-		"poweruser": args.Poweruser,
-		"readonly":  args.Readonly,
+	roleOutput, err := utils.NewAssumableRoles(ctx, name, &utils.IAMAssumableRolesArgs{
+		MaxSessionDuration:  args.MaxSessionDuration,
+		ForceDetachPolicies: args.ForceDetachPolicies,
+		AssumeRolePolicy:    assumeRole.Json,
+		AssumeRoleWithMFA:   assumeRoleMFA.Json,
+		Admin:               args.Admin,
+		Poweruser:           args.Poweruser,
+		Readonly:            args.Readonly,
+	}, opts...)
+	if err != nil {
+		return nil, err
 	}
 
-	roleOutput := make(map[string]*iam.Role)
-	for typ, roleArgs := range rolesToCreate {
-		rolePolicy := assumeRole.Json
-		if roleArgs.RequiresMFA {
-			rolePolicy = assumeRoleMFA.Json
-		}
-
-		if len(roleArgs.PolicyARNS) == 0 {
-			switch typ {
-			case "admin":
-				roleArgs.PolicyARNS = append(roleArgs.PolicyARNS, "arn:aws:iam::aws:policy/AdministratorAccess")
-			case "poweruser":
-				roleArgs.PolicyARNS = append(roleArgs.PolicyARNS, "arn:aws:iam::aws:policy/PowerUserAccess")
-			case "readonly":
-				roleArgs.PolicyARNS = append(roleArgs.PolicyARNS, "arn:aws:iam::aws:policy/ReadOnlyAccess")
-			}
-		}
-
-		role, err := createRoleWithAttachments(ctx, name, typ, roleArgs.PolicyARNS, &iam.RoleArgs{
-			Name:                pulumi.String(roleArgs.Name),
-			Path:                pulumi.String(roleArgs.Path),
-			PermissionsBoundary: pulumi.String(roleArgs.PermissionsBoundaryARN),
-			MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
-			ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-			AssumeRolePolicy:    pulumi.String(rolePolicy),
-			Tags:                pulumi.ToStringMap(roleArgs.Tags),
-		}, opts...)
-		if err != nil {
-			return nil, err
-		}
-
-		roleOutput[typ] = role
-	}
-
-	component.Admin = createAssumableRoleOutput(roleOutput["admin"], args.Admin.RequiresMFA)
-	component.Poweruser = createAssumableRoleOutput(roleOutput["poweruser"], args.Poweruser.RequiresMFA)
-	component.Readonly = createAssumableRoleOutput(roleOutput["readonly"], args.Readonly.RequiresMFA)
+	component.Admin = createAssumableRoleOutput(roleOutput[utils.AdminRoleType], args.Admin.RequiresMFA)
+	component.Poweruser = createAssumableRoleOutput(roleOutput[utils.PoweruserRoleType], args.Poweruser.RequiresMFA)
+	component.Readonly = createAssumableRoleOutput(roleOutput[utils.ReadonlyRoleType], args.Readonly.RequiresMFA)
 
 	return component, nil
 }

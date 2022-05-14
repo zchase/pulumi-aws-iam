@@ -22,6 +22,7 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/eks"
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/zchase/pulumi-aws-iam/pkg/utils"
 )
 
 const EKSRoleIdentifier = "aws-iam:index:EKSRole"
@@ -31,7 +32,7 @@ type EKSRoleArgs struct {
 	Tags map[string]string `pulumi:"tags"`
 
 	// IAM role.
-	Role RoleArgs `pulumi:"role"`
+	Role utils.RoleArgs `pulumi:"role"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
 	MaxSessionDuration int `pulumi:"maxSessionDuration"`
@@ -117,23 +118,12 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 		return nil, err
 	}
 
-	var roleNamePrefix pulumi.StringPtrInput
-	roleName := pulumi.StringPtr(args.Role.Name)
-	if args.Role.NamePrefix != "" {
-		roleNamePrefix = pulumi.StringPtr(args.Role.NamePrefix)
-		roleName = nil
-	}
-
-	role, err := iam.NewRole(ctx, name, &iam.RoleArgs{
-		AssumeRolePolicy:    pulumi.String(assumeRoldWithOIDC.Json),
-		Description:         pulumi.String(args.Role.Description),
-		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
-		Name:                roleName,
-		NamePrefix:          roleNamePrefix,
-		Path:                pulumi.String(args.Role.Path),
-		PermissionsBoundary: pulumi.String(args.Role.PermissionsBoundaryArn),
-		Tags:                pulumi.ToStringMap(args.Tags),
+	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
+		Role:                args.Role,
+		AssumeRolePolicy:    assumeRoldWithOIDC.Json,
+		ForceDetachPolicies: args.ForceDetachPolicies,
+		MaxSessionDuration:  args.MaxSessionDuration,
+		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {
 		return nil, err

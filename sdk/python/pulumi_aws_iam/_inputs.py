@@ -9,6 +9,7 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
 
 __all__ = [
+    'AccountPasswordPolicyArgs',
     'AdminRoleWithMFAArgs',
     'AdminRoleArgs',
     'EKSAmazonManagedServicePrometheusPolicyArgs',
@@ -37,6 +38,160 @@ __all__ = [
 ]
 
 @pulumi.input_type
+class AccountPasswordPolicyArgs:
+    def __init__(__self__, *,
+                 allow_users_to_change: pulumi.Input[bool],
+                 hard_expiry: pulumi.Input[bool],
+                 require_lowercase_characters: pulumi.Input[bool],
+                 require_numbers: pulumi.Input[bool],
+                 require_symbols: pulumi.Input[bool],
+                 require_uppercase_characters: pulumi.Input[bool],
+                 max_age: Optional[pulumi.Input[int]] = None,
+                 minimum_length: Optional[pulumi.Input[int]] = None,
+                 reuse_prevention: Optional[pulumi.Input[int]] = None):
+        """
+        Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+        :param pulumi.Input[bool] allow_users_to_change: Whether to allow users to change their own password.
+        :param pulumi.Input[bool] hard_expiry: Whether users are prevented from setting a new password after their password has
+               expired (i.e. require administrator reset).
+        :param pulumi.Input[bool] require_lowercase_characters: Whether to require lowercase characters for user passwords.
+        :param pulumi.Input[bool] require_numbers: Whether to require numbers for user passwords.
+        :param pulumi.Input[bool] require_symbols: Whether to require symbols for user passwords.
+        :param pulumi.Input[bool] require_uppercase_characters: Whether to require uppercase characters for user passwords.
+        :param pulumi.Input[int] max_age: The number of days that an user password is valid. If not set or a value of `0` is provided, then
+               passwords will not expire.
+        :param pulumi.Input[int] minimum_length: Minimum length to require for user passwords. Defaults to `8` if not set or
+               the provided value is invalid. Valid values are between 6 and 128.
+        :param pulumi.Input[int] reuse_prevention: The number of previous passwords that users are prevented from reusing. If not set or a
+               value of `0` is provided, no reuse prevention policy will be used.
+        """
+        pulumi.set(__self__, "allow_users_to_change", allow_users_to_change)
+        pulumi.set(__self__, "hard_expiry", hard_expiry)
+        pulumi.set(__self__, "require_lowercase_characters", require_lowercase_characters)
+        pulumi.set(__self__, "require_numbers", require_numbers)
+        pulumi.set(__self__, "require_symbols", require_symbols)
+        pulumi.set(__self__, "require_uppercase_characters", require_uppercase_characters)
+        if max_age is not None:
+            pulumi.set(__self__, "max_age", max_age)
+        if minimum_length is not None:
+            pulumi.set(__self__, "minimum_length", minimum_length)
+        if reuse_prevention is not None:
+            pulumi.set(__self__, "reuse_prevention", reuse_prevention)
+
+    @property
+    @pulumi.getter(name="allowUsersToChange")
+    def allow_users_to_change(self) -> pulumi.Input[bool]:
+        """
+        Whether to allow users to change their own password.
+        """
+        return pulumi.get(self, "allow_users_to_change")
+
+    @allow_users_to_change.setter
+    def allow_users_to_change(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "allow_users_to_change", value)
+
+    @property
+    @pulumi.getter(name="hardExpiry")
+    def hard_expiry(self) -> pulumi.Input[bool]:
+        """
+        Whether users are prevented from setting a new password after their password has
+        expired (i.e. require administrator reset).
+        """
+        return pulumi.get(self, "hard_expiry")
+
+    @hard_expiry.setter
+    def hard_expiry(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "hard_expiry", value)
+
+    @property
+    @pulumi.getter(name="requireLowercaseCharacters")
+    def require_lowercase_characters(self) -> pulumi.Input[bool]:
+        """
+        Whether to require lowercase characters for user passwords.
+        """
+        return pulumi.get(self, "require_lowercase_characters")
+
+    @require_lowercase_characters.setter
+    def require_lowercase_characters(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "require_lowercase_characters", value)
+
+    @property
+    @pulumi.getter(name="requireNumbers")
+    def require_numbers(self) -> pulumi.Input[bool]:
+        """
+        Whether to require numbers for user passwords.
+        """
+        return pulumi.get(self, "require_numbers")
+
+    @require_numbers.setter
+    def require_numbers(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "require_numbers", value)
+
+    @property
+    @pulumi.getter(name="requireSymbols")
+    def require_symbols(self) -> pulumi.Input[bool]:
+        """
+        Whether to require symbols for user passwords.
+        """
+        return pulumi.get(self, "require_symbols")
+
+    @require_symbols.setter
+    def require_symbols(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "require_symbols", value)
+
+    @property
+    @pulumi.getter(name="requireUppercaseCharacters")
+    def require_uppercase_characters(self) -> pulumi.Input[bool]:
+        """
+        Whether to require uppercase characters for user passwords.
+        """
+        return pulumi.get(self, "require_uppercase_characters")
+
+    @require_uppercase_characters.setter
+    def require_uppercase_characters(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "require_uppercase_characters", value)
+
+    @property
+    @pulumi.getter(name="maxAge")
+    def max_age(self) -> Optional[pulumi.Input[int]]:
+        """
+        The number of days that an user password is valid. If not set or a value of `0` is provided, then
+        passwords will not expire.
+        """
+        return pulumi.get(self, "max_age")
+
+    @max_age.setter
+    def max_age(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_age", value)
+
+    @property
+    @pulumi.getter(name="minimumLength")
+    def minimum_length(self) -> Optional[pulumi.Input[int]]:
+        """
+        Minimum length to require for user passwords. Defaults to `8` if not set or
+        the provided value is invalid. Valid values are between 6 and 128.
+        """
+        return pulumi.get(self, "minimum_length")
+
+    @minimum_length.setter
+    def minimum_length(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "minimum_length", value)
+
+    @property
+    @pulumi.getter(name="reusePrevention")
+    def reuse_prevention(self) -> Optional[pulumi.Input[int]]:
+        """
+        The number of previous passwords that users are prevented from reusing. If not set or a
+        value of `0` is provided, no reuse prevention policy will be used.
+        """
+        return pulumi.get(self, "reuse_prevention")
+
+    @reuse_prevention.setter
+    def reuse_prevention(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "reuse_prevention", value)
+
+
+@pulumi.input_type
 class AdminRoleWithMFAArgs:
     def __init__(__self__, *,
                  name: Optional[pulumi.Input[str]] = None,
@@ -54,12 +209,8 @@ class AdminRoleWithMFAArgs:
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'admin'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
         if permissions_boundary_arn is None:
@@ -68,8 +219,6 @@ class AdminRoleWithMFAArgs:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
             pulumi.set(__self__, "policy_arns", policy_arns)
-        if requires_mfa is None:
-            requires_mfa = True
         if requires_mfa is not None:
             pulumi.set(__self__, "requires_mfa", requires_mfa)
         if tags is not None:

@@ -14,13 +14,14 @@ import (
 type Account struct {
 	pulumi.ResourceState
 
-	// The AWS ARN associated with the calling entity
+	// The AWS ARN associated with the calling entity.
 	Arn pulumi.StringOutput `pulumi:"arn"`
-	// The AWS Account ID number of the account that owns or contains the calling entity
+	// The AWS Account ID number of the account that owns or contains the calling entity.
 	Id pulumi.StringOutput `pulumi:"id"`
-	// Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
+	// Indicates whether passwords in the account expire. Returns true if max password
+	// age contains a value greater than 0. Returns false if it is 0 or not present.
 	PasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"passwordPolicyExpirePasswords"`
-	// The unique identifier of the calling entity
+	// The unique identifier of the calling entity.
 	UserId pulumi.StringOutput `pulumi:"userId"`
 }
 
@@ -34,32 +35,8 @@ func NewAccount(ctx *pulumi.Context,
 	if args.AccountAlias == nil {
 		return nil, errors.New("invalid value for required argument 'AccountAlias'")
 	}
-	if isZero(args.AllowUsersToChangePassword) {
-		args.AllowUsersToChangePassword = pulumi.BoolPtr(true)
-	}
-	if isZero(args.GetCallerIdentity) {
-		args.GetCallerIdentity = pulumi.BoolPtr(true)
-	}
-	if isZero(args.HardExpiry) {
-		args.HardExpiry = pulumi.BoolPtr(false)
-	}
-	if isZero(args.MaxPasswordAge) {
-		args.MaxPasswordAge = pulumi.IntPtr(0)
-	}
-	if isZero(args.MinimumPasswordLength) {
-		args.MinimumPasswordLength = pulumi.IntPtr(8)
-	}
-	if isZero(args.RequireLowercaseCharacters) {
-		args.RequireLowercaseCharacters = pulumi.BoolPtr(true)
-	}
-	if isZero(args.RequireNumbers) {
-		args.RequireNumbers = pulumi.BoolPtr(true)
-	}
-	if isZero(args.RequireSymbols) {
-		args.RequireSymbols = pulumi.BoolPtr(true)
-	}
-	if isZero(args.RequireUppercaseCharacters) {
-		args.RequireUppercaseCharacters = pulumi.BoolPtr(true)
+	if args.PasswordPolicy == nil {
+		return nil, errors.New("invalid value for required argument 'PasswordPolicy'")
 	}
 	var resource Account
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:Account", name, args, &resource, opts...)
@@ -72,52 +49,18 @@ func NewAccount(ctx *pulumi.Context,
 type accountArgs struct {
 	// AWS IAM account alias for this account.
 	AccountAlias string `pulumi:"accountAlias"`
-	// Whether to allow users to change their own password.
-	AllowUsersToChangePassword *bool `pulumi:"allowUsersToChangePassword"`
-	// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-	GetCallerIdentity *bool `pulumi:"getCallerIdentity"`
-	// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-	HardExpiry *bool `pulumi:"hardExpiry"`
-	// The number of days that an user password is valid.
-	MaxPasswordAge *int `pulumi:"maxPasswordAge"`
-	// Minimum length to require for user passwords.
-	MinimumPasswordLength *int `pulumi:"minimumPasswordLength"`
-	// The number of previous passwords that users are prevented from reusing.
-	PasswordReusePrevention *bool `pulumi:"passwordReusePrevention"`
-	// Whether to require lowercase characters for user passwords.
-	RequireLowercaseCharacters *bool `pulumi:"requireLowercaseCharacters"`
-	// Whether to require numbers for user passwords.
-	RequireNumbers *bool `pulumi:"requireNumbers"`
-	// Whether to require symbols for user passwords.
-	RequireSymbols *bool `pulumi:"requireSymbols"`
-	// Whether to require uppercase characters for user passwords.
-	RequireUppercaseCharacters *bool `pulumi:"requireUppercaseCharacters"`
+	// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+	// left empty the default AWS password policy will be applied.
+	PasswordPolicy AccountPasswordPolicy `pulumi:"passwordPolicy"`
 }
 
 // The set of arguments for constructing a Account resource.
 type AccountArgs struct {
 	// AWS IAM account alias for this account.
 	AccountAlias pulumi.StringInput
-	// Whether to allow users to change their own password.
-	AllowUsersToChangePassword pulumi.BoolPtrInput
-	// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-	GetCallerIdentity pulumi.BoolPtrInput
-	// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-	HardExpiry pulumi.BoolPtrInput
-	// The number of days that an user password is valid.
-	MaxPasswordAge pulumi.IntPtrInput
-	// Minimum length to require for user passwords.
-	MinimumPasswordLength pulumi.IntPtrInput
-	// The number of previous passwords that users are prevented from reusing.
-	PasswordReusePrevention pulumi.BoolPtrInput
-	// Whether to require lowercase characters for user passwords.
-	RequireLowercaseCharacters pulumi.BoolPtrInput
-	// Whether to require numbers for user passwords.
-	RequireNumbers pulumi.BoolPtrInput
-	// Whether to require symbols for user passwords.
-	RequireSymbols pulumi.BoolPtrInput
-	// Whether to require uppercase characters for user passwords.
-	RequireUppercaseCharacters pulumi.BoolPtrInput
+	// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+	// left empty the default AWS password policy will be applied.
+	PasswordPolicy AccountPasswordPolicyInput
 }
 
 func (AccountArgs) ElementType() reflect.Type {

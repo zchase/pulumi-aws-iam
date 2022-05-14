@@ -7,6 +7,7 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from . import _utilities
+from ._inputs import *
 
 __all__ = ['AccountArgs', 'Account']
 
@@ -14,69 +15,15 @@ __all__ = ['AccountArgs', 'Account']
 class AccountArgs:
     def __init__(__self__, *,
                  account_alias: pulumi.Input[str],
-                 allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 get_caller_identity: Optional[pulumi.Input[bool]] = None,
-                 hard_expiry: Optional[pulumi.Input[bool]] = None,
-                 max_password_age: Optional[pulumi.Input[int]] = None,
-                 minimum_password_length: Optional[pulumi.Input[int]] = None,
-                 password_reuse_prevention: Optional[pulumi.Input[bool]] = None,
-                 require_lowercase_characters: Optional[pulumi.Input[bool]] = None,
-                 require_numbers: Optional[pulumi.Input[bool]] = None,
-                 require_symbols: Optional[pulumi.Input[bool]] = None,
-                 require_uppercase_characters: Optional[pulumi.Input[bool]] = None):
+                 password_policy: pulumi.Input['AccountPasswordPolicyArgs']):
         """
         The set of arguments for constructing a Account resource.
         :param pulumi.Input[str] account_alias: AWS IAM account alias for this account.
-        :param pulumi.Input[bool] allow_users_to_change_password: Whether to allow users to change their own password.
-        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-        :param pulumi.Input[bool] hard_expiry: Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-        :param pulumi.Input[int] max_password_age: The number of days that an user password is valid.
-        :param pulumi.Input[int] minimum_password_length: Minimum length to require for user passwords.
-        :param pulumi.Input[bool] password_reuse_prevention: The number of previous passwords that users are prevented from reusing.
-        :param pulumi.Input[bool] require_lowercase_characters: Whether to require lowercase characters for user passwords.
-        :param pulumi.Input[bool] require_numbers: Whether to require numbers for user passwords.
-        :param pulumi.Input[bool] require_symbols: Whether to require symbols for user passwords.
-        :param pulumi.Input[bool] require_uppercase_characters: Whether to require uppercase characters for user passwords.
+        :param pulumi.Input['AccountPasswordPolicyArgs'] password_policy: Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+               left empty the default AWS password policy will be applied.
         """
         pulumi.set(__self__, "account_alias", account_alias)
-        if allow_users_to_change_password is None:
-            allow_users_to_change_password = True
-        if allow_users_to_change_password is not None:
-            pulumi.set(__self__, "allow_users_to_change_password", allow_users_to_change_password)
-        if get_caller_identity is None:
-            get_caller_identity = True
-        if get_caller_identity is not None:
-            pulumi.set(__self__, "get_caller_identity", get_caller_identity)
-        if hard_expiry is None:
-            hard_expiry = False
-        if hard_expiry is not None:
-            pulumi.set(__self__, "hard_expiry", hard_expiry)
-        if max_password_age is None:
-            max_password_age = 0
-        if max_password_age is not None:
-            pulumi.set(__self__, "max_password_age", max_password_age)
-        if minimum_password_length is None:
-            minimum_password_length = 8
-        if minimum_password_length is not None:
-            pulumi.set(__self__, "minimum_password_length", minimum_password_length)
-        if password_reuse_prevention is not None:
-            pulumi.set(__self__, "password_reuse_prevention", password_reuse_prevention)
-        if require_lowercase_characters is None:
-            require_lowercase_characters = True
-        if require_lowercase_characters is not None:
-            pulumi.set(__self__, "require_lowercase_characters", require_lowercase_characters)
-        if require_numbers is None:
-            require_numbers = True
-        if require_numbers is not None:
-            pulumi.set(__self__, "require_numbers", require_numbers)
-        if require_symbols is None:
-            require_symbols = True
-        if require_symbols is not None:
-            pulumi.set(__self__, "require_symbols", require_symbols)
-        if require_uppercase_characters is None:
-            require_uppercase_characters = True
-        if require_uppercase_characters is not None:
-            pulumi.set(__self__, "require_uppercase_characters", require_uppercase_characters)
+        pulumi.set(__self__, "password_policy", password_policy)
 
     @property
     @pulumi.getter(name="accountAlias")
@@ -91,124 +38,17 @@ class AccountArgs:
         pulumi.set(self, "account_alias", value)
 
     @property
-    @pulumi.getter(name="allowUsersToChangePassword")
-    def allow_users_to_change_password(self) -> Optional[pulumi.Input[bool]]:
+    @pulumi.getter(name="passwordPolicy")
+    def password_policy(self) -> pulumi.Input['AccountPasswordPolicyArgs']:
         """
-        Whether to allow users to change their own password.
+        Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+        left empty the default AWS password policy will be applied.
         """
-        return pulumi.get(self, "allow_users_to_change_password")
+        return pulumi.get(self, "password_policy")
 
-    @allow_users_to_change_password.setter
-    def allow_users_to_change_password(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "allow_users_to_change_password", value)
-
-    @property
-    @pulumi.getter(name="getCallerIdentity")
-    def get_caller_identity(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-        """
-        return pulumi.get(self, "get_caller_identity")
-
-    @get_caller_identity.setter
-    def get_caller_identity(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "get_caller_identity", value)
-
-    @property
-    @pulumi.getter(name="hardExpiry")
-    def hard_expiry(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-        """
-        return pulumi.get(self, "hard_expiry")
-
-    @hard_expiry.setter
-    def hard_expiry(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "hard_expiry", value)
-
-    @property
-    @pulumi.getter(name="maxPasswordAge")
-    def max_password_age(self) -> Optional[pulumi.Input[int]]:
-        """
-        The number of days that an user password is valid.
-        """
-        return pulumi.get(self, "max_password_age")
-
-    @max_password_age.setter
-    def max_password_age(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "max_password_age", value)
-
-    @property
-    @pulumi.getter(name="minimumPasswordLength")
-    def minimum_password_length(self) -> Optional[pulumi.Input[int]]:
-        """
-        Minimum length to require for user passwords.
-        """
-        return pulumi.get(self, "minimum_password_length")
-
-    @minimum_password_length.setter
-    def minimum_password_length(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "minimum_password_length", value)
-
-    @property
-    @pulumi.getter(name="passwordReusePrevention")
-    def password_reuse_prevention(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The number of previous passwords that users are prevented from reusing.
-        """
-        return pulumi.get(self, "password_reuse_prevention")
-
-    @password_reuse_prevention.setter
-    def password_reuse_prevention(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "password_reuse_prevention", value)
-
-    @property
-    @pulumi.getter(name="requireLowercaseCharacters")
-    def require_lowercase_characters(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to require lowercase characters for user passwords.
-        """
-        return pulumi.get(self, "require_lowercase_characters")
-
-    @require_lowercase_characters.setter
-    def require_lowercase_characters(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "require_lowercase_characters", value)
-
-    @property
-    @pulumi.getter(name="requireNumbers")
-    def require_numbers(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to require numbers for user passwords.
-        """
-        return pulumi.get(self, "require_numbers")
-
-    @require_numbers.setter
-    def require_numbers(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "require_numbers", value)
-
-    @property
-    @pulumi.getter(name="requireSymbols")
-    def require_symbols(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to require symbols for user passwords.
-        """
-        return pulumi.get(self, "require_symbols")
-
-    @require_symbols.setter
-    def require_symbols(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "require_symbols", value)
-
-    @property
-    @pulumi.getter(name="requireUppercaseCharacters")
-    def require_uppercase_characters(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Whether to require uppercase characters for user passwords.
-        """
-        return pulumi.get(self, "require_uppercase_characters")
-
-    @require_uppercase_characters.setter
-    def require_uppercase_characters(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "require_uppercase_characters", value)
+    @password_policy.setter
+    def password_policy(self, value: pulumi.Input['AccountPasswordPolicyArgs']):
+        pulumi.set(self, "password_policy", value)
 
 
 class Account(pulumi.ComponentResource):
@@ -217,32 +57,15 @@ class Account(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_alias: Optional[pulumi.Input[str]] = None,
-                 allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 get_caller_identity: Optional[pulumi.Input[bool]] = None,
-                 hard_expiry: Optional[pulumi.Input[bool]] = None,
-                 max_password_age: Optional[pulumi.Input[int]] = None,
-                 minimum_password_length: Optional[pulumi.Input[int]] = None,
-                 password_reuse_prevention: Optional[pulumi.Input[bool]] = None,
-                 require_lowercase_characters: Optional[pulumi.Input[bool]] = None,
-                 require_numbers: Optional[pulumi.Input[bool]] = None,
-                 require_symbols: Optional[pulumi.Input[bool]] = None,
-                 require_uppercase_characters: Optional[pulumi.Input[bool]] = None,
+                 password_policy: Optional[pulumi.Input[pulumi.InputType['AccountPasswordPolicyArgs']]] = None,
                  __props__=None):
         """
         Create a Account resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account_alias: AWS IAM account alias for this account.
-        :param pulumi.Input[bool] allow_users_to_change_password: Whether to allow users to change their own password.
-        :param pulumi.Input[bool] get_caller_identity: Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-        :param pulumi.Input[bool] hard_expiry: Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-        :param pulumi.Input[int] max_password_age: The number of days that an user password is valid.
-        :param pulumi.Input[int] minimum_password_length: Minimum length to require for user passwords.
-        :param pulumi.Input[bool] password_reuse_prevention: The number of previous passwords that users are prevented from reusing.
-        :param pulumi.Input[bool] require_lowercase_characters: Whether to require lowercase characters for user passwords.
-        :param pulumi.Input[bool] require_numbers: Whether to require numbers for user passwords.
-        :param pulumi.Input[bool] require_symbols: Whether to require symbols for user passwords.
-        :param pulumi.Input[bool] require_uppercase_characters: Whether to require uppercase characters for user passwords.
+        :param pulumi.Input[pulumi.InputType['AccountPasswordPolicyArgs']] password_policy: Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+               left empty the default AWS password policy will be applied.
         """
         ...
     @overload
@@ -268,16 +91,7 @@ class Account(pulumi.ComponentResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_alias: Optional[pulumi.Input[str]] = None,
-                 allow_users_to_change_password: Optional[pulumi.Input[bool]] = None,
-                 get_caller_identity: Optional[pulumi.Input[bool]] = None,
-                 hard_expiry: Optional[pulumi.Input[bool]] = None,
-                 max_password_age: Optional[pulumi.Input[int]] = None,
-                 minimum_password_length: Optional[pulumi.Input[int]] = None,
-                 password_reuse_prevention: Optional[pulumi.Input[bool]] = None,
-                 require_lowercase_characters: Optional[pulumi.Input[bool]] = None,
-                 require_numbers: Optional[pulumi.Input[bool]] = None,
-                 require_symbols: Optional[pulumi.Input[bool]] = None,
-                 require_uppercase_characters: Optional[pulumi.Input[bool]] = None,
+                 password_policy: Optional[pulumi.Input[pulumi.InputType['AccountPasswordPolicyArgs']]] = None,
                  __props__=None):
         if opts is None:
             opts = pulumi.ResourceOptions()
@@ -295,34 +109,9 @@ class Account(pulumi.ComponentResource):
             if account_alias is None and not opts.urn:
                 raise TypeError("Missing required property 'account_alias'")
             __props__.__dict__["account_alias"] = account_alias
-            if allow_users_to_change_password is None:
-                allow_users_to_change_password = True
-            __props__.__dict__["allow_users_to_change_password"] = allow_users_to_change_password
-            if get_caller_identity is None:
-                get_caller_identity = True
-            __props__.__dict__["get_caller_identity"] = get_caller_identity
-            if hard_expiry is None:
-                hard_expiry = False
-            __props__.__dict__["hard_expiry"] = hard_expiry
-            if max_password_age is None:
-                max_password_age = 0
-            __props__.__dict__["max_password_age"] = max_password_age
-            if minimum_password_length is None:
-                minimum_password_length = 8
-            __props__.__dict__["minimum_password_length"] = minimum_password_length
-            __props__.__dict__["password_reuse_prevention"] = password_reuse_prevention
-            if require_lowercase_characters is None:
-                require_lowercase_characters = True
-            __props__.__dict__["require_lowercase_characters"] = require_lowercase_characters
-            if require_numbers is None:
-                require_numbers = True
-            __props__.__dict__["require_numbers"] = require_numbers
-            if require_symbols is None:
-                require_symbols = True
-            __props__.__dict__["require_symbols"] = require_symbols
-            if require_uppercase_characters is None:
-                require_uppercase_characters = True
-            __props__.__dict__["require_uppercase_characters"] = require_uppercase_characters
+            if password_policy is None and not opts.urn:
+                raise TypeError("Missing required property 'password_policy'")
+            __props__.__dict__["password_policy"] = password_policy
             __props__.__dict__["arn"] = None
             __props__.__dict__["id"] = None
             __props__.__dict__["password_policy_expire_passwords"] = None
@@ -338,7 +127,7 @@ class Account(pulumi.ComponentResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[str]:
         """
-        The AWS ARN associated with the calling entity
+        The AWS ARN associated with the calling entity.
         """
         return pulumi.get(self, "arn")
 
@@ -346,7 +135,7 @@ class Account(pulumi.ComponentResource):
     @pulumi.getter
     def id(self) -> pulumi.Output[str]:
         """
-        The AWS Account ID number of the account that owns or contains the calling entity
+        The AWS Account ID number of the account that owns or contains the calling entity.
         """
         return pulumi.get(self, "id")
 
@@ -354,7 +143,8 @@ class Account(pulumi.ComponentResource):
     @pulumi.getter(name="passwordPolicyExpirePasswords")
     def password_policy_expire_passwords(self) -> pulumi.Output[bool]:
         """
-        Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
+        Indicates whether passwords in the account expire. Returns true if max password
+        age contains a value greater than 0. Returns false if it is 0 or not present.
         """
         return pulumi.get(self, "password_policy_expire_passwords")
 
@@ -362,7 +152,7 @@ class Account(pulumi.ComponentResource):
     @pulumi.getter(name="userId")
     def user_id(self) -> pulumi.Output[str]:
         """
-        The unique identifier of the calling entity
+        The unique identifier of the calling entity.
         """
         return pulumi.get(self, "user_id")
 

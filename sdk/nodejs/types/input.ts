@@ -7,6 +7,52 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
+ * Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+ */
+export interface AccountPasswordPolicyArgs {
+    /**
+     * Whether to allow users to change their own password.
+     */
+    allowUsersToChange: pulumi.Input<boolean>;
+    /**
+     * Whether users are prevented from setting a new password after their password has
+     * expired (i.e. require administrator reset).
+     */
+    hardExpiry: pulumi.Input<boolean>;
+    /**
+     * The number of days that an user password is valid. If not set or a value of `0` is provided, then
+     * passwords will not expire.
+     */
+    maxAge?: pulumi.Input<number>;
+    /**
+     * Minimum length to require for user passwords. Defaults to `8` if not set or
+     * the provided value is invalid. Valid values are between 6 and 128.
+     */
+    minimumLength?: pulumi.Input<number>;
+    /**
+     * Whether to require lowercase characters for user passwords.
+     */
+    requireLowercaseCharacters: pulumi.Input<boolean>;
+    /**
+     * Whether to require numbers for user passwords.
+     */
+    requireNumbers: pulumi.Input<boolean>;
+    /**
+     * Whether to require symbols for user passwords.
+     */
+    requireSymbols: pulumi.Input<boolean>;
+    /**
+     * Whether to require uppercase characters for user passwords.
+     */
+    requireUppercaseCharacters: pulumi.Input<boolean>;
+    /**
+     * The number of previous passwords that users are prevented from reusing. If not set or a
+     * value of `0` is provided, no reuse prevention policy will be used.
+     */
+    reusePrevention?: pulumi.Input<number>;
+}
+
+/**
  * The admin role.
  */
 export interface AdminRoleArgs {
@@ -78,10 +124,7 @@ export interface AdminRoleWithMFAArgs {
 export function adminRoleWithMFAArgsProvideDefaults(val: AdminRoleWithMFAArgs): AdminRoleWithMFAArgs {
     return {
         ...val,
-        name: (val.name) ?? "admin",
-        path: (val.path) ?? "/",
         permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-        requiresMfa: (val.requiresMfa) ?? true,
     };
 }
 

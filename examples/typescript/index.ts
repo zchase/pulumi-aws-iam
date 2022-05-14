@@ -1,24 +1,32 @@
 import * as iam from "@pulumi/aws-iam";
 
 // Account
-export const account = new iam.Account("account", {
-    accountAlias: "cool-alias",
-    minimumPasswordLength: 37,
-    requireNumbers: false,
-});
+// export const account = new iam.Account("account", {
+//     accountAlias: "cool-alias",
+//     passwordPolicy: {
+//         minimumLength: 37,
+//         requireNumbers: false,
+//         allowUsersToChange: true,
+//         hardExpiry: true,
+//         requireSymbols: true,
+//         requireLowercaseCharacters: true,
+//         requireUppercaseCharacters: true,
+//     },
+// });
 
 // Assumable Role
 export const assumableRole = new iam.AssumableRole("assumable-role", {
     trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus" ],
-    customRolePolicyArns: [ "arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess" ],
     role: {
         name: "custom",
         requiresMfa: true,
+        policyArns: [ "arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess" ],
     },
 });
 
-// Assumable Role With OIDC
+// // Assumable Role With OIDC
 export const assumableRoleWithOidc = new iam.AssumableRoleWithOIDC("assumable-role-with-oidc", {
+    providerUrls: ["oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"],
     role: {
         name: "oidc-role",
         policyArns: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ],
@@ -26,11 +34,11 @@ export const assumableRoleWithOidc = new iam.AssumableRoleWithOIDC("assumable-ro
     tags: {
         Role: "oidc-role",
     },
-    providerUrls: ["oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"],
 });
 
-// Assumable Role With SAML
+// // Assumable Role With SAML
 export const assumableRoleWithSaml = new iam.AssumableRoleWithSAML("assumable-role-with-saml", {
+    providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
     role: {
         name: "saml-role",
         policyArns: [ "arn:aws:iam::aws:policy/ReadOnlyAccess" ],
@@ -38,10 +46,9 @@ export const assumableRoleWithSaml = new iam.AssumableRoleWithSAML("assumable-ro
     tags: {
         Role: "saml-role",
     },
-    providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
 });
 
-// Assumable Roles
+// // Assumable Roles
 export const assumableRoles = new iam.AssumableRoles("assumable-roles", {
     trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/anton" ],
     admin: {},
@@ -53,7 +60,7 @@ export const assumableRoles = new iam.AssumableRoles("assumable-roles", {
     },
 });
 
-// Assumable Roles With SAML
+// // Assumable Roles With SAML
 export const assumableRolesWithSaml = new iam.AssumableRolesWithSAML("assumable-role-with-saml", {
     providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
     admin: {},
@@ -63,7 +70,7 @@ export const assumableRolesWithSaml = new iam.AssumableRolesWithSAML("assumable-
     readonly: {},
 });
 
-// EKS Role
+// // EKS Role
 export const eksRole = new iam.EKSRole("eks-role", {
     role: {
         name: "eks-role",
@@ -79,14 +86,14 @@ export const eksRole = new iam.EKSRole("eks-role", {
     // },
 });
 
-// Group With Assumable Roles Policy
+// // Group With Assumable Roles Policy
 export const groupWithAssumableRolesPolicy = new iam.GroupWithAssumableRolesPolicy("group-with-assumable-roles-policy", {
     name: "production-readonly",
     assumableRoles: [ "arn:aws:iam::835367859855:role/readonly" ],
     groupUsers: [ "user1", "user2" ],
 });
 
-// Group With Policies
+// // Group With Policies
 export const groupWithPolicies = new iam.GroupWithPolicies("group-with-policies", {
     name: "superadmins",
     groupUsers: [ "user1", "user2" ],
@@ -98,7 +105,7 @@ export const groupWithPolicies = new iam.GroupWithPolicies("group-with-policies"
     }],
 });
 
-// Policy
+// // Policy
 export const policy = new iam.Policy("policy", {
     name: "example",
     path: "/",
@@ -117,15 +124,15 @@ export const policy = new iam.Policy("policy", {
     }`,
 });
 
-// Read Only Policy
+// // Read Only Policy
 export const readOnlyPolicy = new iam.ReadOnlyPolicy("read-only-policy", {
     name: "example",
     path: "/",
     description: "My example read only policy",
-    allowedServices: [ "rds", "dynamo" ],
+    allowedServices: [ "rds", "dynamodb" ],
 });
 
-// Role For Service Accounts EKS
+// // Role For Service Accounts EKS
 export const roleForServiceAccountsEks = new iam.RoleForServiceAccountsEks("role-for-service-accounts-eks", {
     role: {
         name: "vpc-cni"
@@ -147,7 +154,7 @@ export const roleForServiceAccountsEks = new iam.RoleForServiceAccountsEks("role
     },
 });
 
-// User
+// // User
 export const user = new iam.User("user", {
     name: "pulumipus",
     forceDestroy: true,

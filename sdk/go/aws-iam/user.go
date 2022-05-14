@@ -33,12 +33,6 @@ func NewUser(ctx *pulumi.Context,
 	if args.Name == nil {
 		return nil, errors.New("invalid value for required argument 'Name'")
 	}
-	if isZero(args.PasswordLength) {
-		args.PasswordLength = pulumi.IntPtr(20)
-	}
-	if isZero(args.PasswordResetRequired) {
-		args.PasswordResetRequired = pulumi.BoolPtr(true)
-	}
 	if isZero(args.Path) {
 		args.Path = pulumi.StringPtr("/")
 	}

@@ -34,17 +34,13 @@ export class AssumableRole extends pulumi.ComponentResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            resourceInputs["adminRolePolicyArn"] = (args ? args.adminRolePolicyArn : undefined) ?? "arn:aws:iam::aws:policy/AdministratorAccess";
             resourceInputs["attachAdminPolicy"] = (args ? args.attachAdminPolicy : undefined) ?? false;
             resourceInputs["attachPoweruserPolicy"] = (args ? args.attachPoweruserPolicy : undefined) ?? false;
             resourceInputs["attachReadonlyPolicy"] = (args ? args.attachReadonlyPolicy : undefined) ?? false;
-            resourceInputs["customRolePolicyArns"] = args ? args.customRolePolicyArns : undefined;
             resourceInputs["customRoleTrustPolicy"] = (args ? args.customRoleTrustPolicy : undefined) ?? "";
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
             resourceInputs["mfaAge"] = (args ? args.mfaAge : undefined) ?? 86400;
-            resourceInputs["poweruserRolePolicyArn"] = (args ? args.poweruserRolePolicyArn : undefined) ?? "arn:aws:iam::aws:policy/PowerUserAccess";
-            resourceInputs["readonlyRolePolicyArn"] = (args ? args.readonlyRolePolicyArn : undefined) ?? "arn:aws:iam::aws:policy/ReadOnlyAccess";
             resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleWithMFAArgsProvideDefaults) : undefined) : undefined;
             resourceInputs["roleStsExternalIds"] = args ? args.roleStsExternalIds : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
@@ -66,10 +62,6 @@ export class AssumableRole extends pulumi.ComponentResource {
  */
 export interface AssumableRoleArgs {
     /**
-     * Policy ARN to use for admin role.
-     */
-    adminRolePolicyArn?: pulumi.Input<string>;
-    /**
      * Whether to attach an admin policy to a role.
      */
     attachAdminPolicy?: pulumi.Input<boolean>;
@@ -81,10 +73,6 @@ export interface AssumableRoleArgs {
      * Whether to attach a readonly policy to a role.
      */
     attachReadonlyPolicy?: pulumi.Input<boolean>;
-    /**
-     * List of ARNs of IAM policies to attach to IAM role.
-     */
-    customRolePolicyArns?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * A custom role trust policy.
      */
@@ -101,14 +89,6 @@ export interface AssumableRoleArgs {
      * Max age of valid MFA (in seconds) for roles which require MFA.
      */
     mfaAge?: pulumi.Input<number>;
-    /**
-     * Policy ARN to use for poweruser role.
-     */
-    poweruserRolePolicyArn?: pulumi.Input<string>;
-    /**
-     * Policy ARN to use for readonly role.
-     */
-    readonlyRolePolicyArn?: pulumi.Input<string>;
     /**
      * An IAM role that requires MFA.
      */

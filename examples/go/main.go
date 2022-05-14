@@ -11,9 +11,16 @@ func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		// Account
 		account, err := iam.NewAccount(ctx, "account", &iam.AccountArgs{
-			AccountAlias:          pulumi.String("cool-alias"),
-			MinimumPasswordLength: pulumi.IntPtr(37),
-			RequireNumbers:        pulumi.BoolPtr(false),
+			AccountAlias: pulumi.String("cool-alias"),
+			PasswordPolicy: iam.AccountPasswordPolicyArgs{
+				MinimumLength:              pulumi.IntPtr(37),
+				RequireNumbers:             pulumi.Bool(false),
+				AllowUsersToChange:         pulumi.Bool(true),
+				HardExpiry:                 pulumi.Bool(true),
+				RequireSymbols:             pulumi.Bool(true),
+				RequireLowercaseCharacters: pulumi.Bool(true),
+				RequireUppercaseCharacters: pulumi.Bool(true),
+			},
 		})
 		if err != nil {
 			return err
@@ -23,11 +30,11 @@ func main() {
 
 		// Assumable Role
 		assumableRole, err := iam.NewAssumableRole(ctx, "assumable-role", &iam.AssumableRoleArgs{
-			TrustedRoleArns:      pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
-			CustomRolePolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonCognitoReadOnly", "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"}),
+			TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
 			Role: &iam.RoleWithMFAArgs{
 				Name:        pulumi.String("custom"),
 				RequiresMfa: pulumi.BoolPtr(true),
+				PolicyArns:  pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonCognitoReadOnly", "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"}),
 			},
 		})
 		if err != nil {

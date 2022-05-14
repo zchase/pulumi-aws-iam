@@ -182,6 +182,10 @@ func NewGroupWithPolicies(ctx *pulumi.Context, name string, args *GroupWithPolic
 	}
 
 	if args.AttachIAMSelfManagementPolicy {
+		if args.IAMSelfManagementPolicyNamePrefix == "" {
+			args.IAMSelfManagementPolicyNamePrefix = "IAMSelfManagement-"
+		}
+
 		iamSelfManagementPolicy, err := iam.NewPolicy(ctx, name, &iam.PolicyArgs{
 			NamePrefix: pulumi.String(args.IAMSelfManagementPolicyNamePrefix),
 			Policy:     pulumi.String(policyDoc.Json),

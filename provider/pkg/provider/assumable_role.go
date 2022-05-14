@@ -19,9 +19,16 @@ import (
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/zchase/pulumi-aws-iam/pkg/utils"
 )
 
-const AssumableRoleIdentifier = "aws-iam:index:AssumableRole"
+const (
+	AssumableRoleIdentifier = "aws-iam:index:AssumableRole"
+
+	AdminRolePolicyARN     = "arn:aws:iam::aws:policy/AdministratorAccess"
+	PoweruserRolePolicyARN = "arn:aws:iam::aws:policy/PowerUserAccess"
+	ReadonlyRolePolicyARN  = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+)
 
 type AssumableRoleArgs struct {
 	// Actions of STS.
@@ -40,25 +47,13 @@ type AssumableRoleArgs struct {
 	MaxSessionDuration int `pulumi:"maxSessionDuration"`
 
 	// IAM role.
-	Role RoleArgs `pulumi:"role"`
+	Role utils.RoleArgs `pulumi:"role"`
 
 	// A map of tags to add.
 	Tags map[string]string `pulumi:"tags"`
 
-	// List of ARNs of IAM policies to attach to IAM role.
-	CustomRolePolicyArns []string `pulumi:"customRolePolicyArns"`
-
 	// A custom role trust policy.
 	CustomRoleTrustPolicy string `pulumi:"customRoleTrustPolicy"`
-
-	// Policy ARN to use for admin role.
-	AdminRolePolicyArn string `pulumi:"adminRolePolicyArn"`
-
-	// Policy ARN to use for poweruser role.
-	PoweruserRolePolicyArn string `pulumi:"poweruserRolePolicyArn"`
-
-	// Policy ARN to use for readonly role.
-	ReadonlyRolePolicyArn string `pulumi:"readonlyRolePolicyArn"`
 
 	// Whether to attach an admin policy to a role.
 	AttachAdminPolicy bool `pulumi:"attachAdminPolicy"`
@@ -137,70 +132,75 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 		args.TrustedRoleActions = append(args.TrustedRoleActions, "sts:AssumeRole")
 	}
 
-	assumeRolePolicyArgs := newIAMPolicyDocumentStatementConstructor("Allow", args.TrustedRoleActions).
-		AddAWSPrincipal(args.TrustedRoleArns)
-
-	if len(args.TrustedRoleServices) > 0 {
-		assumeRolePolicyArgs.AddServicePrincipal(args.TrustedRoleServices)
-	}
-
-	if len(args.RoleSTSExternalIDs) > 0 && !args.Role.RequiresMFA {
-		assumeRolePolicyArgs.AddCondition("StringEquals", "sts:ExternalId", args.RoleSTSExternalIDs)
+	policyDocumentStatementConditions := []iam.GetPolicyDocumentStatementCondition{
+		NewPolicyDocCondition("StringEquals", "sts:ExternalId", args.RoleSTSExternalIDs...),
 	}
 
 	if args.Role.RequiresMFA {
-		assumeRolePolicyArgs.
-			AddCondition("Bool", "aws:MultiFactorAuthPresent", []string{"true"}).
-			AddCondition("NumericLessThan", "aws:MultiFactorAuthAge", []string{fmt.Sprintf("%v", args.MFAAge)})
+		mfaAge := args.MFAAge
+		if mfaAge == 0 {
+			mfaAge = 86400
+		}
+
+		policyDocumentStatementConditions = []iam.GetPolicyDocumentStatementCondition{
+			NewPolicyDocCondition("Bool", "aws:MultiFactorAuthPresent", "true"),
+			NewPolicyDocCondition("NumericLessThan", "aws:MultiFactorAuthAge", fmt.Sprintf("%v", mfaAge)),
+		}
+	} else {
+
 	}
 
-	assumeRolePolicy, err := iam.GetPolicyDocument(ctx, assumeRolePolicyArgs.Build())
-	if err != nil {
-		return nil, err
+	policyArgs := &iam.GetPolicyDocumentArgs{
+		Statements: []iam.GetPolicyDocumentStatement{
+			{
+				Effect:     pulumi.StringRef("Allow"),
+				Actions:    args.TrustedRoleActions,
+				Conditions: policyDocumentStatementConditions,
+				Principals: []iam.GetPolicyDocumentStatementPrincipal{
+					{
+						Type:        "AWS",
+						Identifiers: args.TrustedRoleArns,
+					},
+					{
+						Type:        "Service",
+						Identifiers: args.TrustedRoleServices,
+					},
+				},
+			},
+		},
 	}
 
 	rolePolicy := args.CustomRoleTrustPolicy
 	if rolePolicy == "" {
-		rolePolicy = assumeRolePolicy.Json
-	}
-
-	roleName := fmt.Sprintf("%s-role", name)
-	role, err := iam.NewRole(ctx, roleName, &iam.RoleArgs{
-		Name:                pulumi.String(args.Role.Name),
-		Path:                pulumi.String(args.Role.Path),
-		Description:         pulumi.String(args.Role.Description),
-		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
-		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		PermissionsBoundary: pulumi.StringPtr(args.Role.PermissionsBoundaryArn),
-		Tags:                pulumi.ToStringMap(args.Tags),
-		AssumeRolePolicy:    pulumi.String(rolePolicy),
-	}, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, policyArn := range args.CustomRolePolicyArns {
-		policyAttachmentName := fmt.Sprintf("%s-policy-attachment-%s", name, policyArn)
-		err = createRolePolicyAttachment(ctx, policyAttachmentName, policyArn, role.Name, opts...)
+		assumeRolePolicy, err := utils.GetIAMPolicyDocument(ctx, policyArgs)
 		if err != nil {
 			return nil, err
 		}
+
+		rolePolicy = assumeRolePolicy.Json
 	}
 
-	policyAttachments := map[string]bool{
-		args.AdminRolePolicyArn:     args.AttachAdminPolicy,
-		args.PoweruserRolePolicyArn: args.AttachPoweruserPolicy,
-		args.ReadonlyRolePolicyArn:  args.AttachReadonlyPolicy,
+	if args.AttachAdminPolicy {
+		args.Role.PolicyArns = append(args.Role.PolicyArns, AdminRolePolicyARN)
 	}
 
-	for arn, attach := range policyAttachments {
-		if attach {
-			policyAttachmentName := fmt.Sprintf("%s-policy-attachment-%s", name, arn)
-			err = createRolePolicyAttachment(ctx, policyAttachmentName, arn, role.Name, opts...)
-			if err != nil {
-				return nil, err
-			}
-		}
+	if args.AttachPoweruserPolicy {
+		args.Role.PolicyArns = append(args.Role.PolicyArns, PoweruserRolePolicyARN)
+	}
+
+	if args.AttachReadonlyPolicy {
+		args.Role.PolicyArns = append(args.Role.PolicyArns, ReadonlyRolePolicyARN)
+	}
+
+	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
+		Role:                args.Role,
+		MaxSessionDuration:  args.MaxSessionDuration,
+		ForceDetachPolicies: args.ForceDetachPolicies,
+		AssumeRolePolicy:    rolePolicy,
+		Tags:                args.Tags,
+	}, opts...)
+	if err != nil {
+		return nil, err
 	}
 
 	instanceProfileName := fmt.Sprintf("%s-instance-profile", name)

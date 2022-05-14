@@ -185,6 +185,10 @@ func NewUser(ctx *pulumi.Context, name string, args *UserArgs, opts ...pulumi.Re
 		return nil, err
 	}
 
+	if args.PasswordLength == 0 {
+		args.PasswordLength = 20
+	}
+
 	loginProfile, err := iam.NewUserLoginProfile(ctx, name, &iam.UserLoginProfileArgs{
 		User:                  user.Name,
 		PgpKey:                pulumi.Sprintf("%s", args.PGPKey),

@@ -24,9 +24,6 @@ func NewAssumableRole(ctx *pulumi.Context,
 		args = &AssumableRoleArgs{}
 	}
 
-	if isZero(args.AdminRolePolicyArn) {
-		args.AdminRolePolicyArn = pulumi.StringPtr("arn:aws:iam::aws:policy/AdministratorAccess")
-	}
 	if isZero(args.AttachAdminPolicy) {
 		args.AttachAdminPolicy = pulumi.BoolPtr(false)
 	}
@@ -48,12 +45,6 @@ func NewAssumableRole(ctx *pulumi.Context,
 	if isZero(args.MfaAge) {
 		args.MfaAge = pulumi.IntPtr(86400)
 	}
-	if isZero(args.PoweruserRolePolicyArn) {
-		args.PoweruserRolePolicyArn = pulumi.StringPtr("arn:aws:iam::aws:policy/PowerUserAccess")
-	}
-	if isZero(args.ReadonlyRolePolicyArn) {
-		args.ReadonlyRolePolicyArn = pulumi.StringPtr("arn:aws:iam::aws:policy/ReadOnlyAccess")
-	}
 	if args.Role != nil {
 		args.Role = args.Role.ToRoleWithMFAPtrOutput().ApplyT(func(v *RoleWithMFA) *RoleWithMFA { return v.Defaults() }).(RoleWithMFAPtrOutput)
 	}
@@ -66,16 +57,12 @@ func NewAssumableRole(ctx *pulumi.Context,
 }
 
 type assumableRoleArgs struct {
-	// Policy ARN to use for admin role.
-	AdminRolePolicyArn *string `pulumi:"adminRolePolicyArn"`
 	// Whether to attach an admin policy to a role.
 	AttachAdminPolicy *bool `pulumi:"attachAdminPolicy"`
 	// Whether to attach a poweruser policy to a role.
 	AttachPoweruserPolicy *bool `pulumi:"attachPoweruserPolicy"`
 	// Whether to attach a readonly policy to a role.
 	AttachReadonlyPolicy *bool `pulumi:"attachReadonlyPolicy"`
-	// List of ARNs of IAM policies to attach to IAM role.
-	CustomRolePolicyArns []string `pulumi:"customRolePolicyArns"`
 	// A custom role trust policy.
 	CustomRoleTrustPolicy *string `pulumi:"customRoleTrustPolicy"`
 	// Whether policies should be detached from this role when destroying.
@@ -84,10 +71,6 @@ type assumableRoleArgs struct {
 	MaxSessionDuration *int `pulumi:"maxSessionDuration"`
 	// Max age of valid MFA (in seconds) for roles which require MFA.
 	MfaAge *int `pulumi:"mfaAge"`
-	// Policy ARN to use for poweruser role.
-	PoweruserRolePolicyArn *string `pulumi:"poweruserRolePolicyArn"`
-	// Policy ARN to use for readonly role.
-	ReadonlyRolePolicyArn *string `pulumi:"readonlyRolePolicyArn"`
 	// An IAM role that requires MFA.
 	Role *RoleWithMFA `pulumi:"role"`
 	// STS ExternalId condition values to use with a role (when MFA is not required).
@@ -104,16 +87,12 @@ type assumableRoleArgs struct {
 
 // The set of arguments for constructing a AssumableRole resource.
 type AssumableRoleArgs struct {
-	// Policy ARN to use for admin role.
-	AdminRolePolicyArn pulumi.StringPtrInput
 	// Whether to attach an admin policy to a role.
 	AttachAdminPolicy pulumi.BoolPtrInput
 	// Whether to attach a poweruser policy to a role.
 	AttachPoweruserPolicy pulumi.BoolPtrInput
 	// Whether to attach a readonly policy to a role.
 	AttachReadonlyPolicy pulumi.BoolPtrInput
-	// List of ARNs of IAM policies to attach to IAM role.
-	CustomRolePolicyArns pulumi.StringArrayInput
 	// A custom role trust policy.
 	CustomRoleTrustPolicy pulumi.StringPtrInput
 	// Whether policies should be detached from this role when destroying.
@@ -122,10 +101,6 @@ type AssumableRoleArgs struct {
 	MaxSessionDuration pulumi.IntPtrInput
 	// Max age of valid MFA (in seconds) for roles which require MFA.
 	MfaAge pulumi.IntPtrInput
-	// Policy ARN to use for poweruser role.
-	PoweruserRolePolicyArn pulumi.StringPtrInput
-	// Policy ARN to use for readonly role.
-	ReadonlyRolePolicyArn pulumi.StringPtrInput
 	// An IAM role that requires MFA.
 	Role RoleWithMFAPtrInput
 	// STS ExternalId condition values to use with a role (when MFA is not required).

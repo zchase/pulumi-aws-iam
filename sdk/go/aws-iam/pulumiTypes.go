@@ -71,6 +71,145 @@ func (o AccessKeyOutputOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AccessKeyOutput) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
 
+// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+type AccountPasswordPolicy struct {
+	// Whether to allow users to change their own password.
+	AllowUsersToChange bool `pulumi:"allowUsersToChange"`
+	// Whether users are prevented from setting a new password after their password has
+	// expired (i.e. require administrator reset).
+	HardExpiry bool `pulumi:"hardExpiry"`
+	// The number of days that an user password is valid. If not set or a value of `0` is provided, then
+	// passwords will not expire.
+	MaxAge *int `pulumi:"maxAge"`
+	// Minimum length to require for user passwords. Defaults to `8` if not set or
+	// the provided value is invalid. Valid values are between 6 and 128.
+	MinimumLength *int `pulumi:"minimumLength"`
+	// Whether to require lowercase characters for user passwords.
+	RequireLowercaseCharacters bool `pulumi:"requireLowercaseCharacters"`
+	// Whether to require numbers for user passwords.
+	RequireNumbers bool `pulumi:"requireNumbers"`
+	// Whether to require symbols for user passwords.
+	RequireSymbols bool `pulumi:"requireSymbols"`
+	// Whether to require uppercase characters for user passwords.
+	RequireUppercaseCharacters bool `pulumi:"requireUppercaseCharacters"`
+	// The number of previous passwords that users are prevented from reusing. If not set or a
+	// value of `0` is provided, no reuse prevention policy will be used.
+	ReusePrevention *int `pulumi:"reusePrevention"`
+}
+
+// AccountPasswordPolicyInput is an input type that accepts AccountPasswordPolicyArgs and AccountPasswordPolicyOutput values.
+// You can construct a concrete instance of `AccountPasswordPolicyInput` via:
+//
+//          AccountPasswordPolicyArgs{...}
+type AccountPasswordPolicyInput interface {
+	pulumi.Input
+
+	ToAccountPasswordPolicyOutput() AccountPasswordPolicyOutput
+	ToAccountPasswordPolicyOutputWithContext(context.Context) AccountPasswordPolicyOutput
+}
+
+// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+type AccountPasswordPolicyArgs struct {
+	// Whether to allow users to change their own password.
+	AllowUsersToChange pulumi.BoolInput `pulumi:"allowUsersToChange"`
+	// Whether users are prevented from setting a new password after their password has
+	// expired (i.e. require administrator reset).
+	HardExpiry pulumi.BoolInput `pulumi:"hardExpiry"`
+	// The number of days that an user password is valid. If not set or a value of `0` is provided, then
+	// passwords will not expire.
+	MaxAge pulumi.IntPtrInput `pulumi:"maxAge"`
+	// Minimum length to require for user passwords. Defaults to `8` if not set or
+	// the provided value is invalid. Valid values are between 6 and 128.
+	MinimumLength pulumi.IntPtrInput `pulumi:"minimumLength"`
+	// Whether to require lowercase characters for user passwords.
+	RequireLowercaseCharacters pulumi.BoolInput `pulumi:"requireLowercaseCharacters"`
+	// Whether to require numbers for user passwords.
+	RequireNumbers pulumi.BoolInput `pulumi:"requireNumbers"`
+	// Whether to require symbols for user passwords.
+	RequireSymbols pulumi.BoolInput `pulumi:"requireSymbols"`
+	// Whether to require uppercase characters for user passwords.
+	RequireUppercaseCharacters pulumi.BoolInput `pulumi:"requireUppercaseCharacters"`
+	// The number of previous passwords that users are prevented from reusing. If not set or a
+	// value of `0` is provided, no reuse prevention policy will be used.
+	ReusePrevention pulumi.IntPtrInput `pulumi:"reusePrevention"`
+}
+
+func (AccountPasswordPolicyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*AccountPasswordPolicy)(nil)).Elem()
+}
+
+func (i AccountPasswordPolicyArgs) ToAccountPasswordPolicyOutput() AccountPasswordPolicyOutput {
+	return i.ToAccountPasswordPolicyOutputWithContext(context.Background())
+}
+
+func (i AccountPasswordPolicyArgs) ToAccountPasswordPolicyOutputWithContext(ctx context.Context) AccountPasswordPolicyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AccountPasswordPolicyOutput)
+}
+
+// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+type AccountPasswordPolicyOutput struct{ *pulumi.OutputState }
+
+func (AccountPasswordPolicyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*AccountPasswordPolicy)(nil)).Elem()
+}
+
+func (o AccountPasswordPolicyOutput) ToAccountPasswordPolicyOutput() AccountPasswordPolicyOutput {
+	return o
+}
+
+func (o AccountPasswordPolicyOutput) ToAccountPasswordPolicyOutputWithContext(ctx context.Context) AccountPasswordPolicyOutput {
+	return o
+}
+
+// Whether to allow users to change their own password.
+func (o AccountPasswordPolicyOutput) AllowUsersToChange() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.AllowUsersToChange }).(pulumi.BoolOutput)
+}
+
+// Whether users are prevented from setting a new password after their password has
+// expired (i.e. require administrator reset).
+func (o AccountPasswordPolicyOutput) HardExpiry() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.HardExpiry }).(pulumi.BoolOutput)
+}
+
+// The number of days that an user password is valid. If not set or a value of `0` is provided, then
+// passwords will not expire.
+func (o AccountPasswordPolicyOutput) MaxAge() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) *int { return v.MaxAge }).(pulumi.IntPtrOutput)
+}
+
+// Minimum length to require for user passwords. Defaults to `8` if not set or
+// the provided value is invalid. Valid values are between 6 and 128.
+func (o AccountPasswordPolicyOutput) MinimumLength() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) *int { return v.MinimumLength }).(pulumi.IntPtrOutput)
+}
+
+// Whether to require lowercase characters for user passwords.
+func (o AccountPasswordPolicyOutput) RequireLowercaseCharacters() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.RequireLowercaseCharacters }).(pulumi.BoolOutput)
+}
+
+// Whether to require numbers for user passwords.
+func (o AccountPasswordPolicyOutput) RequireNumbers() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.RequireNumbers }).(pulumi.BoolOutput)
+}
+
+// Whether to require symbols for user passwords.
+func (o AccountPasswordPolicyOutput) RequireSymbols() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.RequireSymbols }).(pulumi.BoolOutput)
+}
+
+// Whether to require uppercase characters for user passwords.
+func (o AccountPasswordPolicyOutput) RequireUppercaseCharacters() pulumi.BoolOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) bool { return v.RequireUppercaseCharacters }).(pulumi.BoolOutput)
+}
+
+// The number of previous passwords that users are prevented from reusing. If not set or a
+// value of `0` is provided, no reuse prevention policy will be used.
+func (o AccountPasswordPolicyOutput) ReusePrevention() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v AccountPasswordPolicy) *int { return v.ReusePrevention }).(pulumi.IntPtrOutput)
+}
+
 // The admin role.
 type AdminRole struct {
 	// IAM role with admin access.
@@ -330,21 +469,9 @@ func (val *AdminRoleWithMFA) Defaults() *AdminRoleWithMFA {
 		return nil
 	}
 	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "admin"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
 	if isZero(tmp.PermissionsBoundaryArn) {
 		permissionsBoundaryArn_ := ""
 		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	if isZero(tmp.RequiresMfa) {
-		requiresMfa_ := true
-		tmp.RequiresMfa = &requiresMfa_
 	}
 	return &tmp
 }
@@ -5180,6 +5307,7 @@ func (o UserOutputTypeOutput) UniqueId() pulumi.StringPtrOutput {
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*AccountPasswordPolicyInput)(nil)).Elem(), AccountPasswordPolicyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AdminRoleInput)(nil)).Elem(), AdminRoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AdminRolePtrInput)(nil)).Elem(), AdminRoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AdminRoleWithMFAInput)(nil)).Elem(), AdminRoleWithMFAArgs{})
@@ -5230,6 +5358,7 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*RoleWithMFAInput)(nil)).Elem(), RoleWithMFAArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RoleWithMFAPtrInput)(nil)).Elem(), RoleWithMFAArgs{})
 	pulumi.RegisterOutputType(AccessKeyOutputOutput{})
+	pulumi.RegisterOutputType(AccountPasswordPolicyOutput{})
 	pulumi.RegisterOutputType(AdminRoleOutput{})
 	pulumi.RegisterOutputType(AdminRolePtrOutput{})
 	pulumi.RegisterOutputType(AdminRoleWithMFAOutput{})

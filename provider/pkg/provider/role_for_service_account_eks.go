@@ -22,6 +22,7 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/zchase/pulumi-aws-iam/pkg/eks_policies"
+	"github.com/zchase/pulumi-aws-iam/pkg/utils"
 )
 
 const RoleForServiceAccountsEksIdentifier = "aws-iam:index:RoleForServiceAccountsEks"
@@ -80,7 +81,7 @@ type RoleForServiceAccountsEksArgs struct {
 	Tags map[string]string `pulumi:"tags"`
 
 	// IAM role.
-	Role RoleArgs `pulumi:"role"`
+	Role utils.RoleArgs `pulumi:"role"`
 
 	// IAM policy name prefix.
 	PolicyNamePrefix string `pulumi:"policyNamePrefix"`
@@ -182,23 +183,12 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 		return nil, err
 	}
 
-	var roleNamePrefix pulumi.StringPtrInput
-	roleName := pulumi.StringPtr(args.Role.Name)
-	if args.Role.NamePrefix != "" {
-		roleNamePrefix = pulumi.StringPtr(args.Role.NamePrefix)
-		roleName = nil
-	}
-
-	eksRole, err := iam.NewRole(ctx, name, &iam.RoleArgs{
-		Name:                roleName,
-		NamePrefix:          roleNamePrefix,
-		Path:                pulumi.String(args.Role.Path),
-		Description:         pulumi.String(args.Role.Description),
-		AssumeRolePolicy:    pulumi.String(policyDoc.Json),
-		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
-		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		PermissionsBoundary: pulumi.String(args.Role.PermissionsBoundaryArn),
-		Tags:                pulumi.ToStringMap(args.Tags),
+	eksRole, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
+		Role:                args.Role,
+		MaxSessionDuration:  args.MaxSessionDuration,
+		ForceDetachPolicies: args.ForceDetachPolicies,
+		AssumeRolePolicy:    policyDoc.Json,
+		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {
 		return nil, err

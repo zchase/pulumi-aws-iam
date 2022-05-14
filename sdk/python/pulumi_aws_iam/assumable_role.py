@@ -14,17 +14,13 @@ __all__ = ['AssumableRoleArgs', 'AssumableRole']
 @pulumi.input_type
 class AssumableRoleArgs:
     def __init__(__self__, *,
-                 admin_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  attach_admin_policy: Optional[pulumi.Input[bool]] = None,
                  attach_poweruser_policy: Optional[pulumi.Input[bool]] = None,
                  attach_readonly_policy: Optional[pulumi.Input[bool]] = None,
-                 custom_role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  custom_role_trust_policy: Optional[pulumi.Input[str]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  mfa_age: Optional[pulumi.Input[int]] = None,
-                 poweruser_role_policy_arn: Optional[pulumi.Input[str]] = None,
-                 readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input['RoleWithMFAArgs']] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -33,17 +29,13 @@ class AssumableRoleArgs:
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a AssumableRole resource.
-        :param pulumi.Input[str] admin_role_policy_arn: Policy ARN to use for admin role.
         :param pulumi.Input[bool] attach_admin_policy: Whether to attach an admin policy to a role.
         :param pulumi.Input[bool] attach_poweruser_policy: Whether to attach a poweruser policy to a role.
         :param pulumi.Input[bool] attach_readonly_policy: Whether to attach a readonly policy to a role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] custom_role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
         :param pulumi.Input[str] custom_role_trust_policy: A custom role trust policy.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[int] mfa_age: Max age of valid MFA (in seconds) for roles which require MFA.
-        :param pulumi.Input[str] poweruser_role_policy_arn: Policy ARN to use for poweruser role.
-        :param pulumi.Input[str] readonly_role_policy_arn: Policy ARN to use for readonly role.
         :param pulumi.Input['RoleWithMFAArgs'] role: An IAM role that requires MFA.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_sts_external_ids: STS ExternalId condition values to use with a role (when MFA is not required).
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
@@ -51,10 +43,6 @@ class AssumableRoleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_arns: ARNs of AWS entities who can assume these roles.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] trusted_role_services: AWS Services that can assume these roles.
         """
-        if admin_role_policy_arn is None:
-            admin_role_policy_arn = 'arn:aws:iam::aws:policy/AdministratorAccess'
-        if admin_role_policy_arn is not None:
-            pulumi.set(__self__, "admin_role_policy_arn", admin_role_policy_arn)
         if attach_admin_policy is None:
             attach_admin_policy = False
         if attach_admin_policy is not None:
@@ -67,8 +55,6 @@ class AssumableRoleArgs:
             attach_readonly_policy = False
         if attach_readonly_policy is not None:
             pulumi.set(__self__, "attach_readonly_policy", attach_readonly_policy)
-        if custom_role_policy_arns is not None:
-            pulumi.set(__self__, "custom_role_policy_arns", custom_role_policy_arns)
         if custom_role_trust_policy is None:
             custom_role_trust_policy = ''
         if custom_role_trust_policy is not None:
@@ -85,14 +71,6 @@ class AssumableRoleArgs:
             mfa_age = 86400
         if mfa_age is not None:
             pulumi.set(__self__, "mfa_age", mfa_age)
-        if poweruser_role_policy_arn is None:
-            poweruser_role_policy_arn = 'arn:aws:iam::aws:policy/PowerUserAccess'
-        if poweruser_role_policy_arn is not None:
-            pulumi.set(__self__, "poweruser_role_policy_arn", poweruser_role_policy_arn)
-        if readonly_role_policy_arn is None:
-            readonly_role_policy_arn = 'arn:aws:iam::aws:policy/ReadOnlyAccess'
-        if readonly_role_policy_arn is not None:
-            pulumi.set(__self__, "readonly_role_policy_arn", readonly_role_policy_arn)
         if role is not None:
             pulumi.set(__self__, "role", role)
         if role_sts_external_ids is not None:
@@ -105,18 +83,6 @@ class AssumableRoleArgs:
             pulumi.set(__self__, "trusted_role_arns", trusted_role_arns)
         if trusted_role_services is not None:
             pulumi.set(__self__, "trusted_role_services", trusted_role_services)
-
-    @property
-    @pulumi.getter(name="adminRolePolicyArn")
-    def admin_role_policy_arn(self) -> Optional[pulumi.Input[str]]:
-        """
-        Policy ARN to use for admin role.
-        """
-        return pulumi.get(self, "admin_role_policy_arn")
-
-    @admin_role_policy_arn.setter
-    def admin_role_policy_arn(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "admin_role_policy_arn", value)
 
     @property
     @pulumi.getter(name="attachAdminPolicy")
@@ -153,18 +119,6 @@ class AssumableRoleArgs:
     @attach_readonly_policy.setter
     def attach_readonly_policy(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "attach_readonly_policy", value)
-
-    @property
-    @pulumi.getter(name="customRolePolicyArns")
-    def custom_role_policy_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
-        """
-        List of ARNs of IAM policies to attach to IAM role.
-        """
-        return pulumi.get(self, "custom_role_policy_arns")
-
-    @custom_role_policy_arns.setter
-    def custom_role_policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
-        pulumi.set(self, "custom_role_policy_arns", value)
 
     @property
     @pulumi.getter(name="customRoleTrustPolicy")
@@ -213,30 +167,6 @@ class AssumableRoleArgs:
     @mfa_age.setter
     def mfa_age(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "mfa_age", value)
-
-    @property
-    @pulumi.getter(name="poweruserRolePolicyArn")
-    def poweruser_role_policy_arn(self) -> Optional[pulumi.Input[str]]:
-        """
-        Policy ARN to use for poweruser role.
-        """
-        return pulumi.get(self, "poweruser_role_policy_arn")
-
-    @poweruser_role_policy_arn.setter
-    def poweruser_role_policy_arn(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "poweruser_role_policy_arn", value)
-
-    @property
-    @pulumi.getter(name="readonlyRolePolicyArn")
-    def readonly_role_policy_arn(self) -> Optional[pulumi.Input[str]]:
-        """
-        Policy ARN to use for readonly role.
-        """
-        return pulumi.get(self, "readonly_role_policy_arn")
-
-    @readonly_role_policy_arn.setter
-    def readonly_role_policy_arn(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "readonly_role_policy_arn", value)
 
     @property
     @pulumi.getter
@@ -316,17 +246,13 @@ class AssumableRole(pulumi.ComponentResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  attach_admin_policy: Optional[pulumi.Input[bool]] = None,
                  attach_poweruser_policy: Optional[pulumi.Input[bool]] = None,
                  attach_readonly_policy: Optional[pulumi.Input[bool]] = None,
-                 custom_role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  custom_role_trust_policy: Optional[pulumi.Input[str]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  mfa_age: Optional[pulumi.Input[int]] = None,
-                 poweruser_role_policy_arn: Optional[pulumi.Input[str]] = None,
-                 readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleWithMFAArgs']]] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -338,17 +264,13 @@ class AssumableRole(pulumi.ComponentResource):
         Create a AssumableRole resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] admin_role_policy_arn: Policy ARN to use for admin role.
         :param pulumi.Input[bool] attach_admin_policy: Whether to attach an admin policy to a role.
         :param pulumi.Input[bool] attach_poweruser_policy: Whether to attach a poweruser policy to a role.
         :param pulumi.Input[bool] attach_readonly_policy: Whether to attach a readonly policy to a role.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] custom_role_policy_arns: List of ARNs of IAM policies to attach to IAM role.
         :param pulumi.Input[str] custom_role_trust_policy: A custom role trust policy.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[int] mfa_age: Max age of valid MFA (in seconds) for roles which require MFA.
-        :param pulumi.Input[str] poweruser_role_policy_arn: Policy ARN to use for poweruser role.
-        :param pulumi.Input[str] readonly_role_policy_arn: Policy ARN to use for readonly role.
         :param pulumi.Input[pulumi.InputType['RoleWithMFAArgs']] role: An IAM role that requires MFA.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] role_sts_external_ids: STS ExternalId condition values to use with a role (when MFA is not required).
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
@@ -379,17 +301,13 @@ class AssumableRole(pulumi.ComponentResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  attach_admin_policy: Optional[pulumi.Input[bool]] = None,
                  attach_poweruser_policy: Optional[pulumi.Input[bool]] = None,
                  attach_readonly_policy: Optional[pulumi.Input[bool]] = None,
-                 custom_role_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  custom_role_trust_policy: Optional[pulumi.Input[str]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  mfa_age: Optional[pulumi.Input[int]] = None,
-                 poweruser_role_policy_arn: Optional[pulumi.Input[str]] = None,
-                 readonly_role_policy_arn: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[pulumi.InputType['RoleWithMFAArgs']]] = None,
                  role_sts_external_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -410,9 +328,6 @@ class AssumableRole(pulumi.ComponentResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = AssumableRoleArgs.__new__(AssumableRoleArgs)
 
-            if admin_role_policy_arn is None:
-                admin_role_policy_arn = 'arn:aws:iam::aws:policy/AdministratorAccess'
-            __props__.__dict__["admin_role_policy_arn"] = admin_role_policy_arn
             if attach_admin_policy is None:
                 attach_admin_policy = False
             __props__.__dict__["attach_admin_policy"] = attach_admin_policy
@@ -422,7 +337,6 @@ class AssumableRole(pulumi.ComponentResource):
             if attach_readonly_policy is None:
                 attach_readonly_policy = False
             __props__.__dict__["attach_readonly_policy"] = attach_readonly_policy
-            __props__.__dict__["custom_role_policy_arns"] = custom_role_policy_arns
             if custom_role_trust_policy is None:
                 custom_role_trust_policy = ''
             __props__.__dict__["custom_role_trust_policy"] = custom_role_trust_policy
@@ -435,12 +349,6 @@ class AssumableRole(pulumi.ComponentResource):
             if mfa_age is None:
                 mfa_age = 86400
             __props__.__dict__["mfa_age"] = mfa_age
-            if poweruser_role_policy_arn is None:
-                poweruser_role_policy_arn = 'arn:aws:iam::aws:policy/PowerUserAccess'
-            __props__.__dict__["poweruser_role_policy_arn"] = poweruser_role_policy_arn
-            if readonly_role_policy_arn is None:
-                readonly_role_policy_arn = 'arn:aws:iam::aws:policy/ReadOnlyAccess'
-            __props__.__dict__["readonly_role_policy_arn"] = readonly_role_policy_arn
             __props__.__dict__["role"] = role
             __props__.__dict__["role_sts_external_ids"] = role_sts_external_ids
             __props__.__dict__["tags"] = tags

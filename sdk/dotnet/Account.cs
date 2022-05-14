@@ -13,25 +13,26 @@ namespace Pulumi.AwsIam
     public partial class Account : Pulumi.ComponentResource
     {
         /// <summary>
-        /// The AWS ARN associated with the calling entity
+        /// The AWS ARN associated with the calling entity.
         /// </summary>
         [Output("arn")]
         public Output<string> Arn { get; private set; } = null!;
 
         /// <summary>
-        /// The AWS Account ID number of the account that owns or contains the calling entity
+        /// The AWS Account ID number of the account that owns or contains the calling entity.
         /// </summary>
         [Output("id")]
         public Output<string> Id { get; private set; } = null!;
 
         /// <summary>
-        /// Indicates whether passwords in the account expire. Returns true if max password age contains a value greater than 0. Returns false if it is 0 or not present.
+        /// Indicates whether passwords in the account expire. Returns true if max password
+        /// age contains a value greater than 0. Returns false if it is 0 or not present.
         /// </summary>
         [Output("passwordPolicyExpirePasswords")]
         public Output<bool> PasswordPolicyExpirePasswords { get; private set; } = null!;
 
         /// <summary>
-        /// The unique identifier of the calling entity
+        /// The unique identifier of the calling entity.
         /// </summary>
         [Output("userId")]
         public Output<string> UserId { get; private set; } = null!;
@@ -71,76 +72,14 @@ namespace Pulumi.AwsIam
         public Input<string> AccountAlias { get; set; } = null!;
 
         /// <summary>
-        /// Whether to allow users to change their own password.
+        /// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+        /// left empty the default AWS password policy will be applied.
         /// </summary>
-        [Input("allowUsersToChangePassword")]
-        public Input<bool>? AllowUsersToChangePassword { get; set; }
-
-        /// <summary>
-        /// Whether to get AWS account ID, User ID, and ARN in which Pulumi is authorized.
-        /// </summary>
-        [Input("getCallerIdentity")]
-        public Input<bool>? GetCallerIdentity { get; set; }
-
-        /// <summary>
-        /// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-        /// </summary>
-        [Input("hardExpiry")]
-        public Input<bool>? HardExpiry { get; set; }
-
-        /// <summary>
-        /// The number of days that an user password is valid.
-        /// </summary>
-        [Input("maxPasswordAge")]
-        public Input<int>? MaxPasswordAge { get; set; }
-
-        /// <summary>
-        /// Minimum length to require for user passwords.
-        /// </summary>
-        [Input("minimumPasswordLength")]
-        public Input<int>? MinimumPasswordLength { get; set; }
-
-        /// <summary>
-        /// The number of previous passwords that users are prevented from reusing.
-        /// </summary>
-        [Input("passwordReusePrevention")]
-        public Input<bool>? PasswordReusePrevention { get; set; }
-
-        /// <summary>
-        /// Whether to require lowercase characters for user passwords.
-        /// </summary>
-        [Input("requireLowercaseCharacters")]
-        public Input<bool>? RequireLowercaseCharacters { get; set; }
-
-        /// <summary>
-        /// Whether to require numbers for user passwords.
-        /// </summary>
-        [Input("requireNumbers")]
-        public Input<bool>? RequireNumbers { get; set; }
-
-        /// <summary>
-        /// Whether to require symbols for user passwords.
-        /// </summary>
-        [Input("requireSymbols")]
-        public Input<bool>? RequireSymbols { get; set; }
-
-        /// <summary>
-        /// Whether to require uppercase characters for user passwords.
-        /// </summary>
-        [Input("requireUppercaseCharacters")]
-        public Input<bool>? RequireUppercaseCharacters { get; set; }
+        [Input("passwordPolicy", required: true)]
+        public Input<Inputs.AccountPasswordPolicyArgs> PasswordPolicy { get; set; } = null!;
 
         public AccountArgs()
         {
-            AllowUsersToChangePassword = true;
-            GetCallerIdentity = true;
-            HardExpiry = false;
-            MaxPasswordAge = 0;
-            MinimumPasswordLength = 8;
-            RequireLowercaseCharacters = true;
-            RequireNumbers = true;
-            RequireSymbols = true;
-            RequireUppercaseCharacters = true;
         }
     }
 }

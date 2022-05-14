@@ -47,12 +47,6 @@ namespace Pulumi.AwsIam
     public sealed class AssumableRoleArgs : Pulumi.ResourceArgs
     {
         /// <summary>
-        /// Policy ARN to use for admin role.
-        /// </summary>
-        [Input("adminRolePolicyArn")]
-        public Input<string>? AdminRolePolicyArn { get; set; }
-
-        /// <summary>
         /// Whether to attach an admin policy to a role.
         /// </summary>
         [Input("attachAdminPolicy")]
@@ -69,18 +63,6 @@ namespace Pulumi.AwsIam
         /// </summary>
         [Input("attachReadonlyPolicy")]
         public Input<bool>? AttachReadonlyPolicy { get; set; }
-
-        [Input("customRolePolicyArns")]
-        private InputList<string>? _customRolePolicyArns;
-
-        /// <summary>
-        /// List of ARNs of IAM policies to attach to IAM role.
-        /// </summary>
-        public InputList<string> CustomRolePolicyArns
-        {
-            get => _customRolePolicyArns ?? (_customRolePolicyArns = new InputList<string>());
-            set => _customRolePolicyArns = value;
-        }
 
         /// <summary>
         /// A custom role trust policy.
@@ -105,18 +87,6 @@ namespace Pulumi.AwsIam
         /// </summary>
         [Input("mfaAge")]
         public Input<int>? MfaAge { get; set; }
-
-        /// <summary>
-        /// Policy ARN to use for poweruser role.
-        /// </summary>
-        [Input("poweruserRolePolicyArn")]
-        public Input<string>? PoweruserRolePolicyArn { get; set; }
-
-        /// <summary>
-        /// Policy ARN to use for readonly role.
-        /// </summary>
-        [Input("readonlyRolePolicyArn")]
-        public Input<string>? ReadonlyRolePolicyArn { get; set; }
 
         /// <summary>
         /// An IAM role that requires MFA.
@@ -186,7 +156,6 @@ namespace Pulumi.AwsIam
 
         public AssumableRoleArgs()
         {
-            AdminRolePolicyArn = "arn:aws:iam::aws:policy/AdministratorAccess";
             AttachAdminPolicy = false;
             AttachPoweruserPolicy = false;
             AttachReadonlyPolicy = false;
@@ -194,8 +163,6 @@ namespace Pulumi.AwsIam
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
             MfaAge = 86400;
-            PoweruserRolePolicyArn = "arn:aws:iam::aws:policy/PowerUserAccess";
-            ReadonlyRolePolicyArn = "arn:aws:iam::aws:policy/ReadOnlyAccess";
         }
     }
 }

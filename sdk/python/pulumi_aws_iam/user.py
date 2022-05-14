@@ -42,12 +42,8 @@ class UserArgs:
         pulumi.set(__self__, "name", name)
         if force_destroy is not None:
             pulumi.set(__self__, "force_destroy", force_destroy)
-        if password_length is None:
-            password_length = 20
         if password_length is not None:
             pulumi.set(__self__, "password_length", password_length)
-        if password_reset_required is None:
-            password_reset_required = True
         if password_reset_required is not None:
             pulumi.set(__self__, "password_reset_required", password_reset_required)
         if path is None:
@@ -287,11 +283,7 @@ class User(pulumi.ComponentResource):
             if name is None and not opts.urn:
                 raise TypeError("Missing required property 'name'")
             __props__.__dict__["name"] = name
-            if password_length is None:
-                password_length = 20
             __props__.__dict__["password_length"] = password_length
-            if password_reset_required is None:
-                password_reset_required = True
             __props__.__dict__["password_reset_required"] = password_reset_required
             if path is None:
                 path = '/'

@@ -24,27 +24,22 @@ import (
 
 const AccountIdentifier = "aws-iam:index:Account"
 
-type AccountArgs struct {
-	// Whether to get AWS account ID, User ID, and ARN in which Terraform is authorized.
-	GetCallerIdentity bool `pulumi:"getCallerIdentity"`
-
-	// AWS IAM account alias for this account.
-	AccountAlias string `pulumi:"accountAlias"`
-
+type AccountPasswordPolicyArgs struct {
 	// The number of days that an user password is valid.
-	MaxPasswordAge int `pulumi:"maxPasswordAge"`
+	MaxAge int `pulumi:"maxAge"`
 
 	// Minimum length to require for user passwords.
-	MinimumPasswordLength int `pulumi:"minimumPasswordLength"`
-
-	// Whether to allow users to change their own password.
-	AllowUsersToChangePassword bool `pulumi:"allowUsersToChangePassword"`
-
-	// Whether users are prevented from setting a new password after their password has expired (i.e. require administrator reset).
-	HardExpiry bool `pulumi:"hardExpiry"`
+	MinimumLength int `pulumi:"minimumLength"`
 
 	// The number of previous passwords that users are prevented from reusing.
-	PasswordReusePrevention int `pulumi:"passwordReusePrevention"`
+	ReusePrevention int `pulumi:"reusePrevention"`
+
+	// Whether to allow users to change their own password.
+	AllowUsersToChange bool `pulumi:"allowUsersToChange"`
+
+	// Whether users are prevented from setting a new password after their password
+	// has expired (i.e. require administrator reset).
+	HardExpiry bool `pulumi:"hardExpiry"`
 
 	// Whether to require lowercase characters for user passwords.
 	RequireLowercaseCharacters bool `pulumi:"requireLowercaseCharacters"`
@@ -57,6 +52,23 @@ type AccountArgs struct {
 
 	// Whether to require symbols for user passwords.
 	RequireSymbols bool `pulumi:"requireSymbols"`
+}
+
+type AccountArgs struct {
+	// AWS IAM account alias for this account.
+	AccountAlias string `pulumi:"accountAlias"`
+
+	// Options to specify complexity requirements and mandatory rotation periods for
+	// your IAM users' passwords. If left empty the default AWS password policy will be applied.
+	PasswordPolicy AccountPasswordPolicyArgs `pulumi:"passwordPolicy"`
+}
+
+func (this *AccountArgs) Defaults() error {
+	return nil
+}
+
+func (this *AccountArgs) Validate() error {
+	return nil
 }
 
 type Account struct {
@@ -78,6 +90,11 @@ type Account struct {
 func NewIAMAccount(ctx *pulumi.Context, name string, args *AccountArgs, opts ...pulumi.ResourceOption) (*Account, error) {
 	if args == nil {
 		args = &AccountArgs{}
+	}
+
+	// Return an error if MinimumLength is not valid.
+	if args.PasswordPolicy.MinimumLength < 6 || args.PasswordPolicy.MinimumLength > 128 {
+		return nil, fmt.Errorf("Invalid MinimumLength for PasswordPolicy provided for resource with name [%s]. Valid values are between 6 and 128.", name)
 	}
 
 	component := &Account{}
@@ -103,15 +120,15 @@ func NewIAMAccount(ctx *pulumi.Context, name string, args *AccountArgs, opts ...
 
 	passwordPolicyName := fmt.Sprintf("%s-password-policy", name)
 	passwordPolicy, err := iam.NewAccountPasswordPolicy(ctx, passwordPolicyName, &iam.AccountPasswordPolicyArgs{
-		MaxPasswordAge:             pulumi.Int(args.MaxPasswordAge),
-		MinimumPasswordLength:      pulumi.Int(args.MinimumPasswordLength),
-		AllowUsersToChangePassword: pulumi.Bool(args.AllowUsersToChangePassword),
-		HardExpiry:                 pulumi.Bool(args.HardExpiry),
-		PasswordReusePrevention:    pulumi.Int(args.PasswordReusePrevention),
-		RequireLowercaseCharacters: pulumi.Bool(args.RequireLowercaseCharacters),
-		RequireUppercaseCharacters: pulumi.Bool(args.RequireUppercaseCharacters),
-		RequireNumbers:             pulumi.Bool(args.RequireNumbers),
-		RequireSymbols:             pulumi.Bool(args.RequireSymbols),
+		MaxPasswordAge:             pulumi.Int(args.PasswordPolicy.MaxAge),
+		MinimumPasswordLength:      pulumi.Int(args.PasswordPolicy.MinimumLength),
+		AllowUsersToChangePassword: pulumi.Bool(args.PasswordPolicy.AllowUsersToChange),
+		HardExpiry:                 pulumi.Bool(args.PasswordPolicy.HardExpiry),
+		PasswordReusePrevention:    pulumi.Int(args.PasswordPolicy.ReusePrevention),
+		RequireLowercaseCharacters: pulumi.Bool(args.PasswordPolicy.RequireLowercaseCharacters),
+		RequireUppercaseCharacters: pulumi.Bool(args.PasswordPolicy.RequireUppercaseCharacters),
+		RequireNumbers:             pulumi.Bool(args.PasswordPolicy.RequireNumbers),
+		RequireSymbols:             pulumi.Bool(args.PasswordPolicy.RequireSymbols),
 	}, opts...)
 	if err != nil {
 		return nil, err

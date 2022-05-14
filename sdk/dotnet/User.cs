@@ -135,8 +135,6 @@ namespace Pulumi.AwsIam
 
         public UserArgs()
         {
-            PasswordLength = 20;
-            PasswordResetRequired = true;
             Path = "/";
             SshKeyEncoding = "SSH";
         }

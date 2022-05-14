@@ -2,7 +2,6 @@ using Pulumi;
 using Pulumi.AwsIam;
 using Pulumi.AwsIam.Inputs;
 using System.Collections.Immutable;
-using System.Collections.Generic;
 
 class MyStack : Stack
 {
